@@ -1,0 +1,63 @@
+<app-cabecalho-pagina titulo="Categorias" subtitulo="Organize suas tarefas por assunto.">
+  <button mat-flat-button (click)="abrirFormulario()">
+    <mat-icon>add</mat-icon>
+    Nova categoria
+  </button>
+</app-cabecalho-pagina>
+
+@if (store.erro(); as erro) {
+  <mat-card appearance="outlined">
+    <app-estado-erro [mensagem]="erro" (tentarDeNovo)="store.carregar()" />
+  </mat-card>
+} @else if (store.categorias().length) {
+  <section class="grade">
+    @for (categoria of store.categorias(); track categoria.id) {
+      <mat-card appearance="outlined" class="cartao" [style.--cor-categoria]="categoria.cor">
+        <mat-card-header>
+          <div mat-card-avatar class="avatar">
+            <mat-icon>label</mat-icon>
+          </div>
+          <mat-card-title>{{ categoria.nome }}</mat-card-title>
+          <mat-card-subtitle>{{
+            categoria.totalTarefas | i18nPlural: pluralTarefas
+          }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions class="acoes">
+          <a mat-button [routerLink]="['/tarefas']" [queryParams]="{ categoria: categoria.id }">
+            Ver tarefas
+          </a>
+          <span class="espaco"></span>
+          <button
+            mat-icon-button
+            matTooltip="Editar"
+            (click)="abrirFormulario(categoria)"
+            [attr.aria-label]="'Editar ' + categoria.nome"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            matTooltip="Excluir"
+            (click)="confirmarRemocao(categoria)"
+            [attr.aria-label]="'Excluir ' + categoria.nome"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    }
+  </section>
+} @else if (!store.carregando()) {
+  <mat-card appearance="outlined">
+    <app-estado-vazio
+      icone="label_off"
+      titulo="Nenhuma categoria ainda"
+      descricao="Crie categorias para agrupar as tarefas por assunto."
+    >
+      <button mat-stroked-button (click)="abrirFormulario()">
+        <mat-icon>add</mat-icon>
+        Criar a primeira categoria
+      </button>
+    </app-estado-vazio>
+  </mat-card>
+}

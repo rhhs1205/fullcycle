@@ -1,0 +1,28 @@
+<nav aria-label="Menu principal" class="menu">
+  <mat-nav-list>
+    @for (item of itens; track item.rota) {
+      <a
+        mat-list-item
+        [routerLink]="item.rota"
+        routerLinkActive
+        #link="routerLinkActive"
+        [activated]="link.isActive"
+        [attr.aria-current]="link.isActive ? 'page' : null"
+        (click)="navegou.emit()"
+      >
+        <mat-icon matListItemIcon>{{ item.icone }}</mat-icon>
+        <span matListItemTitle>{{ item.rotulo }}</span>
+      </a>
+    }
+  </mat-nav-list>
+</nav>
+
+<div class="rodape">
+  <mat-divider />
+  <mat-nav-list>
+    <a mat-list-item [href]="urlDocumentacao" target="_blank" rel="noopener">
+      <mat-icon matListItemIcon>api</mat-icon>
+      <span matListItemTitle>Swagger da API</span>
+    </a>
+  </mat-nav-list>
+</div>

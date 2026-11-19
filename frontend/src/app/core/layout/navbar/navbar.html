@@ -1,0 +1,38 @@
+<mat-toolbar class="navbar">
+  <button mat-icon-button (click)="alternarMenu.emit()" aria-label="Abrir ou fechar o menu lateral">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <a routerLink="/dashboard" class="marca" aria-label="Gestor de Tarefas">
+    <mat-icon>task_alt</mat-icon>
+    <span>Gestor de Tarefas</span>
+  </a>
+
+  <span class="espaco"></span>
+
+  <button
+    type="button"
+    class="status"
+    [attr.data-status]="statusApi.status()"
+    [attr.aria-label]="status().rotulo"
+    (click)="statusApi.verificar()"
+    [matTooltip]="status().dica"
+  >
+    <span class="ponto"></span>
+    <mat-icon class="icone">{{ status().icone }}</mat-icon>
+    <span class="texto">{{ status().rotulo }}</span>
+  </button>
+
+  <button
+    mat-icon-button
+    (click)="tema.alternar()"
+    [matTooltip]="tema.escuro() ? 'Tema claro' : 'Tema escuro'"
+    [attr.aria-label]="tema.escuro() ? 'Ativar tema claro' : 'Ativar tema escuro'"
+  >
+    <mat-icon>{{ tema.escuro() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+</mat-toolbar>
+
+@if (carregamento.ativo()) {
+  <mat-progress-bar mode="indeterminate" class="carregamento" aria-label="Carregando dados" />
+}

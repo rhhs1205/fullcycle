@@ -1,0 +1,99 @@
+@use '@angular/material' as mat;
+
+:host {
+  display: block;
+  position: relative;
+  z-index: 2;
+  box-shadow: var(--mat-sys-level2);
+}
+
+.navbar {
+  gap: 8px;
+
+  @include mat.toolbar-overrides(
+    (
+      container-background-color: var(--mat-sys-primary),
+      container-text-color: var(--mat-sys-on-primary),
+    )
+  );
+
+  @include mat.icon-button-overrides(
+    (
+      icon-color: var(--mat-sys-on-primary),
+      state-layer-color: var(--mat-sys-on-primary),
+      ripple-color: color-mix(in srgb, var(--mat-sys-on-primary) 16%, transparent),
+    )
+  );
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: inherit;
+  text-decoration: none;
+  font: var(--mat-sys-title-large);
+}
+
+.espaco {
+  flex: 1;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mat-sys-on-primary) 14%, transparent);
+  color: inherit;
+  font: var(--mat-sys-label-large);
+  cursor: pointer;
+
+  &:hover {
+    background: color-mix(in srgb, var(--mat-sys-on-primary) 22%, transparent);
+  }
+}
+
+.ponto {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fdd835;
+}
+
+.status[data-status='online'] .ponto {
+  background: #66bb6a;
+}
+
+.status[data-status='offline'] .ponto {
+  background: #ef5350;
+}
+
+.status[data-status='banco-offline'] .ponto {
+  background: #ffa726;
+}
+
+.status .icone {
+  display: none;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+.carregamento {
+  position: absolute;
+  inset: auto 0 -4px 0;
+}
+
+@media (max-width: 599.98px) {
+  .marca span,
+  .status .texto {
+    display: none;
+  }
+
+  .status .icone {
+    display: inline-block;
+  }
+}

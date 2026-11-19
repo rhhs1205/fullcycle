@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16
+    container_name: estudo-db
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: tarefas
+    ports:
+      - "5433:5432"
+    volumes:
+      - dados:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d tarefas"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  dados:

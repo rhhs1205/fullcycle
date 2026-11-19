@@ -1,0 +1,13 @@
+<app-navbar (alternarMenu)="sidenav.toggle()" />
+
+<mat-sidenav-container class="container">
+  <mat-sidenav #sidenav class="sidenav" [mode]="celular() ? 'over' : 'side'" [opened]="!celular()">
+    <app-sidebar (navegou)="celular() && sidenav.close()" />
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <main class="conteudo">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

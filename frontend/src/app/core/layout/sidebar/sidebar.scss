@@ -1,0 +1,28 @@
+@use '@angular/material' as mat;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.menu {
+  flex: 1;
+}
+
+mat-nav-list {
+  padding: 0;
+
+  @include mat.list-overrides(
+    (
+      active-indicator-color: var(--mat-sys-secondary-container),
+      active-indicator-shape: var(--mat-sys-corner-full),
+    )
+  );
+}
+
+.rodape mat-divider {
+  margin-bottom: 8px;
+}

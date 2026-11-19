@@ -1,0 +1,56 @@
+.campos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.rotulo {
+  margin: 0 0 8px;
+  font: var(--mat-sys-label-large);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.paleta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.amostra {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+
+  &.selecionada {
+    outline: 2px solid var(--mat-sys-on-surface);
+    outline-offset: 2px;
+  }
+
+  mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+}
+
+.previa {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .rotulo {
+    margin: 0;
+  }
+}
+
+.erro {
+  margin: 0;
+  color: var(--mat-sys-error);
+}

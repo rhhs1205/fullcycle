@@ -1,0 +1,30 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.cartao {
+  border-top: 6px solid var(--cor-categoria);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--cor-categoria) 18%, transparent);
+  color: var(--cor-categoria);
+}
+
+.acoes {
+  margin-top: auto;
+}
+
+.espaco {
+  flex: 1;
+}

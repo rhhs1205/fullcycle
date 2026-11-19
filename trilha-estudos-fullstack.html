@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia de estudos — Do terminal ao sistema completo com Claude Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ffffff; --ink:#1c2533; --muted:#556072; --line:#d6dce5; --tint:#f3f5f8;
+  --front:#c0264b; --front-soft:#fbe8ee; --back:#6d3fd0; --back-soft:#efe9fc;
+  --db:#0b6fa4; --db-soft:#e3f1fa; --ai:#0f766e; --ai-soft:#e0f3f0; --git:#b4540a; --git-soft:#fdf0e3;
+  --ok:#1d7a3a; --err:#b42318; --warn:#a75a07;
+  --code-bg:#1f2836; --code-ink:#e8edf4;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#e9edf2;color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.62}
+.doc{max-width:860px;margin:2rem auto;background:var(--paper);padding:3.2rem 3.6rem;box-shadow:0 1px 3px rgba(20,30,50,.12)}
+a{color:var(--ai);text-decoration-thickness:1px;text-underline-offset:2px}
+h1,h2,h3,h4{line-height:1.2;letter-spacing:-.01em}
+.chapter{break-before:page;page-break-before:always;padding-top:.4rem}
+.chapter:first-of-type{break-before:auto}
+.ch-head{display:flex;align-items:baseline;gap:.9rem;border-bottom:3px solid var(--c,var(--ink));padding-bottom:.5rem;margin:0 0 1.4rem}
+.ch-head .num{font-family:var(--mono);font-weight:600;font-size:1.05rem;color:var(--c,var(--muted))}
+.ch-head h2{margin:0;font-size:1.75rem}
+h3{font-size:1.18rem;margin:1.9rem 0 .55rem;break-after:avoid}
+h4{font-size:1rem;margin:1.2rem 0 .4rem;break-after:avoid}
+p{margin:0 0 .85rem}
+ul,ol{margin:0 0 .9rem;padding-left:1.3rem}
+li{margin:.2rem 0}
+code{font-family:var(--mono);font-size:.86em;background:var(--tint);border:1px solid var(--line);padding:.02rem .3rem;border-radius:4px}
+pre{background:var(--code-bg);color:var(--code-ink);padding:.85rem 1rem;border-radius:7px;font-size:.8rem;line-height:1.55;margin:0 0 1.1rem;white-space:pre-wrap;word-break:break-word;break-inside:avoid}
+pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit}
+.c{color:#93a3b8}.p{color:#7ee2a0}
+.front{--c:var(--front);--soft:var(--front-soft)} .back{--c:var(--back);--soft:var(--back-soft)}
+.db{--c:var(--db);--soft:var(--db-soft)} .ai{--c:var(--ai);--soft:var(--ai-soft)} .git{--c:var(--git);--soft:var(--git-soft)}
+.box{border:1px solid var(--line);border-left:4px solid var(--c,var(--muted));background:var(--soft,var(--tint));border-radius:6px;padding:.75rem 1rem;margin:0 0 1.1rem;break-inside:avoid}
+.box p:last-child,.box ul:last-child{margin-bottom:0}
+.box .t{font-weight:700;display:block;margin-bottom:.2rem}
+.warn{--c:var(--warn);--soft:#fdf3e4}
+.tip{--c:var(--ai);--soft:var(--ai-soft)}
+table{border-collapse:collapse;width:100%;font-size:.88rem;margin:0 0 1.1rem;break-inside:avoid}
+th,td{text-align:left;padding:.42rem .6rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--tint);font-weight:600}
+td code{white-space:nowrap}
+figure{margin:.4rem 0 1.4rem;break-inside:avoid}
+figure svg{width:100%;height:auto;display:block}
+figcaption{font-size:.82rem;color:var(--muted);margin-top:.45rem}
+svg text{font-family:var(--sans);fill:var(--ink)}
+svg .m{fill:var(--muted)}
+svg .mono{font-family:var(--mono)}
+.steps{counter-reset:st;list-style:none;padding:0}
+.steps>li{counter-increment:st;position:relative;padding:0 0 .9rem 2.6rem;break-inside:avoid}
+.steps>li::before{content:counter(st);position:absolute;left:0;top:-.05rem;width:1.8rem;height:1.8rem;border-radius:50%;background:var(--c,var(--ink));color:#fff;font-weight:700;font-size:.9rem;display:grid;place-items:center}
+.steps>li>strong:first-child{display:block}
+.os{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin:0 0 1.1rem}
+.os>div{border:1px solid var(--line);border-radius:7px;padding:.7rem .8rem;break-inside:avoid}
+.os h4{margin:0 0 .4rem;font-size:.95rem}
+.os pre{font-size:.72rem;margin:0}
+.os.stack{grid-template-columns:1fr;gap:.45rem}
+.os.stack>div{display:grid;grid-template-columns:10rem 1fr;align-items:center;gap:.6rem;padding:.5rem .7rem}
+.os.stack h4{margin:0}
+.os.stack pre{font-size:.78rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.check{list-style:none;padding:0}
+.check li{border-bottom:1px dashed var(--line);margin:0}
+.check label{display:flex;align-items:flex-start;gap:.65rem;padding:.35rem 0;cursor:pointer}
+.check input{flex:none;width:1.05rem;height:1.05rem;margin:.25rem 0 0;accent-color:var(--ai);cursor:pointer}
+.check input:checked+span{color:var(--muted);text-decoration:line-through}
+.progresso-check{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem;margin:0 0 1.2rem;padding:.6rem .8rem;background:var(--ai-soft);border:1px solid var(--line);border-radius:7px}
+.progresso-check strong{min-width:8.5rem}
+.progresso-check .barra{flex:1;min-width:8rem;height:.55rem;background:#fff;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.progresso-check .barra span{display:block;height:100%;width:0;background:var(--ai);transition:width .2s}
+.progresso-check button{font:inherit;font-size:.85rem;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:6px;padding:.2rem .7rem;cursor:pointer}
+.ex li{margin-bottom:.7rem}
+.ex .o{display:block;padding-left:.2rem;color:var(--ink)}
+/* cover */
+.cover{min-height:900px;display:flex;flex-direction:column;justify-content:space-between;padding-top:2rem}
+.cover h1{font-size:2.9rem;line-height:1.05;margin:1.2rem 0 1rem;max-width:15ch;letter-spacing:-.025em}
+.cover .sub{font-size:1.15rem;color:var(--muted);max-width:46ch}
+.cover .meta{font-size:.9rem;color:var(--muted);border-top:1px solid var(--line);padding-top:1rem}
+.toc ol{list-style:none;padding:0;margin:0;columns:2;column-gap:2rem}
+kbd{font-family:var(--mono);font-size:.8em;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 .3rem;background:#fff}
+.toc li{display:flex;gap:.6rem;padding:.3rem 0;border-bottom:1px solid var(--line);break-inside:avoid}
+.toc li span{font-family:var(--mono);color:var(--muted);min-width:1.6rem}
+.toc a{color:var(--ink);text-decoration:none}
+.vid td:first-child{font-weight:600}
+@page{size:A4;margin:16mm 15mm 18mm}
+@media print{
+  body{background:#fff;font-size:10.5pt}
+  .doc{max-width:none;margin:0;padding:0;box-shadow:none}
+  .cover{min-height:250mm}
+  a{color:var(--ink)}
+  .progresso-check{display:none}
+  .check input:checked+span{color:var(--ink);text-decoration:none}
+}
+@media (max-width:760px){.doc{padding:1.6rem 1.2rem;margin:0}.os,.two{grid-template-columns:1fr}.toc ol{columns:1}td code{white-space:normal;overflow-wrap:anywhere}}
+</style>
+</head>
+<body>
+<div class="doc">
+
+<!-- ============ CAPA ============ -->
+<section class="cover">
+  <div>
+    <svg viewBox="0 0 640 260" role="img" aria-label="Terminal, Angular, NestJS e banco conectados" style="width:100%;max-width:640px">
+      <rect x="0" y="40" width="150" height="110" rx="10" fill="#1f2836"/>
+      <circle cx="16" cy="56" r="4" fill="#ff8a7a"/><circle cx="30" cy="56" r="4" fill="#e9a34a"/><circle cx="44" cy="56" r="4" fill="#7ee2a0"/>
+      <text x="14" y="88" class="mono" font-size="13" style="fill:#7ee2a0">$ claude</text>
+      <text x="14" y="110" class="mono" font-size="11" style="fill:#93a3b8">&gt; o que faz</text>
+      <text x="14" y="126" class="mono" font-size="11" style="fill:#93a3b8">  este projeto?</text>
+      <path d="M155 95 h40" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 4"/>
+      <rect x="200" y="55" width="125" height="80" rx="10" fill="var(--front-soft)" stroke="var(--front)" stroke-width="2"/>
+      <text x="262" y="100" text-anchor="middle" font-weight="700" style="fill:var(--front)">Angular</text>
+      <path d="M327 95 h30" stroke="var(--muted)" stroke-width="2"/>
+      <rect x="360" y="55" width="125" height="80" rx="10" fill="var(--back-soft)" stroke="var(--back)" stroke-width="2"/>
+      <text x="422" y="100" text-anchor="middle" font-weight="700" style="fill:var(--back)">NestJS</text>
+      <path d="M487 95 h30" stroke="var(--muted)" stroke-width="2"/>
+      <rect x="515" y="35" width="125" height="120" rx="12" fill="none" stroke="var(--db)" stroke-width="1.5" stroke-dasharray="6 5"/>
+      <ellipse cx="577" cy="75" rx="30" ry="9" fill="var(--db)"/><rect x="547" y="75" width="60" height="45" fill="var(--db)" opacity=".6"/><ellipse cx="577" cy="120" rx="30" ry="9" fill="var(--db)"/>
+      <text x="577" y="145" text-anchor="middle" font-size="12" class="m">Postgres</text>
+      <path d="M75 200 C 200 250, 450 250, 577 200" fill="none" stroke="var(--ai)" stroke-width="2"/>
+      <text x="326" y="232" text-anchor="middle" font-size="13" style="fill:var(--ai)">Skills + SDD guiando o Claude no caminho</text>
+    </svg>
+    <h1>Do terminal ao sistema completo</h1>
+    <p class="sub">Guia de estudos para quem está começando do zero: preparar a máquina e o VS Code, usar o Claude Code sem assinatura e entender, passo a passo, Angular, NestJS, banco em container, Skills e Spec-Driven Development.</p>
+  </div>
+  <div class="meta">Guia de estudos · versão para impressão</div>
+</section>
+
+<!-- ============ SUMARIO ============ -->
+<section class="chapter toc">
+  <div class="ch-head"><h2>Sumário</h2></div>
+  <ol>
+    <li><span>1</span><a href="#ch1">Boas-vindas</a></li>
+    <li><span>2</span><a href="#ch2">Primeiros conceitos</a></li>
+    <li><span>3</span><a href="#ch3">O mapa do sistema</a></li>
+    <li><span>4</span><a href="#ch4">Preparando a máquina pelo terminal</a></li>
+    <li><span>5</span><a href="#ch5">VS Code: seu ambiente de trabalho</a></li>
+    <li><span>6</span><a href="#ch6">Acesso ao Claude sem assinatura</a></li>
+    <li><span>7</span><a href="#ch7">Claude Code no terminal</a></li>
+    <li><span>8</span><a href="#ch8">Claude Code dentro do VS Code</a></li>
+    <li><span>9</span><a href="#ch9">Como pedir coisas ao Claude</a></li>
+    <li><span>10</span><a href="#ch10">Git e GitHub no fluxo</a></li>
+    <li><span>11</span><a href="#ch11">Como front e back conversam</a></li>
+    <li><span>12</span><a href="#ch12">Frontend com Angular</a></li>
+    <li><span>13</span><a href="#ch13">Backend com NestJS</a></li>
+    <li><span>14</span><a href="#ch14">Banco de dados em container</a></li>
+    <li><span>15</span><a href="#ch15">Juntando tudo e erros comuns</a></li>
+    <li><span>16</span><a href="#ch16">Skills no Claude</a></li>
+    <li><span>17</span><a href="#ch17">SDD com Spec Kit</a></li>
+    <li><span>18</span><a href="#ch18">Mão na massa: as tasks do projeto</a></li>
+    <li><span>19</span><a href="#ch19">Checklist prático</a></li>
+    <li><span>20</span><a href="#ch20">Exercícios e gabarito</a></li>
+    <li><span>21</span><a href="#ch21">Vídeos e documentação</a></li>
+    <li><span>22</span><a href="#ch22">Glossário</a></li>
+  </ol>
+  <h3 style="margin-top:2.5rem">Plano de estudo sugerido: 4 dias</h3>
+  <table>
+    <thead><tr><th>Dia</th><th>Capítulos</th><th>Resultado esperado</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>1 a 6</td><td>Entende as peças de um sistema e deixa a máquina pronta: terminal, Git, Node, Docker, VS Code com as extensões e acesso ao Claude.</td></tr>
+      <tr><td>2</td><td>7 a 11</td><td>Usa o Claude Code no terminal e no VS Code, faz bons pedidos, conhece o fluxo de Git e entende como front e back conversam.</td></tr>
+      <tr><td>3</td><td>12 a 17</td><td>Projeto rodando (banco, API e front), lê um componente Angular e uma rota do Nest, e entende skills e SDD.</td></tr>
+      <tr><td>4</td><td>18 a 20</td><td>Resolve as 5 tasks do projeto com a skill /sdd, completa o checklist e faz os exercícios.</td></tr>
+    </tbody>
+  </table>
+  <p>Os capítulos 21 (vídeos e documentação) e 22 (glossário) são de consulta: volte a eles sempre que precisar. Se um dia render menos, siga a ordem mesmo assim e continue de onde parou no dia seguinte.</p>
+</section>
+
+<!-- ============ 1 ============ -->
+<section class="chapter" id="ch1">
+  <div class="ch-head"><span class="num">01</span><h2>Boas-vindas</h2></div>
+  <p>Este guia foi escrito para quem está <strong>começando do zero</strong>. Você não precisa saber programar, nunca ter aberto um terminal ou nunca ter usado uma IA para programar. Tudo será explicado no momento em que aparecer, com exemplos do dia a dia.</p>
+  <p>Ao final, você vai ter a máquina pronta para trabalhar, vai saber usar o <strong>Claude Code</strong> — uma IA que ajuda a programar — e vai entender as peças de um sistema web de verdade: a tela, o servidor e o banco de dados.</p>
+
+  <h3>O que você vai conseguir fazer</h3>
+  <figure>
+    <svg viewBox="0 0 760 150" role="img" aria-labelledby="f-goal">
+      <title id="f-goal">Quatro etapas da jornada: preparar a máquina, conhecer o Claude Code, entender as peças do sistema e construir com método</title>
+      <g font-size="13" text-anchor="middle">
+        <rect x="5" y="20" width="175" height="100" rx="12" fill="var(--tint)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="92" y="52" font-weight="700">Preparar a máquina</text><text x="92" y="74" font-size="11.5" class="m">terminal, VS Code,</text><text x="92" y="90" font-size="11.5" class="m">Node, Git, Docker</text><text x="92" y="108" font-size="11" class="m">caps. 2 a 5</text>
+        <rect x="197" y="20" width="175" height="100" rx="12" fill="var(--ai-soft)" stroke="var(--ai)" stroke-width="1.5"/>
+        <text x="284" y="52" font-weight="700">Usar o Claude Code</text><text x="284" y="74" font-size="11.5" class="m">acesso, terminal,</text><text x="284" y="90" font-size="11.5" class="m">VS Code, bons pedidos</text><text x="284" y="108" font-size="11" class="m">caps. 6 a 9</text>
+        <rect x="389" y="20" width="175" height="100" rx="12" fill="var(--back-soft)" stroke="var(--back)" stroke-width="1.5"/>
+        <text x="476" y="52" font-weight="700">Entender o sistema</text><text x="476" y="74" font-size="11.5" class="m">Git, Angular, NestJS,</text><text x="476" y="90" font-size="11.5" class="m">banco em container</text><text x="476" y="108" font-size="11" class="m">caps. 10 a 15</text>
+        <rect x="581" y="20" width="175" height="100" rx="12" fill="var(--ai)" />
+        <text x="668" y="52" font-weight="700" style="fill:#fff">Construir com método</text><text x="668" y="74" font-size="11.5" style="fill:#fff">Skills e SDD,</text><text x="668" y="90" font-size="11.5" style="fill:#fff">checklist e exercícios</text><text x="668" y="108" font-size="11" style="fill:#fff">caps. 16 a 20</text>
+      </g>
+      <g stroke="var(--muted)" stroke-width="2"><path d="M181 70h15M373 70h15M565 70h15"/></g>
+    </svg>
+  </figure>
+
+  <h3>Como ler este guia</h3>
+  <ul>
+    <li><strong>Na ordem.</strong> Cada capítulo usa o que veio antes.</li>
+    <li><strong>Com o computador do lado.</strong> Sempre que aparecer um comando, digite você mesmo — copiar e colar ajuda, mas digitar faz você lembrar.</li>
+    <li><strong>Sem pressa.</strong> Errar faz parte. O capítulo 15 tem os erros mais comuns e como resolver.</li>
+    <li><strong>Usando a IA para aprender.</strong> Quando algo não ficar claro, pergunte ao Claude: <em>"me explica como se eu nunca tivesse programado"</em>.</li>
+  </ul>
+
+  <div class="box tip"><span class="t">Este guia tem um projeto pronto ao lado</span><p>O repositório onde este arquivo está já traz o sistema que o guia descreve: <code>frontend/</code> (Angular + Angular Material), <code>api/</code> (NestJS) e o banco no <code>docker-compose.yml</code>. Quer ver tudo funcionando antes de estudar as peças? Siga o <code>README.md</code>: <code>npm run setup</code> uma vez e depois <code>npm run dev</code>. Depois volte aqui para entender, capítulo a capítulo, o que cada parte faz. No fim, o capítulo 18 propõe 5 tasks para você resolver no próprio projeto, com o Claude Code no VS Code.</p></div>
+
+  <div class="box tip"><span class="t">Como os comandos aparecem</span>
+    <ul>
+      <li>Blocos escuros são comandos para digitar no terminal, uma linha por vez, apertando <kbd>Enter</kbd> no fim.</li>
+      <li>Linhas que começam com <code>#</code> são comentários explicando o comando. <strong>Não digite.</strong></li>
+      <li><code>&lt;algo&gt;</code> quer dizer "troque pelo seu valor". Ex.: <code>git clone &lt;endereço&gt;</code> vira <code>git clone https://github.com/empresa/projeto</code>.</li>
+      <li>Quando o comando muda conforme o sistema, ele aparece separado para <strong>Windows</strong>, <strong>macOS</strong> e <strong>Linux</strong>. Use só o do seu.</li>
+      <li>"<strong>O que você deve ver</strong>" mostra o resultado esperado, para você saber que deu certo.</li>
+    </ul>
+  </div>
+
+  <h3>O que você vai precisar</h3>
+  <table>
+    <thead><tr><th>Item</th><th>Detalhe</th></tr></thead>
+    <tbody>
+      <tr><td>Computador</td><td>Windows 10 ou 11, macOS 13 ou mais novo, ou Ubuntu 20.04 ou mais novo. Pelo menos 8 GB de memória (o Docker usa bastante).</td></tr>
+      <tr><td>Internet</td><td>Para baixar as ferramentas e para o Claude funcionar.</td></tr>
+      <tr><td>Permissão para instalar programas</td><td>Em computador da empresa, alguns downloads podem ser bloqueados. Se um comando falhar por "permissão" ou "rede", fale com o suporte antes de tentar contornar.</td></tr>
+      <tr><td>Conta no GitHub</td><td>Gratuita, em github.com.</td></tr>
+      <tr><td>Acesso ao Claude</td><td>Não precisa de assinatura. O capítulo 6 explica como.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 2 ============ -->
+<section class="chapter" id="ch2">
+  <div class="ch-head"><span class="num">02</span><h2>Primeiros conceitos</h2></div>
+  <p>Antes de instalar qualquer coisa, vale entender o que cada palavra significa. Volte a este capítulo sempre que se perder.</p>
+
+  <h3>Código, arquivo e projeto</h3>
+  <p><strong>Código</strong> é texto com instruções para o computador, escrito numa <strong>linguagem de programação</strong>. Neste guia a linguagem principal é o <strong>TypeScript</strong>, uma versão do JavaScript que avisa erros antes de rodar.</p>
+  <p>O código fica em <strong>arquivos</strong> comuns, como um documento de texto, só que com outra extensão: <code>.ts</code> para TypeScript, <code>.html</code> para estrutura de páginas, <code>.css</code> para aparência, <code>.json</code> para configurações.</p>
+  <p>Um <strong>projeto</strong> é uma pasta com todos os arquivos de um sistema. É nessa pasta que você e o Claude vão trabalhar.</p>
+  <figure>
+    <svg viewBox="0 0 760 175" role="img" aria-labelledby="f-code">
+      <title id="f-code">Você escreve código em arquivos dentro da pasta do projeto; o Node.js executa ou converte esse código; o resultado aparece no navegador</title>
+      <rect x="10" y="20" width="220" height="135" rx="10" fill="var(--tint)" stroke="var(--line)" stroke-width="2"/>
+      <text x="28" y="46" font-weight="700">📁 fullcycle/</text>
+      <text x="46" y="72" class="mono" font-size="12">📄 tarefas.component.ts</text>
+      <text x="46" y="94" class="mono" font-size="12">📄 tarefas.html</text>
+      <text x="46" y="116" class="mono" font-size="12">📄 estilos.css</text>
+      <text x="46" y="138" class="mono" font-size="12">📄 package.json</text>
+      <path d="M238 88 h50" stroke="var(--ink)" stroke-width="2"/><path d="M282 81 l9 7 -9 7" fill="none" stroke="var(--ink)" stroke-width="2"/>
+      <rect x="300" y="45" width="170" height="85" rx="10" fill="#fff" stroke="var(--ok)" stroke-width="2"/>
+      <text x="385" y="80" text-anchor="middle" font-weight="700">Node.js</text><text x="385" y="102" text-anchor="middle" font-size="12" class="m">lê e roda o código</text>
+      <path d="M478 88 h50" stroke="var(--ink)" stroke-width="2"/><path d="M522 81 l9 7 -9 7" fill="none" stroke="var(--ink)" stroke-width="2"/>
+      <rect x="540" y="20" width="210" height="135" rx="10" fill="#fff" stroke="var(--line)" stroke-width="2"/>
+      <rect x="540" y="20" width="210" height="24" rx="10" fill="var(--tint)"/>
+      <text x="556" y="37" class="mono m" font-size="11">localhost:4200</text>
+      <rect x="558" y="58" width="175" height="18" rx="4" fill="var(--tint)"/><rect x="558" y="84" width="175" height="18" rx="4" fill="var(--tint)"/><rect x="558" y="110" width="120" height="18" rx="4" fill="var(--front)" opacity=".7"/>
+      <text x="645" y="148" text-anchor="middle" font-size="12" class="m">o que o usuário vê</text>
+    </svg>
+  </figure>
+
+  <h3>O terminal</h3>
+  <p>O <strong>terminal</strong> é uma janela onde você conversa com o computador <strong>escrevendo comandos</strong> em vez de clicar. Parece antigo, mas é o jeito mais rápido e preciso de instalar ferramentas e rodar projetos. Você digita um comando, aperta <kbd>Enter</kbd> e o computador responde com texto.</p>
+  <div class="box"><span class="t">Analogia</span><p>Clicar em ícones é como apontar para fotos no cardápio. O terminal é como falar o pedido exato para o garçom: dá mais trabalho no começo, mas não tem ambiguidade.</p></div>
+
+  <h3>Ferramentas que vamos instalar e para que servem</h3>
+  <table>
+    <thead><tr><th>Ferramenta</th><th>O que é</th><th>Analogia</th></tr></thead>
+    <tbody>
+      <tr><td>Gerenciador de pacotes</td><td>Instala outros programas por comando (<code>winget</code>, <code>brew</code>, <code>apt</code>)</td><td>A loja de aplicativos do celular</td></tr>
+      <tr><td>VS Code</td><td>Editor onde você lê e escreve o código</td><td>O Word, só que para código</td></tr>
+      <tr><td>Node.js e npm</td><td>Roda código JavaScript/TypeScript fora do navegador. O npm baixa bibliotecas</td><td>O motor do carro</td></tr>
+      <tr><td>Git</td><td>Guarda o histórico de todas as mudanças</td><td>"Controlar alterações" do Word, para o projeto inteiro</td></tr>
+      <tr><td>GitHub</td><td>Site onde o time guarda e revisa o código</td><td>Um Google Drive para projetos</td></tr>
+      <tr><td>Docker</td><td>Roda programas dentro de "caixas" padronizadas</td><td>Um contêiner de navio: igual em qualquer porto</td></tr>
+      <tr><td>Claude Code</td><td>IA que lê o projeto, explica, escreve código e roda comandos com sua permissão</td><td>Um colega experiente sentado do seu lado</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Claude no navegador × Claude Code</h3>
+  <table>
+    <thead><tr><th></th><th>Claude no navegador (claude.ai)</th><th>Claude Code</th></tr></thead>
+    <tbody>
+      <tr><td>Onde roda</td><td>Num site</td><td>No terminal ou dentro do VS Code</td></tr>
+      <tr><td>Vê seu projeto?</td><td>Só o que você colar ou anexar</td><td>Sim, lê os arquivos da pasta sozinho</td></tr>
+      <tr><td>Muda arquivos?</td><td>Não</td><td>Sim, pedindo sua permissão</td></tr>
+      <tr><td>Roda comandos?</td><td>Não</td><td>Sim, pedindo sua permissão</td></tr>
+      <tr><td>Bom para</td><td>Tirar dúvidas, estudar conceitos</td><td>Trabalhar num projeto de verdade</td></tr>
+    </tbody>
+  </table>
+  <div class="box warn"><span class="t">A regra mais importante do guia</span><p>A IA erra. Ela escreve com confiança mesmo quando está errada. <strong>Você é responsável por tudo que vai para o projeto.</strong> Por isso este guia ensina as peças do sistema: para você conseguir conferir o que o Claude fez.</p></div>
+
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>Projeto é uma pasta com arquivos de código. O terminal é onde você dá comandos. VS Code é onde você edita. Node roda o código, Git guarda o histórico, Docker roda o banco numa caixa, e o Claude Code é a IA que trabalha dentro da pasta do projeto — com você conferindo.</p></div>
+</section>
+
+<section class="chapter" id="ch3">
+  <div class="ch-head"><span class="num">03</span><h2>O mapa do sistema</h2></div>
+  <p>Quase todo sistema web tem três camadas, e cada uma só conversa com a vizinha. A analogia que vamos usar no guia inteiro é a de um restaurante.</p>
+  <figure>
+    <svg viewBox="0 0 760 300" role="img" aria-labelledby="f-rest">
+      <title id="f-rest">Restaurante: cliente é o navegador, salão é o Angular, cozinha é o NestJS, despensa é o banco em container</title>
+      <rect x="10" y="40" width="150" height="200" rx="12" fill="var(--tint)" stroke="var(--line)"/>
+      <circle cx="85" cy="105" r="22" fill="var(--muted)" opacity=".45"/><rect x="60" y="132" width="50" height="55" rx="20" fill="var(--muted)" opacity=".45"/>
+      <text x="85" y="215" text-anchor="middle" font-weight="700">Cliente</text><text x="85" y="232" text-anchor="middle" font-size="12" class="m">navegador</text>
+      <rect x="195" y="40" width="160" height="200" rx="12" fill="var(--front-soft)" stroke="var(--front)" stroke-width="2"/>
+      <rect x="245" y="85" width="60" height="45" rx="4" fill="#fff" stroke="var(--front)"/><path d="M253 98h44M253 108h38M253 118h30" stroke="var(--front)"/>
+      <rect x="230" y="145" width="90" height="10" rx="3" fill="var(--front)" opacity=".7"/><rect x="238" y="155" width="6" height="30" fill="var(--front)" opacity=".7"/><rect x="306" y="155" width="6" height="30" fill="var(--front)" opacity=".7"/>
+      <text x="275" y="215" text-anchor="middle" font-weight="700" style="fill:var(--front)">Salão</text><text x="275" y="232" text-anchor="middle" font-size="12" class="m">Angular · porta 4200</text>
+      <rect x="390" y="40" width="160" height="200" rx="12" fill="var(--back-soft)" stroke="var(--back)" stroke-width="2"/>
+      <rect x="420" y="140" width="100" height="45" rx="6" fill="var(--back)" opacity=".7"/><circle cx="447" cy="140" r="10" fill="#fff" stroke="var(--back)" stroke-width="2"/><circle cx="493" cy="140" r="10" fill="#fff" stroke="var(--back)" stroke-width="2"/>
+      <path d="M445 95 q5 -14 10 0 q5 -14 10 0 q5 -14 10 0 q5 -14 10 0" fill="none" stroke="var(--back)" stroke-width="2"/>
+      <text x="470" y="215" text-anchor="middle" font-weight="700" style="fill:var(--back)">Cozinha</text><text x="470" y="232" text-anchor="middle" font-size="12" class="m">NestJS · porta 3000</text>
+      <rect x="585" y="40" width="165" height="200" rx="12" fill="var(--db-soft)" stroke="var(--db)" stroke-width="2" stroke-dasharray="7 5"/>
+      <ellipse cx="667" cy="95" rx="32" ry="10" fill="var(--db)"/><rect x="635" y="95" width="64" height="70" fill="var(--db)" opacity=".55"/><ellipse cx="667" cy="165" rx="32" ry="10" fill="var(--db)"/>
+      <text x="667" y="215" text-anchor="middle" font-weight="700" style="fill:var(--db)">Despensa</text><text x="667" y="232" text-anchor="middle" font-size="12" class="m">Postgres em Docker · 5433</text>
+      <g stroke="var(--ink)" stroke-width="2" fill="none"><path d="M162 22 h580"/><path d="M734 15 l9 7 -9 7"/><path d="M742 278 h-580"/><path d="M170 271 l-9 7 9 7"/></g>
+      <text x="380" y="16" text-anchor="middle" font-size="12">pedido (requisição)</text>
+      <text x="380" y="296" text-anchor="middle" font-size="12">prato (resposta)</text>
+    </svg>
+  </figure>
+  <table>
+    <thead><tr><th>No restaurante</th><th>No sistema</th><th>Responsabilidade</th></tr></thead>
+    <tbody>
+      <tr><td>Cliente</td><td>Navegador</td><td>Quem usa. Só vê o cardápio e recebe o prato.</td></tr>
+      <tr><td>Salão e garçom</td><td>Frontend Angular</td><td>Mostra as telas, anota o pedido, leva para a cozinha e serve a resposta.</td></tr>
+      <tr><td>Cozinha</td><td>Backend NestJS</td><td>Confere o pedido, segue a receita (regras de negócio), protege o acesso.</td></tr>
+      <tr><td>Despensa</td><td>PostgreSQL em container</td><td>Guarda os dados de forma organizada e permanente.</td></tr>
+    </tbody>
+  </table>
+  <div class="box tip"><span class="t">Por que isso importa</span><p>O cliente nunca entra na cozinha. Por isso senhas, regras importantes e acesso ao banco ficam no backend — nunca no frontend, que roda no computador do usuário e pode ser inspecionado por qualquer um.</p></div>
+
+  <h3>Onde o Claude Code entra</h3>
+  <figure>
+    <svg viewBox="0 0 760 170" role="img" aria-labelledby="f-cc">
+      <title id="f-cc">O Claude Code roda no terminal, dentro da pasta do projeto, e lê e edita os arquivos das três camadas, guiado por CLAUDE.md, skills e specs</title>
+      <rect x="10" y="20" width="230" height="130" rx="10" fill="#1f2836"/>
+      <text x="26" y="50" class="mono" font-size="13" style="fill:#7ee2a0">~/fullcycle $ claude</text>
+      <text x="26" y="78" class="mono" font-size="12" style="fill:#e8edf4">&gt; cria o endpoint PATCH</text>
+      <text x="26" y="96" class="mono" font-size="12" style="fill:#e8edf4">  /tarefas/:id</text>
+      <text x="26" y="128" class="mono" font-size="11" style="fill:#93a3b8">lê · edita · roda testes</text>
+      <path d="M245 85 h40" stroke="var(--ai)" stroke-width="2.5"/><path d="M279 78 l9 7 -9 7" fill="none" stroke="var(--ai)" stroke-width="2.5"/>
+      <rect x="295" y="15" width="455" height="140" rx="10" fill="none" stroke="var(--line)" stroke-width="2"/>
+      <text x="312" y="40" font-weight="700">fullcycle/</text>
+      <rect x="312" y="55" width="95" height="38" rx="6" fill="var(--front-soft)" stroke="var(--front)"/><text x="359" y="79" text-anchor="middle" font-size="13">frontend/</text>
+      <rect x="417" y="55" width="95" height="38" rx="6" fill="var(--back-soft)" stroke="var(--back)"/><text x="464" y="79" text-anchor="middle" font-size="13">api/</text>
+      <rect x="522" y="55" width="210" height="38" rx="6" fill="var(--db-soft)" stroke="var(--db)"/><text x="627" y="79" text-anchor="middle" font-size="13">docker-compose.yml</text>
+      <rect x="312" y="103" width="120" height="38" rx="6" fill="var(--ai-soft)" stroke="var(--ai)"/><text x="372" y="127" text-anchor="middle" font-size="13">CLAUDE.md</text>
+      <rect x="442" y="103" width="140" height="38" rx="6" fill="var(--ai-soft)" stroke="var(--ai)"/><text x="512" y="127" text-anchor="middle" font-size="13">.claude/skills/</text>
+      <rect x="592" y="103" width="140" height="38" rx="6" fill="var(--ai-soft)" stroke="var(--ai)"/><text x="662" y="127" text-anchor="middle" font-size="13">specs/</text>
+    </svg>
+    <figcaption>O Claude Code trabalha na pasta onde você o abriu. Os arquivos verdes são as instruções que guiam o trabalho dele: <code>CLAUDE.md</code> (cap. 7), skills (cap. 16) e specs (cap. 17).</figcaption>
+  </figure>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>Um sistema web tem três camadas: o frontend (Angular) mostra as telas, o backend (NestJS) aplica as regras e o banco (PostgreSQL) guarda os dados. Cada uma só conversa com a vizinha. O Claude Code trabalha na pasta do projeto, que contém as três.</p></div>
+</section>
+
+<section class="chapter" id="ch4">
+  <div class="ch-head"><span class="num">04</span><h2>Preparando a máquina pelo terminal</h2></div>
+  <p>Agora vamos instalar tudo pelo terminal (lembre do capítulo 2: é a janela onde você digita comandos). Faça <strong>uma seção por vez</strong> e confira o resultado antes de seguir.</p>
+  <figure>
+    <svg viewBox="0 0 760 120" role="img" aria-labelledby="f-stack"><title id="f-stack">Camadas do ambiente: sistema operacional, gerenciador de pacotes, ferramentas, editor e Claude Code</title>
+      <g font-size="13" text-anchor="middle">
+      <rect x="5" y="80" width="750" height="34" rx="6" fill="var(--tint)" stroke="var(--line)"/><text x="380" y="102">Sistema operacional: Windows, macOS ou Linux</text>
+      <rect x="40" y="42" width="680" height="34" rx="6" fill="#fff" stroke="var(--ink)"/><text x="380" y="64">Gerenciador de pacotes: winget · brew · apt</text>
+      <rect x="75" y="4" width="610" height="34" rx="6" fill="var(--ai-soft)" stroke="var(--ai)"/><text x="380" y="26">Git · Node.js · Docker · uv · VS Code · Claude Code</text></g>
+    </svg>
+    <figcaption>Primeiro o gerenciador de pacotes, depois as ferramentas por cima dele. Cada camada depende da de baixo.</figcaption>
+  </figure>
+
+  <h3>4.1 Abrindo o terminal</h3>
+  <table>
+    <thead><tr><th>Sistema</th><th>Como abrir</th><th>Como saber que deu certo</th></tr></thead>
+    <tbody>
+      <tr><td>Windows</td><td>Tecla Windows, digite <strong>Terminal</strong> e abra. Ele já abre no PowerShell.</td><td>A linha começa com <code>PS C:\Users\SeuNome&gt;</code></td></tr>
+      <tr><td>macOS</td><td><kbd>Cmd</kbd> + <kbd>Espaço</kbd>, digite <strong>Terminal</strong> e abra.</td><td>A linha termina com <code>%</code> ou <code>$</code></td></tr>
+      <tr><td>Linux</td><td><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd></td><td>A linha termina com <code>$</code></td></tr>
+    </tbody>
+  </table>
+  <div class="box"><span class="t">Experimente agora</span><p>Abra o terminal, digite <code>pwd</code> e aperte <kbd>Enter</kbd>. Ele mostra em qual pasta você está, algo como <code>C:\Users\SeuNome</code> ou <code>/home/seunome</code>. Pronto: você usou o terminal.</p></div>
+  <h4>Os comandos de navegação que você vai usar o tempo todo</h4>
+  <table>
+    <thead><tr><th>Comando</th><th>O que faz</th></tr></thead>
+    <tbody>
+      <tr><td><code>pwd</code></td><td>Mostra em qual pasta você está.</td></tr>
+      <tr><td><code>ls</code></td><td>Lista os arquivos da pasta (no PowerShell também funciona).</td></tr>
+      <tr><td><code>cd pasta</code></td><td>Entra numa pasta. <code>cd ..</code> volta uma.</td></tr>
+      <tr><td><code>mkdir nome</code></td><td>Cria uma pasta.</td></tr>
+      <tr><td><code>code .</code></td><td>Abre a pasta atual no VS Code.</td></tr>
+      <tr><td><kbd>Tab</kbd></td><td>Completa nomes de pastas e arquivos. Use sempre.</td></tr>
+      <tr><td><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td>Interrompe o comando que está rodando (ex.: um servidor).</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4.2 Instalando as ferramentas</h3>
+  <p>Cada sistema tem um <strong>gerenciador de pacotes</strong> que instala programas com um comando: <code>winget</code> no Windows (já vem instalado), <code>brew</code> no macOS e <code>apt</code> no Ubuntu.</p>
+  <div class="box warn"><span class="t">Só no macOS: instale o Homebrew primeiro</span>
+<pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></pre>
+  <p>Ao final, o instalador mostra dois comandos em "Next steps". Copie e rode os dois.</p></div>
+
+  <div class="box warn"><span class="t">Só no Windows: libere scripts no PowerShell</span><p>Por padrão o PowerShell bloqueia alguns programas instalados pelo npm (você veria <code>a execução de scripts foi desabilitada neste sistema</code>). Rode uma vez:</p>
+<pre style="margin:.3rem 0 0"><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+<span class="c"># responda S (Sim) e aperte Enter</span></code></pre></div>
+
+  <h4>Git, VS Code e GitHub CLI</h4>
+  <div class="os">
+    <div><h4>Windows</h4><pre><code>winget install Git.Git
+winget install Microsoft.VisualStudioCode
+winget install GitHub.cli</code></pre></div>
+    <div><h4>macOS</h4><pre><code>brew install git gh
+brew install --cask visual-studio-code</code></pre></div>
+    <div><h4>Linux (Ubuntu)</h4><pre><code>sudo apt update
+sudo apt install -y git gh
+sudo snap install code --classic</code></pre></div>
+  </div>
+
+  <h4>Node.js (versão LTS)</h4>
+  <p>Node roda o Angular e o NestJS. Use sempre a versão <strong>LTS</strong> (suporte longo). No Linux recomendamos o <strong>nvm</strong>, que permite trocar de versão sem <code>sudo</code>.</p>
+  <div class="os">
+    <div><h4>Windows</h4><pre><code>winget install OpenJS.NodeJS.LTS</code></pre></div>
+    <div><h4>macOS</h4><pre><code>brew install node</code></pre></div>
+    <div><h4>Linux (Ubuntu)</h4><pre><code><span class="c"># instale o nvm com o comando
+# do README: github.com/nvm-sh/nvm
+# feche e abra o terminal, depois:</span>
+nvm install --lts</code></pre></div>
+  </div>
+
+  <h4>Docker</h4>
+  <div class="os">
+    <div><h4>Windows</h4><pre><code>winget install Docker.DockerDesktop
+<span class="c"># reinicie o computador
+# abra o Docker Desktop uma vez
+# e aceite os termos.
+# Se pedir WSL, rode como
+# administrador:  wsl --install
+# e reinicie de novo.</span></code></pre></div>
+    <div><h4>macOS</h4><pre><code>brew install --cask docker
+<span class="c"># abra o app Docker uma vez
+# e espere a baleia ficar parada</span></code></pre></div>
+    <div><h4>Linux (Ubuntu)</h4><pre><code>curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER
+<span class="c"># saia e entre de novo
+# na sessão do Linux</span></code></pre></div>
+  </div>
+
+  <h4>uv (necessário para o Spec Kit, cap. 17)</h4>
+  <div class="os stack">
+    <div><h4>Windows</h4><pre><code>winget install astral-sh.uv</code></pre></div>
+    <div><h4>macOS</h4><pre><code>brew install uv</code></pre></div>
+    <div><h4>Linux (Ubuntu)</h4><pre><code>curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre></div>
+  </div>
+
+  <h4>CLIs do Angular e do NestJS (iguais em todos os sistemas)</h4>
+<pre><code>npm install -g @angular/cli @nestjs/cli</code></pre>
+
+  <div class="box warn"><span class="t">Feche e abra o terminal depois de instalar</span><p>O terminal só "enxerga" programas novos quando é reaberto. Se aparecer <code>command not found</code> ou <code>não é reconhecido como um comando</code> logo depois de instalar, esse é quase sempre o motivo.</p></div>
+
+  <h3>4.3 Verificando a instalação</h3>
+  <p>Feche e abra o terminal. Depois rode cada linha. Todas devem responder com um número de versão.</p>
+<pre><code>git --version
+node -v
+npm -v
+docker -v
+docker compose version
+uv --version
+ng version
+nest --version</code></pre>
+  <p><strong>O que você deve ver</strong> (os números podem ser outros, o importante é aparecer uma versão):</p>
+<pre><code><span class="p">git version 2.47.1
+v22.12.0
+10.9.0
+Docker version 27.4.0
+Docker Compose version v2.31.0
+uv 0.5.11</span></code></pre>
+  <p>Se alguma linha disser <em>"não é reconhecido"</em> ou <em>"command not found"</em>, aquela ferramenta não foi instalada ou o terminal precisa ser reaberto.</p>
+  <p>Teste também se o Docker está realmente funcionando (não só instalado):</p>
+<pre><code>docker run hello-world
+<span class="c"># deve imprimir "Hello from Docker!"</span></code></pre>
+
+  <h3>4.4 Configurando o Git e o GitHub</h3>
+<pre><code>git config --global user.name "Seu Nome"
+git config --global user.email "seu-email@empresa.com"
+git config --global init.defaultBranch main
+
+gh auth login
+<span class="c"># escolha: GitHub.com → HTTPS → Login with a web browser
+# copie o código mostrado e confirme no navegador</span></code></pre>
+  <p>O <code>gh auth login</code> já configura o Git para enviar código ao GitHub sem pedir senha a cada push.</p>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>Instale primeiro o gerenciador de pacotes, depois Git, VS Code, Node, Docker e uv, e as CLIs do Angular e do Nest. Feche e abra o terminal, confira as versões, rode <code>docker run hello-world</code> e faça o <code>gh auth login</code>.</p></div>
+</section>
+
+<!-- ============ 5 VS CODE ============ -->
+<section class="chapter" id="ch5">
+  <div class="ch-head"><span class="num">05</span><h2>VS Code: seu ambiente de trabalho</h2></div>
+  <p>O <strong>VS Code</strong> (Visual Studio Code) é o programa onde você vai passar a maior parte do tempo. Nele você abre a pasta do projeto, lê e edita arquivos, usa o terminal e conversa com o Claude — tudo na mesma janela. Esse tipo de programa se chama <strong>IDE</strong> ou editor de código.</p>
+  <p>Você já instalou o VS Code no capítulo 4. Agora vamos deixá-lo pronto.</p>
+
+  <h3>5.1 Conhecendo a tela</h3>
+  <figure>
+    <svg viewBox="0 0 760 400" role="img" aria-labelledby="f-vsc">
+      <title id="f-vsc">Janela do VS Code: barra de atividades à esquerda, explorador de arquivos, editor no centro, painel do Claude Code à direita, terminal embaixo e barra de status no rodapé</title>
+      <rect x="5" y="5" width="750" height="390" rx="10" fill="#fff" stroke="var(--ink)" stroke-width="2"/>
+      <rect x="5" y="5" width="750" height="26" rx="10" fill="var(--tint)"/><text x="380" y="23" text-anchor="middle" font-size="12" class="m">fullcycle — Visual Studio Code</text>
+      <rect x="5" y="31" width="44" height="340" fill="#2b3442"/>
+      <g fill="#93a3b8"><rect x="17" y="45" width="20" height="20" rx="3"/><circle cx="27" cy="92" r="9"/><rect x="17" y="120" width="20" height="20" rx="3"/><rect x="17" y="155" width="20" height="20" rx="3"/></g>
+      <path d="M27 192 l4 8 9 1 -7 6 2 9 -8 -5 -8 5 2 -9 -7 -6 9 -1z" fill="var(--ai)"/>
+      <rect x="49" y="31" width="150" height="340" fill="var(--tint)"/>
+      <text x="60" y="52" font-size="11" font-weight="700" class="m">EXPLORER</text>
+      <g font-size="11.5" class="mono"><text x="62" y="76">▾ fullcycle</text><text x="74" y="96">▸ api</text><text x="74" y="116">▸ frontend</text><text x="74" y="136">  CLAUDE.md</text><text x="74" y="156">  docker-compose.yml</text><text x="74" y="176">  README.md</text></g>
+      <rect x="199" y="31" width="330" height="22" fill="var(--tint)"/><rect x="199" y="31" width="150" height="22" fill="#fff"/><text x="212" y="47" font-size="11" class="mono">tarefas.service.ts</text>
+      <g class="mono" font-size="11"><text x="210" y="76" class="m">1</text><text x="230" y="76" style="fill:var(--back)">@Injectable()</text>
+      <text x="210" y="94" class="m">2</text><text x="230" y="94">export class TarefasService {</text>
+      <text x="210" y="112" class="m">3</text><text x="246" y="112">listar() {</text>
+      <text x="210" y="130" class="m">4</text><text x="262" y="130">return this.repo.find();</text>
+      <text x="210" y="148" class="m">5</text><text x="246" y="148">}</text>
+      <text x="210" y="166" class="m">6</text><text x="230" y="166">}</text></g>
+      <rect x="529" y="31" width="226" height="250" fill="var(--ai-soft)"/>
+      <text x="542" y="52" font-size="12" font-weight="700" style="fill:var(--ai)">✳ Claude Code</text>
+      <rect x="542" y="64" width="200" height="40" rx="6" fill="#fff"/><text x="552" y="82" font-size="11">o que faz o método</text><text x="552" y="97" font-size="11">listar?</text>
+      <rect x="542" y="112" width="200" height="72" rx="6" fill="#fff" opacity=".7"/><text x="552" y="130" font-size="11" class="m">Ele busca todas as</text><text x="552" y="145" font-size="11" class="m">tarefas no banco usando</text><text x="552" y="160" font-size="11" class="m">o repository…</text>
+      <rect x="542" y="240" width="200" height="30" rx="6" fill="#fff" stroke="var(--ai)"/><text x="552" y="259" font-size="11" class="m">Pergunte ao Claude…</text>
+      <rect x="199" y="281" width="556" height="90" fill="#1f2836"/>
+      <text x="212" y="299" font-size="10.5" style="fill:#93a3b8">TERMINAL</text>
+      <text x="212" y="321" class="mono" font-size="11.5" style="fill:#7ee2a0">~/fullcycle $ docker compose up -d</text>
+      <text x="212" y="340" class="mono" font-size="11.5" style="fill:#e8edf4">Container estudo-db  Started</text>
+      <rect x="5" y="371" width="750" height="24" fill="var(--ai)"/><text x="16" y="388" font-size="11" style="fill:#fff">⎇ main   ✓ 0 problemas</text>
+      <g font-size="12" font-weight="700">
+        <circle cx="27" cy="250" r="13" fill="var(--git)"/><text x="27" y="255" text-anchor="middle" style="fill:#fff">A</text>
+        <circle cx="180" cy="210" r="13" fill="var(--git)"/><text x="180" y="215" text-anchor="middle" style="fill:#fff">B</text>
+        <circle cx="505" cy="200" r="13" fill="var(--git)"/><text x="505" y="205" text-anchor="middle" style="fill:#fff">C</text>
+        <circle cx="730" cy="215" r="13" fill="var(--git)"/><text x="730" y="220" text-anchor="middle" style="fill:#fff">D</text>
+        <circle cx="730" cy="320" r="13" fill="var(--git)"/><text x="730" y="325" text-anchor="middle" style="fill:#fff">E</text>
+        <circle cx="400" cy="383" r="11" fill="#fff"/><text x="400" y="387" text-anchor="middle" style="fill:var(--git)">F</text>
+      </g>
+    </svg>
+  </figure>
+  <table>
+    <thead><tr><th></th><th>Área</th><th>Para que serve</th></tr></thead>
+    <tbody>
+      <tr><td><strong>A</strong></td><td>Barra de atividades</td><td>Troca entre arquivos, busca, Git, extensões. O ícone em forma de faísca abre o Claude Code.</td></tr>
+      <tr><td><strong>B</strong></td><td>Explorer</td><td>A árvore de pastas e arquivos do projeto.</td></tr>
+      <tr><td><strong>C</strong></td><td>Editor</td><td>Onde o arquivo aberto aparece. Cada arquivo abre numa aba.</td></tr>
+      <tr><td><strong>D</strong></td><td>Painel do Claude Code</td><td>A conversa com o Claude. Pode ser arrastado para outro lugar.</td></tr>
+      <tr><td><strong>E</strong></td><td>Terminal integrado</td><td>O mesmo terminal do capítulo 4, já aberto na pasta do projeto.</td></tr>
+      <tr><td><strong>F</strong></td><td>Barra de status</td><td>Mostra a branch do Git e se há erros no código.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>5.2 Atalhos que você vai usar todo dia</h3>
+  <table>
+    <thead><tr><th>Ação</th><th>Windows / Linux</th><th>macOS</th></tr></thead>
+    <tbody>
+      <tr><td>Paleta de comandos (procura qualquer função)</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td></tr>
+      <tr><td>Abrir arquivo pelo nome</td><td><kbd>Ctrl</kbd>+<kbd>P</kbd></td><td><kbd>Cmd</kbd>+<kbd>P</kbd></td></tr>
+      <tr><td>Abrir / fechar o terminal</td><td><kbd>Ctrl</kbd>+<kbd>`</kbd></td><td><kbd>Ctrl</kbd>+<kbd>`</kbd></td></tr>
+      <tr><td>Novo terminal</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>`</kbd></td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>`</kbd></td></tr>
+      <tr><td>Extensões</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd></td></tr>
+      <tr><td>Salvar</td><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td><kbd>Cmd</kbd>+<kbd>S</kbd></td></tr>
+      <tr><td>Buscar em todos os arquivos</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></td></tr>
+    </tbody>
+  </table>
+  <p>A tecla <kbd>`</kbd> é a crase, normalmente ao lado do número 1 ou perto do <kbd>Enter</kbd> no teclado brasileiro.</p>
+
+  <h3>5.3 Habilitando o comando <code>code</code> no terminal</h3>
+  <p>O comando <code>code .</code> abre a pasta atual no VS Code. No Windows e no Linux ele já funciona depois da instalação. No macOS, faça uma vez:</p>
+  <ol class="steps">
+    <li><strong>Abra o VS Code</strong></li>
+    <li><strong>Abra a paleta de comandos</strong><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></li>
+    <li><strong>Digite "shell command"</strong>e escolha <em>Shell Command: Install 'code' command in PATH</em>.</li>
+    <li><strong>Feche e abra o terminal</strong>e teste com <code>code --version</code>.</li>
+  </ol>
+
+  <h3>5.4 Instalando as extensões</h3>
+  <p><strong>Extensões</strong> são complementos que ensinam o VS Code a entender cada tecnologia: colorir o código, apontar erros, formatar. Instale estas:</p>
+  <table>
+    <thead><tr><th>Extensão (nome na loja)</th><th>Para que serve</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Claude Code</strong> (Anthropic)</td><td>O Claude dentro do VS Code — capítulo 8.</td></tr>
+      <tr><td><strong>Angular Language Service</strong></td><td>Entende os templates do Angular e aponta erros.</td></tr>
+      <tr><td><strong>ESLint</strong></td><td>Aponta problemas de qualidade no código.</td></tr>
+      <tr><td><strong>Prettier - Code formatter</strong></td><td>Arruma a formatação automaticamente.</td></tr>
+      <tr><td><strong>Docker</strong> / Container Tools</td><td>Mostra containers e ajuda com o <code>docker-compose.yml</code>.</td></tr>
+      <tr><td><strong>REST Client</strong></td><td>Testa a API direto de um arquivo, sem precisar do <code>curl</code>.</td></tr>
+      <tr><td><strong>Portuguese (Brazil) Language Pack</strong></td><td>Opcional: deixa o VS Code em português.</td></tr>
+    </tbody>
+  </table>
+  <h4>Pelo próprio VS Code</h4>
+  <ol class="steps">
+    <li><strong>Abra a aba de extensões</strong><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> (ou <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> no Mac).</li>
+    <li><strong>Busque pelo nome</strong>da tabela acima.</li>
+    <li><strong>Confira o autor</strong>antes de instalar. A extensão do Claude Code é publicada pela <strong>Anthropic</strong>; existem cópias de outros autores.</li>
+    <li><strong>Clique em Install</strong>.</li>
+  </ol>
+  <h4>Ou pelo terminal, de uma vez</h4>
+<pre><code>code --install-extension anthropic.claude-code
+code --install-extension Angular.ng-template
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension esbenp.prettier-vscode
+code --install-extension humao.rest-client
+<span class="c"># Docker: instale pela aba de extensões, buscando "Docker"</span></code></pre>
+  <p><strong>O que você deve ver:</strong> <code>Extension '...' was successfully installed.</code> para cada linha.</p>
+
+  <h3>5.5 Duas configurações que ajudam muito</h3>
+  <p>Abra a paleta de comandos, digite <em>Preferences: Open User Settings (JSON)</em> e acrescente dentro das chaves:</p>
+<pre><code>"editor.formatOnSave": true,
+"editor.defaultFormatter": "esbenp.prettier-vscode",
+"files.autoSave": "onFocusChange"</code></pre>
+  <p>Assim o código é arrumado sempre que você salva, e o arquivo salva sozinho quando você troca de janela — menos chance de rodar o projeto com uma mudança que não foi salva.</p>
+
+  <h3>5.6 Abrindo um projeto</h3>
+<pre><code>cd caminho/da/pasta/do/projeto
+code .</code></pre>
+  <p>O ponto (<code>.</code>) significa "a pasta onde estou". Na primeira vez, o VS Code pergunta se você confia nos autores dos arquivos. Para o projeto de estudo, confirme.</p>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>O VS Code junta editor, terminal e Claude numa janela. Instale as extensões da tabela (principalmente a do Claude Code, da Anthropic), ligue a formatação ao salvar e abra projetos com <code>code .</code>.</p></div>
+</section>
+
+<!-- ============ 6 ACESSO ============ -->
+<section class="chapter ai" id="ch6">
+  <div class="ch-head"><span class="num">06</span><h2>Acesso ao Claude sem assinatura</h2></div>
+  <p>Para usar o Claude Code você precisa de uma <strong>conta com acesso</strong>. Existem dois jeitos de pagar: assinatura mensal (planos Pro, Max e outros) ou <strong>pagamento por uso</strong> pelo <strong>Claude Console</strong>. Você <strong>não precisa de assinatura</strong>: o Console funciona sozinho.</p>
+  <div class="box warn"><span class="t">Atenção</span><p>O plano gratuito do claude.ai <strong>não</strong> está entre as contas aceitas pelo Claude Code. Ter conta grátis no site não basta.</p></div>
+
+  <h3>6.1 Qual caminho é o seu?</h3>
+  <figure>
+    <svg viewBox="0 0 760 260" role="img" aria-labelledby="f-acc">
+      <title id="f-acc">Se a empresa fornece acesso, use o convite ou conta que ela indicar; se não, crie uma conta no Claude Console e adicione créditos pré-pagos</title>
+      <rect x="230" y="10" width="300" height="50" rx="10" fill="var(--tint)" stroke="var(--ink)" stroke-width="1.5"/>
+      <text x="380" y="41" text-anchor="middle" font-weight="700">A empresa fornece acesso ao Claude?</text>
+      <path d="M300 60 L170 110" stroke="var(--ink)" stroke-width="1.8"/><path d="M460 60 L590 110" stroke="var(--ink)" stroke-width="1.8"/>
+      <text x="215" y="88" font-size="13" font-weight="700" style="fill:var(--ok)">sim</text><text x="530" y="88" font-size="13" font-weight="700" style="fill:var(--err)">não</text>
+      <rect x="20" y="110" width="320" height="130" rx="10" fill="var(--ai-soft)" stroke="var(--ai)" stroke-width="2"/>
+      <text x="40" y="140" font-weight="700">Caminho A — acesso da empresa</text>
+      <text x="40" y="166" font-size="12.5">Você recebe um convite por e-mail</text>
+      <text x="40" y="185" font-size="12.5">(Console, Team ou Enterprise).</text>
+      <text x="40" y="210" font-size="12.5">Aceite e faça login com essa conta.</text>
+      <text x="40" y="229" font-size="12" class="m">Custo: da empresa.</text>
+      <rect x="420" y="110" width="320" height="130" rx="10" fill="#fff" stroke="var(--ai)" stroke-width="2"/>
+      <text x="440" y="140" font-weight="700">Caminho B — conta própria no Console</text>
+      <text x="440" y="166" font-size="12.5">Crie a conta em platform.claude.com,</text>
+      <text x="440" y="185" font-size="12.5">adicione créditos e faça login</text>
+      <text x="440" y="204" font-size="12.5">no Claude Code com ela.</text>
+      <text x="440" y="229" font-size="12" class="m">Custo: seu, só o que usar.</text>
+    </svg>
+    <figcaption>Na dúvida, pergunte ao seu líder antes de pagar qualquer coisa: muitas empresas já têm acesso contratado.</figcaption>
+  </figure>
+
+  <h3>6.2 Como funciona o pagamento por uso</h3>
+  <p>No Console você paga pelo <strong>quanto o Claude lê e escreve</strong>, medido em <strong>tokens</strong> (pedaços de palavras). É como um celular pré-pago: você coloca créditos e eles vão sendo descontados conforme o uso. Sem uso, sem cobrança.</p>
+  <ul>
+    <li>Ler um projeto grande, conversas longas e pedidos complexos gastam mais.</li>
+    <li>Perguntas curtas e sessões focadas em uma tarefa gastam menos.</li>
+    <li>Dentro do Claude Code, o comando <code>/usage</code> mostra quanto a sessão já custou.</li>
+  </ul>
+
+  <h3>6.3 Caminho A: acesso pela empresa</h3>
+  <ol class="steps ai">
+    <li><strong>Peça o acesso ao seu líder</strong>Ele (ou o administrador) envia um convite para o seu e-mail.</li>
+    <li><strong>Aceite o convite</strong>Abra o e-mail e siga o link para criar a senha ou entrar.</li>
+    <li><strong>Faça login no Claude Code</strong>Como explicado em 7.3 (terminal) ou 8.2 (VS Code), escolhendo o tipo de conta que a empresa indicou.</li>
+  </ol>
+
+  <h3>6.4 Caminho B: sua conta no Claude Console</h3>
+  <ol class="steps ai">
+    <li><strong>Crie a conta</strong>Acesse <code>platform.claude.com</code> e cadastre-se com seu e-mail.</li>
+    <li><strong>Adicione créditos</strong>Nas configurações da conta, abra a área de cobrança (<em>Billing</em>), cadastre a forma de pagamento <strong>você mesmo</strong> e compre um valor pequeno para começar.</li>
+    <li><strong>Defina um limite de gasto</strong>Nas configurações de limites, coloque um teto mensal. Assim um esquecimento não vira surpresa na fatura.</li>
+    <li><strong>Faça login no Claude Code</strong>Na tela de login, escolha <strong>Anthropic Console account</strong> e depois <strong>Sign in with your Console account</strong> (marcada como recomendada).</li>
+  </ol>
+  <p>Os nomes de menus podem mudar com o tempo; se não encontrar algo, procure por "Billing" e "Limits" nas configurações do Console.</p>
+
+  <h3>6.5 Segurança da conta</h3>
+  <div class="box warn"><span class="t">Chave de API é como senha de banco</span>
+    <ul>
+      <li>Prefira o login pelo navegador (passo 4) em vez de criar <strong>chaves de API</strong>.</li>
+      <li>Se alguém te passar uma chave, <strong>nunca</strong> cole em chat, e-mail, print ou arquivo que vá para o Git.</li>
+      <li>Se uma chave vazar, avise e apague a chave no Console imediatamente — quem tiver ela gasta seus créditos.</li>
+    </ul>
+  </div>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>Sem assinatura, use o Claude Console: crie a conta, adicione créditos, defina um limite e faça login escolhendo "Anthropic Console account". Se a empresa já tem acesso, use o convite dela. Acompanhe o gasto com <code>/usage</code>.</p></div>
+</section>
+
+<section class="chapter ai" id="ch7">
+  <div class="ch-head"><span class="num">07</span><h2>Claude Code no terminal</h2></div>
+  <p>O Claude Code é o Claude rodando <strong>no seu terminal, dentro da pasta do projeto</strong>. Diferente do chat no navegador, ele lê os arquivos do projeto, edita código e roda comandos — sempre pedindo sua permissão nas ações que mudam algo.</p>
+
+  <h3>7.1 O ciclo de trabalho</h3>
+  <figure>
+    <svg viewBox="0 0 760 210" role="img" aria-labelledby="f-flow">
+      <title id="f-flow">Instalar uma vez, fazer login uma vez, e depois em cada dia: entrar na pasta do projeto, abrir uma sessão com claude, pedir, revisar e aprovar, e sair ou retomar depois</title>
+      <g font-size="13">
+        <rect x="5" y="20" width="120" height="58" rx="9" fill="var(--tint)" stroke="var(--line)" stroke-width="2"/><text x="65" y="45" text-anchor="middle" font-weight="700">Instalar</text><text x="65" y="63" text-anchor="middle" class="m" font-size="11">uma vez</text>
+        <rect x="145" y="20" width="120" height="58" rx="9" fill="var(--tint)" stroke="var(--line)" stroke-width="2"/><text x="205" y="45" text-anchor="middle" font-weight="700">Login</text><text x="205" y="63" text-anchor="middle" class="m" font-size="11">uma vez</text>
+        <path d="M127 49 h16" stroke="var(--muted)" stroke-width="2"/>
+        <path d="M267 49 h40 v70" fill="none" stroke="var(--muted)" stroke-width="2"/>
+        <rect x="245" y="125" width="125" height="62" rx="9" fill="#fff" stroke="var(--ai)" stroke-width="2"/><text x="307" y="150" text-anchor="middle" font-weight="700">cd projeto</text><text x="307" y="169" text-anchor="middle" class="m" font-size="11">entrar na pasta</text>
+        <rect x="390" y="125" width="110" height="62" rx="9" fill="var(--ai)"/><text x="445" y="150" text-anchor="middle" font-weight="700" style="fill:#fff" class="mono">claude</text><text x="445" y="169" text-anchor="middle" font-size="11" style="fill:#fff">abre a sessão</text>
+        <rect x="520" y="125" width="110" height="62" rx="9" fill="#fff" stroke="var(--ai)" stroke-width="2"/><text x="575" y="150" text-anchor="middle" font-weight="700">Pedir</text><text x="575" y="169" text-anchor="middle" class="m" font-size="11">em português</text>
+        <rect x="650" y="125" width="105" height="62" rx="9" fill="#fff" stroke="var(--ai)" stroke-width="2"/><text x="702" y="150" text-anchor="middle" font-weight="700">Revisar</text><text x="702" y="169" text-anchor="middle" class="m" font-size="11">e aprovar</text>
+        <path d="M372 156 h16M502 156 h16M632 156 h16" stroke="var(--muted)" stroke-width="2"/>
+        <path d="M702 123 v-30 h-127 v30" fill="none" stroke="var(--ai)" stroke-width="2" stroke-dasharray="5 4"/><text x="638" y="86" text-anchor="middle" class="m" font-size="11">repete</text>
+        <text x="500" y="40" font-size="12" class="m">dia a dia →</text>
+        <text x="445" y="205" text-anchor="middle" class="m" font-size="11">sair: /exit · voltar depois: claude -c</text>
+      </g>
+    </svg>
+  </figure>
+
+  <h3>7.2 Instalar</h3>
+  <p>Use o instalador oficial. Ele se atualiza sozinho em segundo plano.</p>
+  <div class="os stack">
+    <div><h4>Windows (PowerShell)</h4><pre><code>irm https://claude.ai/install.ps1 | iex</code></pre></div>
+    <div><h4>macOS</h4><pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre></div>
+    <div><h4>Linux</h4><pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre></div>
+  </div>
+  <p>O comando não mostra progresso enquanto baixa — espere terminar. Depois <strong>abra um terminal novo</strong> e confira:</p>
+<pre><code>claude --version
+<span class="c"># ex.: 2.x.x (Claude Code)</span></code></pre>
+  <div class="box warn"><span class="t">Erros comuns na instalação</span>
+    <ul>
+      <li><code>claude não é reconhecido</code> / <code>command not found</code>: abra um terminal novo. Se continuar, o instalador não foi adicionado ao PATH — veja "Troubleshoot installation" na documentação.</li>
+      <li><code>'irm' is not recognized</code>: você está no CMD, não no PowerShell. Abra o <strong>Terminal</strong> do Windows.</li>
+      <li>No Windows, tenha o <strong>Git</strong> instalado (cap. 4): com ele, o Claude Code usa o Git Bash para rodar comandos.</li>
+    </ul>
+  </div>
+  <p>Alternativas, se a empresa preferir gerenciadores de pacote: <code>winget install Anthropic.ClaudeCode</code> no Windows ou <code>brew install --cask claude-code</code> no macOS. Nesses casos ele não se atualiza sozinho.</p>
+
+  <h3>7.3 Primeiro acesso (login)</h3>
+  <p>Antes, tenha em mãos a conta do capítulo 6 (Console ou a da empresa).</p>
+  <ol class="steps ai">
+    <li><strong>Entre numa pasta qualquer e rode <code>claude</code></strong>Na primeira vez ele pergunta o tema de cores (escolha com as setas e <kbd>Enter</kbd>) e depois a forma de login.</li>
+    <li><strong>Escolha o tipo de conta</strong>Sem assinatura: <strong>Anthropic Console account</strong> e depois <strong>Sign in with your Console account</strong>. Com acesso da empresa: o tipo que seu líder indicou.</li>
+    <li><strong>Confirme no navegador</strong>Uma página abre para você autorizar. Se não abrir sozinha, aperte <kbd>c</kbd> para copiar o endereço e cole no navegador.</li>
+    <li><strong>Volte ao terminal</strong>Ele mostra <code>Login successful</code>. Aperte <kbd>Enter</kbd>.</li>
+    <li><strong>Pronto</strong>O login fica salvo. Para trocar de conta depois, rode <code>/login</code>; para sair, <code>/logout</code>.</li>
+  </ol>
+
+  <h3>7.4 Abrindo um projeto</h3>
+  <p>O Claude Code trabalha <strong>na pasta em que você o abriu</strong>. Não existe "adicionar projeto" num menu: você entra na pasta e abre o Claude ali.</p>
+  <h4>Projeto que já está no GitHub</h4>
+<pre><code>cd ~                                  <span class="c"># vai para sua pasta pessoal</span>
+mkdir projetos &amp;&amp; cd projetos
+git clone &lt;url-do-repositorio&gt;
+cd fullcycle
+claude</code></pre>
+  <h4>Projeto novo, do zero</h4>
+<pre><code>mkdir projeto-estudo &amp;&amp; cd projeto-estudo
+git init
+claude</code></pre>
+  <div class="box tip"><span class="t">Na primeira vez numa pasta</span><p>O Claude Code pergunta se você confia nos arquivos dessa pasta. Confirme só para projetos que você conhece — ele vai ler e poder executar coisas ali.</p></div>
+
+  <h4>Trabalhando com mais de uma pasta</h4>
+  <p>Se o front e o back estiverem em repositórios separados, abra o Claude na pasta principal e dê acesso à outra:</p>
+<pre><code>cd ~/projetos/api
+claude --add-dir ../frontend         <span class="c"># ao abrir</span>
+
+<span class="c"># ou, com a sessão já aberta:</span>
+/add-dir ../frontend</code></pre>
+
+  <h3>7.5 Ensinando o projeto ao Claude: <code>/init</code> e <code>CLAUDE.md</code></h3>
+  <p>Logo na primeira sessão de um projeto, rode:</p>
+<pre><code>/init</code></pre>
+  <p>O Claude lê o projeto e cria um arquivo <code>CLAUDE.md</code> na raiz: um resumo da stack, dos comandos e das convenções. Esse arquivo é lido automaticamente <strong>em toda sessão</strong> naquela pasta. Revise, ajuste e faça commit dele — ele é do time.</p>
+<pre><code><span class="c"># CLAUDE.md (exemplo)</span>
+## Stack
+- frontend/: Angular + Angular Material, componentes standalone, estado com signals
+- api/: NestJS + TypeORM, um módulo por assunto (categorias, tarefas, dashboard, health)
+- banco: PostgreSQL 16 via docker compose, porta 5433 na máquina
+
+## Comandos
+- Tudo de uma vez: npm run dev
+- Subir banco: docker compose up -d
+- API: cd api &amp;&amp; npm run start:dev   (testes: npm test)
+- Front: cd frontend &amp;&amp; npm start    (testes: npm test)
+
+## Regras
+- Todo endpoint novo tem teste unitário no service.
+- Nunca commitar o arquivo .env.</code></pre>
+
+  <h3>7.6 Sessões: começar, nomear, retomar</h3>
+  <p>Cada vez que você roda <code>claude</code> nasce uma <strong>sessão</strong>: uma conversa com memória do que foi dito e feito. Ela fica salva e pode ser retomada depois.</p>
+  <figure>
+    <svg viewBox="0 0 760 150" role="img" aria-labelledby="f-sess">
+      <title id="f-sess">Linha do tempo de sessões: abrir com nome, trabalhar, sair; no dia seguinte continuar com claude -c ou escolher com /resume; /clear começa conversa limpa e /compact resume a atual</title>
+      <path d="M20 70 h720" stroke="var(--line)" stroke-width="3"/>
+      <g font-size="12">
+        <circle cx="60" cy="70" r="9" fill="var(--ai)"/><text x="60" y="44" text-anchor="middle" class="mono" font-size="11">claude -n tarefas</text><text x="60" y="100" text-anchor="middle" class="m">abre com nome</text>
+        <circle cx="210" cy="70" r="9" fill="var(--ai)" opacity=".5"/><text x="210" y="44" text-anchor="middle" class="mono" font-size="11">/compact</text><text x="210" y="100" text-anchor="middle" class="m">conversa longa:</text><text x="210" y="116" text-anchor="middle" class="m">resume e continua</text>
+        <circle cx="350" cy="70" r="9" fill="var(--muted)"/><text x="350" y="44" text-anchor="middle" class="mono" font-size="11">/exit</text><text x="350" y="100" text-anchor="middle" class="m">fim do dia</text>
+        <path d="M400 55 v30" stroke="var(--muted)" stroke-dasharray="3 3"/>
+        <circle cx="480" cy="70" r="9" fill="var(--ai)"/><text x="480" y="44" text-anchor="middle" class="mono" font-size="11">claude -c</text><text x="480" y="100" text-anchor="middle" class="m">continua a última</text>
+        <circle cx="610" cy="70" r="9" fill="var(--ai)"/><text x="610" y="44" text-anchor="middle" class="mono" font-size="11">/resume</text><text x="610" y="100" text-anchor="middle" class="m">escolhe outra</text>
+        <circle cx="720" cy="70" r="9" fill="#fff" stroke="var(--ai)" stroke-width="3"/><text x="715" y="44" text-anchor="middle" class="mono" font-size="11">/clear</text><text x="705" y="100" text-anchor="middle" class="m">conversa nova</text>
+      </g>
+      <text x="400" y="142" text-anchor="middle" font-size="12" class="m">dia 1   ·   dia 2</text>
+    </svg>
+  </figure>
+  <table>
+    <thead><tr><th>Quero…</th><th>Comando</th></tr></thead>
+    <tbody>
+      <tr><td>Abrir uma sessão nova</td><td><code>claude</code></td></tr>
+      <tr><td>Abrir já com um nome fácil de achar</td><td><code>claude -n editar-tarefa</code></td></tr>
+      <tr><td>Dar nome à sessão atual</td><td><code>/rename editar-tarefa</code></td></tr>
+      <tr><td>Continuar a última sessão desta pasta</td><td><code>claude -c</code></td></tr>
+      <tr><td>Escolher uma sessão antiga numa lista</td><td><code>/resume</code> (dentro) ou <code>claude -r editar-tarefa</code> (fora)</td></tr>
+      <tr><td>Começar do zero sem sair</td><td><code>/clear</code></td></tr>
+      <tr><td>Conversa muito longa: resumir e seguir</td><td><code>/compact</code></td></tr>
+      <tr><td>Ver quanto do contexto já foi usado</td><td><code>/context</code></td></tr>
+      <tr><td>Sair</td><td><code>/exit</code> ou <kbd>Ctrl</kbd>+<kbd>C</kbd> duas vezes</td></tr>
+    </tbody>
+  </table>
+  <div class="box tip"><span class="t">Regra prática</span><p>Uma sessão por tarefa. Terminou de criar o endpoint e vai mexer na tela? <code>/clear</code> ou uma sessão nova. Conversas misturadas deixam o Claude mais confuso e mais lento.</p></div>
+
+  <h3>7.7 Pedindo e controlando</h3>
+  <table>
+    <thead><tr><th>Atalho</th><th>Para quê</th><th>Exemplo</th></tr></thead>
+    <tbody>
+      <tr><td><code>@</code></td><td>Apontar um arquivo específico</td><td><code>explica o @api/src/tarefas/tarefas.service.ts</code></td></tr>
+      <tr><td><code>!</code></td><td>Rodar um comando do terminal sem sair</td><td><code>!docker ps</code></td></tr>
+      <tr><td><kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Trocar o modo de permissão</td><td>Manual → aceitar edições → plano</td></tr>
+      <tr><td><code>/plan</code></td><td>Pedir um plano antes de mexer em qualquer arquivo</td><td><code>/plan adicionar campo prioridade</code></td></tr>
+      <tr><td><kbd>Esc</kbd></td><td>Interromper o Claude no meio</td><td>Ele parou no caminho errado</td></tr>
+      <tr><td><kbd>Esc</kbd> <kbd>Esc</kbd></td><td>Voltar a um ponto anterior da conversa</td><td>Desfazer um rumo ruim</td></tr>
+      <tr><td><code>/skills</code></td><td>Listar as skills disponíveis</td><td>cap. 16</td></tr>
+      <tr><td><code>/help</code></td><td>Ver todos os comandos</td><td></td></tr>
+    </tbody>
+  </table>
+  <h4>Modos de permissão</h4>
+  <p>O modo decide se o Claude pede autorização antes de agir. Nas versões atuais a sessão começa em <strong>Auto</strong> (age sozinho, com um verificador de segurança). <strong>Enquanto aprende, use Manual</strong>, que pergunta antes de cada mudança:</p>
+<pre><code>claude --permission-mode manual</code></pre>
+  <ul>
+    <li><strong>Manual</strong> — pergunta antes de editar arquivos e de rodar comandos. <em>Use este agora.</em></li>
+    <li><strong>Plan</strong> — só lê e propõe um plano; não altera nada. Ótimo para começar uma tarefa.</li>
+    <li><strong>Auto</strong> — age sem perguntar na maioria das vezes. Para quando você já tiver experiência.</li>
+  </ul>
+  <p><kbd>Shift</kbd>+<kbd>Tab</kbd> troca de modo durante a sessão. Para deixar o Manual como padrão em todas as sessões, veja a seção 8.5.</p>
+
+  <h3>7.8 Roteiro da sua primeira hora</h3>
+  <ol class="steps ai">
+    <li><strong>Clone o projeto de estudo e abra o Claude nele</strong><code>git clone &lt;url&gt;</code>, <code>cd fullcycle</code>, <code>claude -n reconhecimento --permission-mode manual</code>.</li>
+    <li><strong>Peça um tour</strong><code>o que esse projeto faz e como ele está organizado?</code></li>
+    <li><strong>Peça para ele te ensinar a rodar</strong><code>como eu subo o banco, a API e o front? me explica cada comando antes de rodar</code></li>
+    <li><strong>Leia o CLAUDE.md</strong><code>@CLAUDE.md o que tem nesse arquivo e por que ele importa?</code></li>
+    <li><strong>Faça uma pergunta sobre código</strong><code>onde fica a validação do título da tarefa?</code> e abra o arquivo no VS Code para conferir.</li>
+    <li><strong>Peça uma mudança pequena em modo plano</strong><kbd>Shift</kbd>+<kbd>Tab</kbd> até o modo plano, e peça <code>aumentar o limite do título para 150 caracteres</code>. Leia o plano antes de aprovar.</li>
+    <li><strong>Revise e rode os testes</strong><code>!git diff</code> e depois <code>!cd api &amp;&amp; npm test</code>.</li>
+    <li><strong>Desfaça</strong><code>!git checkout .</code> — era só treino. Saia com <code>/exit</code>.</li>
+  </ol>
+  <div class="box"><span class="t">Prefere interface gráfica?</span><p>O próximo capítulo mostra o mesmo fluxo dentro do VS Code. Pasta do projeto, sessões, CLAUDE.md e permissões funcionam igual.</p></div>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>Instale com o instalador oficial, faça login com a conta do capítulo 6, entre na pasta do projeto e rode <code>claude</code>. Rode <code>/init</code> para criar o CLAUDE.md, use uma sessão por tarefa (<code>-n</code>, <code>-c</code>, <code>/resume</code>) e trabalhe em modo Manual enquanto aprende.</p></div>
+</section>
+
+<!-- ============ 8 CC NO VS CODE ============ -->
+<section class="chapter ai" id="ch8">
+  <div class="ch-head"><span class="num">08</span><h2>Claude Code dentro do VS Code</h2></div>
+  <p>Tudo o que você aprendeu no capítulo 7 funciona também com uma interface gráfica, dentro do VS Code. Para quem está começando, este costuma ser o jeito mais confortável: você vê o código e a conversa lado a lado, e as mudanças aparecem destacadas antes de você aprovar.</p>
+
+  <h3>8.1 Terminal ou extensão?</h3>
+  <table>
+    <thead><tr><th></th><th>No terminal (<code>claude</code>)</th><th>Extensão no VS Code</th></tr></thead>
+    <tbody>
+      <tr><td>Aparência</td><td>Texto no terminal</td><td>Painel de chat com botões</td></tr>
+      <tr><td>Ver as mudanças</td><td>Diff em texto</td><td>Diff colorido lado a lado, como no Git</td></tr>
+      <tr><td>Apontar código</td><td>Digitando <code>@arquivo</code></td><td>Selecionando o trecho com o mouse</td></tr>
+      <tr><td>Precisa instalar</td><td>O Claude Code (cap. 7)</td><td>Só a extensão (ela já traz o Claude Code junto)</td></tr>
+      <tr><td>CLAUDE.md, skills, sessões</td><td colspan="2">Iguais nos dois. Pode alternar à vontade.</td></tr>
+    </tbody>
+  </table>
+  <p>Recomendação: use a <strong>extensão</strong> no dia a dia e o <strong>terminal</strong> quando quiser comandos rápidos. Para usar <code>claude</code> no terminal integrado do VS Code, você precisa da instalação do capítulo 7 também.</p>
+
+  <h3>8.2 Instalar e entrar</h3>
+  <ol class="steps ai">
+    <li><strong>Instale a extensão</strong>Aba de extensões → busque <em>Claude Code</em> → confira que o autor é <strong>Anthropic</strong> → Install. (Ou <code>code --install-extension anthropic.claude-code</code>.) Se o ícone não aparecer, use a paleta de comandos: <em>Developer: Reload Window</em>.</li>
+    <li><strong>Abra a pasta do projeto</strong><code>code .</code> dentro da pasta, ou <em>File → Open Folder</em>.</li>
+    <li><strong>Abra o painel do Claude</strong>Abra qualquer arquivo e clique no ícone de faísca (✳) no canto superior direito do editor. Ou clique na faísca da barra lateral esquerda para ver a lista de sessões.</li>
+    <li><strong>Faça login</strong>Clique em <strong>Sign in</strong> e escolha a conta do capítulo 6 (Console ou a da empresa). Confirme no navegador.</li>
+    <li><strong>Siga o checklist "Learn Claude Code"</strong>Ele aparece depois do login e mostra cada recurso com o botão <em>Show me</em>. Vale os 10 minutos.</li>
+  </ol>
+
+  <h3>8.3 O painel por dentro</h3>
+  <figure>
+    <svg viewBox="0 0 760 330" role="img" aria-labelledby="f-panel">
+      <title id="f-panel">Painel do Claude Code no VS Code: lista de mensagens, uma proposta de mudança com diff e botões de aceitar ou rejeitar, e a caixa de pedido com indicador de modo de permissão</title>
+      <rect x="150" y="5" width="460" height="320" rx="10" fill="#fff" stroke="var(--ai)" stroke-width="2"/>
+      <rect x="150" y="5" width="460" height="34" rx="10" fill="var(--ai-soft)"/>
+      <text x="168" y="27" font-weight="700" style="fill:var(--ai)">✳ Claude Code</text><text x="590" y="27" text-anchor="end" font-size="12" class="m">sessões · nova</text>
+      <rect x="320" y="52" width="275" height="34" rx="8" fill="var(--tint)"/><text x="332" y="73" font-size="12">aumenta o limite do título para 150</text>
+      <text x="168" y="108" font-size="12">Vou alterar o DTO. Proposta:</text>
+      <rect x="168" y="118" width="425" height="78" rx="6" fill="#1f2836"/>
+      <text x="180" y="138" class="mono" font-size="11" style="fill:#93a3b8">criar-tarefa.dto.ts</text>
+      <rect x="168" y="146" width="425" height="20" fill="#5a1f22" opacity=".8"/><text x="180" y="160" class="mono" font-size="11" style="fill:#ffb3a8">-  @MaxLength(120)</text>
+      <rect x="168" y="168" width="425" height="20" fill="#1e4d2e" opacity=".9"/><text x="180" y="182" class="mono" font-size="11" style="fill:#9ff0b8">+  @MaxLength(150)</text>
+      <rect x="168" y="206" width="90" height="28" rx="6" fill="var(--ai)"/><text x="213" y="225" text-anchor="middle" font-size="12" font-weight="600" style="fill:#fff">Aceitar</text>
+      <rect x="266" y="206" width="90" height="28" rx="6" fill="#fff" stroke="var(--line)" stroke-width="1.5"/><text x="311" y="225" text-anchor="middle" font-size="12">Rejeitar</text>
+      <rect x="168" y="262" width="425" height="48" rx="8" fill="#fff" stroke="var(--line)" stroke-width="1.5"/>
+      <text x="180" y="282" font-size="12" class="m">Pergunte ao Claude…  @ para arquivos</text>
+      <rect x="180" y="290" width="70" height="16" rx="8" fill="var(--git-soft)" stroke="var(--git)"/><text x="215" y="302" text-anchor="middle" font-size="10" style="fill:var(--git)">Manual</text>
+      <g font-size="12">
+        <path d="M150 70 H110" stroke="var(--git)" stroke-width="1.5"/><text x="105" y="65" text-anchor="end" font-weight="700">Seu pedido</text><text x="105" y="81" text-anchor="end" class="m">aparece aqui</text>
+        <path d="M600 160 H640" stroke="var(--git)" stroke-width="1.5"/><text x="645" y="148" font-weight="700">Diff</text><text x="645" y="164" class="m">vermelho sai,</text><text x="645" y="180" class="m">verde entra</text>
+        <path d="M150 220 H110" stroke="var(--git)" stroke-width="1.5"/><text x="105" y="215" text-anchor="end" font-weight="700">Você decide</text><text x="105" y="231" text-anchor="end" class="m">aceita ou rejeita</text>
+        <path d="M250 298 V315 H110" stroke="var(--git)" stroke-width="1.5" fill="none"/><text x="105" y="303" text-anchor="end" font-weight="700">Modo</text><text x="105" y="319" text-anchor="end" class="m">clique para trocar</text>
+      </g>
+    </svg>
+  </figure>
+
+  <h3>8.4 Recursos que mais ajudam quem está começando</h3>
+  <table>
+    <thead><tr><th>Quero…</th><th>Como fazer</th></tr></thead>
+    <tbody>
+      <tr><td>Perguntar sobre um trecho de código</td><td>Selecione as linhas no editor. O Claude já vê a seleção. <kbd>Alt</kbd>+<kbd>K</kbd> (<kbd>Option</kbd>+<kbd>K</kbd> no Mac) insere a referência, ex.: <code>@tarefas.service.ts#5-10</code>.</td></tr>
+      <tr><td>Citar um arquivo</td><td>Digite <code>@</code> e o começo do nome.</td></tr>
+      <tr><td>Ver o plano antes de qualquer mudança</td><td>Mude o modo para <strong>Plan</strong> ou digite <code>/plan</code>. O plano abre como documento, e você pode comentar nele antes de aprovar.</td></tr>
+      <tr><td>Trocar o modo de permissão</td><td>Clique no indicador de modo embaixo da caixa de pedido.</td></tr>
+      <tr><td>Retomar uma conversa</td><td>Faísca na barra lateral → lista de sessões → clique na sessão.</td></tr>
+      <tr><td>Duas conversas ao mesmo tempo</td><td>Paleta de comandos → <em>Claude Code: Open in New Tab</em>.</td></tr>
+      <tr><td>Anexar uma imagem (ex.: print de um erro)</td><td>Arraste a imagem para a caixa de pedido.</td></tr>
+      <tr><td>Usar o visual de terminal no painel</td><td>Configurações → <em>Claude Code: Use Terminal</em>.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>8.5 Configure o modo Manual enquanto aprende</h3>
+  <p>O Claude Code tem modos de permissão que decidem se ele pede autorização antes de agir. Nas versões atuais, o modo inicial é o <strong>Auto</strong>: um sistema de segurança revisa as ações e a maioria acontece sem perguntar. Isso é ótimo para quem já tem experiência, mas <strong>quem está aprendendo precisa ver cada passo</strong>.</p>
+  <table>
+    <thead><tr><th>Modo</th><th>Comportamento</th><th>Para quem</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Manual</strong></td><td>Pergunta antes de editar arquivos e de rodar quase todo comando</td><td><strong>Você, agora</strong></td></tr>
+      <tr><td><strong>Plan</strong></td><td>Só lê e propõe um plano; não muda nada</td><td>Começo de toda tarefa</td></tr>
+      <tr><td><strong>Auto</strong></td><td>Age sozinho; um classificador barra ações arriscadas</td><td>Quando você já entende o que ele faz</td></tr>
+    </tbody>
+  </table>
+  <p>Para começar sempre em Manual, crie ou edite o arquivo <code>~/.claude/settings.json</code> (a pasta <code>.claude</code> fica dentro da sua pasta de usuário):</p>
+<pre><code>{
+  "permissions": {
+    "defaultMode": "default"
+  }
+}</code></pre>
+  <p><code>"default"</code> é o nome interno do modo Manual. Depois de salvar, abra uma sessão nova e confira o indicador de modo.</p>
+  <div class="box tip"><span class="t">Na prática, neste projeto</span><p>O capítulo 18 repete esses passos no repositório do guia, do zero até resolver a primeira task com o Claude Code no VS Code.</p></div>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>Instale a extensão da Anthropic, abra a pasta do projeto, clique na faísca e faça login. Selecione código para perguntar sobre ele, use Plan para ver o plano, revise o diff antes de aceitar, e deixe o modo Manual como padrão enquanto aprende.</p></div>
+</section>
+
+<!-- ============ 9 PEDIDOS ============ -->
+<section class="chapter ai" id="ch9">
+  <div class="ch-head"><span class="num">09</span><h2>Como pedir coisas ao Claude</h2></div>
+  <p>O Claude entende português normal. Mas a qualidade da resposta depende muito do pedido. Imagine que você está pedindo ajuda a um colega que é ótimo programador, mas <strong>acabou de chegar e não sabe nada do que você está fazendo</strong>. O que ele precisaria saber?</p>
+
+  <h3>9.1 As quatro partes de um bom pedido</h3>
+  <figure>
+    <svg viewBox="0 0 760 165" role="img" aria-labelledby="f-prompt">
+      <title id="f-prompt">Um bom pedido tem contexto, tarefa, limites e como conferir</title>
+      <g font-size="13">
+        <rect x="5" y="15" width="178" height="135" rx="10" fill="var(--tint)" stroke="var(--line)" stroke-width="2"/>
+        <text x="20" y="42" font-weight="700">1. Contexto</text><text x="20" y="66" font-size="12" class="m">O que você está</text><text x="20" y="82" font-size="12" class="m">fazendo e onde</text><text x="20" y="110" font-size="11.5" font-style="italic">"Estou na tela de</text><text x="20" y="126" font-size="11.5" font-style="italic">tarefas, no frontend/…"</text>
+        <rect x="197" y="15" width="178" height="135" rx="10" fill="var(--ai-soft)" stroke="var(--ai)" stroke-width="2"/>
+        <text x="212" y="42" font-weight="700">2. Tarefa</text><text x="212" y="66" font-size="12" class="m">O que exatamente</text><text x="212" y="82" font-size="12" class="m">você quer</text><text x="212" y="110" font-size="11.5" font-style="italic">"Mostrar uma mensagem</text><text x="212" y="126" font-size="11.5" font-style="italic">quando a lista vazia…"</text>
+        <rect x="389" y="15" width="178" height="135" rx="10" fill="var(--tint)" stroke="var(--line)" stroke-width="2"/>
+        <text x="404" y="42" font-weight="700">3. Limites</text><text x="404" y="66" font-size="12" class="m">O que não fazer</text><text x="404" y="82" font-size="12" class="m">ou o que respeitar</text><text x="404" y="110" font-size="11.5" font-style="italic">"Não mexa na API.</text><text x="404" y="126" font-size="11.5" font-style="italic">Use o @empty."</text>
+        <rect x="581" y="15" width="174" height="135" rx="10" fill="var(--ai-soft)" stroke="var(--ai)" stroke-width="2"/>
+        <text x="596" y="42" font-weight="700">4. Como conferir</text><text x="596" y="66" font-size="12" class="m">Como saber que</text><text x="596" y="82" font-size="12" class="m">ficou certo</text><text x="596" y="110" font-size="11.5" font-style="italic">"Rode o ng test e</text><text x="596" y="126" font-size="11.5" font-style="italic">me explique o diff."</text>
+      </g>
+    </svg>
+  </figure>
+
+  <h3>9.2 Antes e depois</h3>
+  <table>
+    <thead><tr><th>Pedido fraco</th><th>Pedido bom</th></tr></thead>
+    <tbody>
+      <tr><td><code>arruma o erro</code></td><td><code>rodei npm run start:dev na pasta api e apareceu este erro: [cole o erro]. o docker ps mostra o banco rodando. me explica a causa antes de corrigir.</code></td></tr>
+      <tr><td><code>faz a tela de tarefas</code></td><td><code>na tela de tarefas em frontend/src/app/features/tarefas, quando a lista estiver vazia, mostre "Nenhuma tarefa ainda". use o @empty do Angular, não mexa na API e rode o ng test no final.</code></td></tr>
+      <tr><td><code>explica o código</code></td><td><code>@api/src/tarefas/tarefas.service.ts me explica esse arquivo linha por linha como se eu nunca tivesse programado</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>9.3 Pedidos que todo iniciante deveria usar</h3>
+  <ul>
+    <li><code>me explica como se eu fosse iniciante</code> — no fim de qualquer pergunta.</li>
+    <li><code>antes de mudar qualquer coisa, me diga o plano</code> — ou use o modo Plan.</li>
+    <li><code>por que você escolheu fazer assim?</code> — para aprender com a decisão.</li>
+    <li><code>o que pode dar errado com essa mudança?</code> — para treinar o olhar crítico.</li>
+    <li><code>me mostra como eu testo isso na mão</code> — para conferir sozinho.</li>
+    <li><code>me faz 3 perguntas para ver se eu entendi</code> — para fixar o conteúdo.</li>
+  </ul>
+
+  <h3>9.4 Hábitos de quem usa IA bem</h3>
+  <ol class="steps ai">
+    <li><strong>Uma tarefa por conversa</strong>Mudou de assunto, comece uma sessão nova.</li>
+    <li><strong>Peça pequeno</strong>Três pedidos pequenos e conferidos são melhores que um grande que você não entende.</li>
+    <li><strong>Leia todo diff antes de aceitar</strong>Se não entendeu uma linha, pergunte sobre ela.</li>
+    <li><strong>Rode e teste</strong>"O Claude disse que funciona" não é teste. Rode o projeto e os testes.</li>
+    <li><strong>Desconfie de respostas muito confiantes</strong>Se algo parece estranho, peça a fonte ou a documentação.</li>
+  </ol>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>Bons pedidos têm contexto, tarefa, limites e como conferir. Peça explicações, peça o plano antes, peça pequeno e leia cada mudança. O objetivo não é só o código pronto: é você entender o código.</p></div>
+</section>
+
+<section class="chapter git" id="ch10">
+  <div class="ch-head"><span class="num">10</span><h2>Git e GitHub no fluxo</h2></div>
+  <p>Git guarda o histórico do código na sua máquina. GitHub guarda uma cópia na nuvem e é onde o time revisa as mudanças. O fluxo de toda tarefa é sempre o mesmo:</p>
+  <figure>
+    <svg viewBox="0 0 760 200" role="img" aria-labelledby="f-git">
+      <title id="f-git">Fluxo do Git: a linha principal main, uma branch sai dela, recebe commits, vai para o GitHub com push, vira um pull request e volta para a main depois da revisão</title>
+      <path d="M20 60 h720" stroke="var(--ink)" stroke-width="3"/>
+      <text x="20" y="40" font-weight="700">main</text>
+      <circle cx="80" cy="60" r="8" fill="var(--ink)"/><circle cx="680" cy="60" r="10" fill="var(--git)"/>
+      <path d="M80 60 C 120 60, 120 140, 160 140 H 520 C 600 140, 620 60, 680 60" fill="none" stroke="var(--git)" stroke-width="3"/>
+      <text x="150" y="170" font-size="13" class="mono" style="fill:var(--git)">feature/editar-tarefa</text>
+      <circle cx="250" cy="140" r="8" fill="var(--git)"/><circle cx="340" cy="140" r="8" fill="var(--git)"/><circle cx="430" cy="140" r="8" fill="var(--git)"/>
+      <g font-size="11" class="mono">
+        <text x="110" y="110" class="m">checkout -b</text>
+        <text x="250" y="120" text-anchor="middle" class="m">commit</text><text x="340" y="120" text-anchor="middle" class="m">commit</text><text x="430" y="120" text-anchor="middle" class="m">commit</text>
+        <text x="520" y="125" text-anchor="middle" class="m">push</text>
+        <text x="610" y="105" text-anchor="middle" class="m">pull request</text>
+        <text x="680" y="90" text-anchor="middle" class="m">merge</text>
+      </g>
+      <rect x="560" y="160" width="190" height="34" rx="6" fill="var(--git-soft)" stroke="var(--git)"/>
+      <text x="655" y="182" text-anchor="middle" font-size="12">revisão do time no GitHub</text>
+    </svg>
+  </figure>
+<pre><code>git checkout main &amp;&amp; git pull           <span class="c"># começa da versão mais nova</span>
+git checkout -b feature/editar-tarefa    <span class="c"># cria a branch da tarefa</span>
+<span class="c"># ... trabalha (com ou sem o Claude) ...</span>
+git status                               <span class="c"># o que mudou?</span>
+git add .
+git commit -m "feat: permite editar o título da tarefa"
+git push -u origin feature/editar-tarefa
+gh pr create --fill                      <span class="c"># abre o pull request</span></code></pre>
+  <div class="box tip"><span class="t">Com o Claude Code</span><p>Você pode pedir em português: <code>cria uma branch para essa tarefa</code>, <code>faz o commit com uma mensagem descritiva</code>, <code>abre o PR</code>. Mas leia sempre o <code>git diff</code> antes do commit: <strong>você</strong> é o responsável pelo que vai para o repositório.</p></div>
+  <div class="box warn"><span class="t">Nunca faça commit de</span><ul><li>Arquivos <code>.env</code> com senhas e chaves.</li><li>A pasta <code>node_modules/</code> (o <code>.gitignore</code> já deve impedir).</li></ul></div>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>Toda tarefa segue o mesmo caminho: atualizar a main, criar uma branch, fazer commits pequenos, enviar com push e abrir um pull request. Leia o <code>git diff</code> antes de cada commit, mesmo quando foi o Claude que escreveu.</p></div>
+</section>
+
+<section class="chapter" id="ch11">
+  <div class="ch-head"><span class="num">11</span><h2>Como front e back conversam</h2></div>
+  <p>O frontend manda uma <strong>requisição HTTP</strong> para o backend. Ela tem um <strong>método</strong> (o que fazer), uma <strong>rota</strong> (sobre o quê) e, às vezes, um <strong>corpo</strong> em JSON (os dados). O backend devolve uma <strong>resposta</strong> com um <strong>status code</strong> e um corpo em JSON.</p>
+  <h3>O caminho de um clique em "Adicionar"</h3>
+  <figure>
+    <svg viewBox="0 0 760 400" role="img" aria-labelledby="f-seq">
+      <title id="f-seq">Diagrama de sequência: o usuário clica, o Angular envia POST /tarefas, o NestJS valida e faz INSERT no Postgres, o banco confirma, o NestJS responde 201 e o Angular atualiza a tela</title>
+      <g font-weight="700" font-size="14" text-anchor="middle">
+        <rect x="20" y="10" width="120" height="36" rx="7" fill="var(--tint)" stroke="var(--line)"/><text x="80" y="33">Usuário</text>
+        <rect x="220" y="10" width="120" height="36" rx="7" fill="var(--front-soft)" stroke="var(--front)"/><text x="280" y="33" style="fill:var(--front)">Angular</text>
+        <rect x="420" y="10" width="120" height="36" rx="7" fill="var(--back-soft)" stroke="var(--back)"/><text x="480" y="33" style="fill:var(--back)">NestJS</text>
+        <rect x="620" y="10" width="120" height="36" rx="7" fill="var(--db-soft)" stroke="var(--db)"/><text x="680" y="33" style="fill:var(--db)">PostgreSQL</text>
+      </g>
+      <g stroke="var(--line)" stroke-width="2" stroke-dasharray="4 4"><path d="M80 46 V390"/><path d="M280 46 V390"/><path d="M480 46 V390"/><path d="M680 46 V390"/></g>
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1c2533"/></marker></defs>
+      <g stroke="var(--ink)" stroke-width="1.8" font-size="12">
+        <path d="M80 80 H276" marker-end="url(#ah)"/><text x="178" y="72" text-anchor="middle" stroke="none">clica em Adicionar</text>
+        <path d="M280 125 H476" marker-end="url(#ah)"/><text x="378" y="110" text-anchor="middle" stroke="none" class="mono" font-size="11">POST /tarefas</text><text x="378" y="122" text-anchor="middle" stroke="none" class="mono m" font-size="10">{"titulo":"Estudar"}</text>
+        <path d="M480 160 h40 v24 h-36" fill="none" marker-end="url(#ah)"/><text x="530" y="176" stroke="none" font-size="11">valida o DTO</text>
+        <path d="M480 220 H676" marker-end="url(#ah)"/><text x="578" y="212" text-anchor="middle" stroke="none" class="mono" font-size="11">INSERT INTO tarefa</text>
+        <path d="M680 260 H484" stroke-dasharray="6 4" marker-end="url(#ah)"/><text x="578" y="252" text-anchor="middle" stroke="none" font-size="11">linha gravada, id 3</text>
+        <path d="M480 300 H284" stroke-dasharray="6 4" marker-end="url(#ah)"/><text x="378" y="292" text-anchor="middle" stroke="none" class="mono" font-size="11">201 Created + JSON</text>
+        <path d="M280 340 h40 v24 h-36" fill="none" marker-end="url(#ah)"/><text x="330" y="356" stroke="none" font-size="11">atualiza o signal</text>
+        <path d="M280 380 H84" stroke-dasharray="6 4" marker-end="url(#ah)"/><text x="178" y="372" text-anchor="middle" stroke="none" font-size="11">tarefa aparece na lista</text>
+      </g>
+    </svg>
+    <figcaption>Setas cheias são pedidos; tracejadas são respostas. Se a validação falhar, o NestJS responde 400 e o banco nem é chamado.</figcaption>
+  </figure>
+  <h3>Métodos HTTP</h3>
+  <table>
+    <thead><tr><th>Método</th><th>No restaurante</th><th>Exemplo</th></tr></thead>
+    <tbody>
+      <tr><td><code>GET</code></td><td>"O que tem no cardápio?"</td><td><code>GET /tarefas</code></td></tr>
+      <tr><td><code>POST</code></td><td>"Quero fazer um pedido"</td><td><code>POST /tarefas</code></td></tr>
+      <tr><td><code>PATCH</code></td><td>"Troca a batata por salada"</td><td><code>PATCH /tarefas/1</code></td></tr>
+      <tr><td><code>DELETE</code></td><td>"Cancela esse pedido"</td><td><code>DELETE /tarefas/1</code></td></tr>
+    </tbody>
+  </table>
+  <h3>Status codes</h3>
+  <table>
+    <thead><tr><th>Faixa</th><th>Significa</th><th>Exemplos</th></tr></thead>
+    <tbody>
+      <tr><td><code>2xx</code></td><td>Deu certo</td><td><code>200 OK</code>, <code>201 Created</code></td></tr>
+      <tr><td><code>4xx</code></td><td>Problema no pedido</td><td><code>400</code> dado inválido, <code>401</code> sem login, <code>404</code> não encontrado</td></tr>
+      <tr><td><code>5xx</code></td><td>Problema no servidor</td><td><code>500</code> erro interno (ex.: banco fora do ar)</td></tr>
+    </tbody>
+  </table>
+  <h3>Testando uma API pelo terminal</h3>
+<pre><code>curl http://localhost:3000/tarefas
+
+curl -X POST http://localhost:3000/tarefas \
+  -H "Content-Type: application/json" \
+  -d '{"titulo":"Estudar HTTP"}'</code></pre>
+  <div class="box warn"><span class="t">No PowerShell</span><p>Use <code>curl.exe</code> em vez de <code>curl</code>, e troque as aspas do corpo: <code>-d "{\"titulo\":\"Estudar HTTP\"}"</code>. Ou use a extensão REST Client do VS Code.</p></div>
+  <div class="box tip"><span class="t">Testando pelo navegador</span><p>Com a API do projeto rodando, abra <code>http://localhost:3000/docs</code>. É o Swagger: uma página gerada pela própria API com todas as rotas (tarefas, categorias, dashboard e health), o formato de cada dado e um botão <em>Try it out</em> para mandar requisições sem usar o terminal.</p></div>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>O front envia requisições com método (GET, POST, PATCH, DELETE), rota e, às vezes, um corpo em JSON. O back responde com um status code (2xx certo, 4xx pedido errado, 5xx erro no servidor) e um JSON. Dá para testar a API pelo terminal com <code>curl</code>.</p></div>
+</section>
+
+<section class="chapter front" id="ch12">
+  <div class="ch-head"><span class="num">12</span><h2>Frontend com Angular</h2></div>
+  <p><strong>O salão.</strong> Angular monta o que o usuário vê, reage aos cliques e leva os pedidos para a cozinha. É um framework do Google em TypeScript, muito usado em empresas porque já traz rotas, formulários, HTTP e testes.</p>
+  <h3>Anatomia de um componente</h3>
+  <figure>
+    <svg viewBox="0 0 760 230" role="img" aria-labelledby="f-anat">
+      <title id="f-anat">Um componente junta TypeScript, template HTML e CSS e vira um pedaço da tela</title>
+      <rect x="10" y="20" width="200" height="56" rx="9" fill="var(--front-soft)" stroke="var(--front)" stroke-width="2"/><text x="28" y="44" font-weight="700" font-size="14">tarefas.component.ts</text><text x="28" y="63" font-size="12" class="m">lógica e estado — o cérebro</text>
+      <rect x="10" y="88" width="200" height="56" rx="9" fill="var(--front-soft)" stroke="var(--front)" stroke-width="2"/><text x="28" y="112" font-weight="700" font-size="14">template HTML</text><text x="28" y="131" font-size="12" class="m">estrutura — o esqueleto</text>
+      <rect x="10" y="156" width="200" height="56" rx="9" fill="var(--front-soft)" stroke="var(--front)" stroke-width="2"/><text x="28" y="180" font-weight="700" font-size="14">estilos CSS</text><text x="28" y="199" font-size="12" class="m">aparência — a roupa</text>
+      <path d="M215 116 H345" stroke="var(--front)" stroke-width="3"/><path d="M338 108 l10 8 -10 8" fill="none" stroke="var(--front)" stroke-width="3"/>
+      <rect x="360" y="20" width="390" height="192" rx="12" fill="#fff" stroke="var(--line)" stroke-width="2"/>
+      <rect x="380" y="45" width="220" height="30" rx="6" fill="none" stroke="var(--line)" stroke-width="2"/><text x="392" y="65" font-size="13" class="m">Nova tarefa</text>
+      <rect x="610" y="45" width="120" height="30" rx="6" fill="var(--front)"/><text x="670" y="65" text-anchor="middle" font-size="13" style="fill:#fff" font-weight="600">Adicionar</text>
+      <rect x="380" y="92" width="350" height="28" rx="4" fill="var(--tint)"/><text x="392" y="111" font-size="13">☐ Estudar Docker</text>
+      <rect x="380" y="128" width="350" height="28" rx="4" fill="var(--tint)"/><text x="392" y="147" font-size="13" class="m">☑ Instalar Node.js</text>
+      <rect x="380" y="164" width="350" height="28" rx="4" fill="var(--tint)"/><text x="392" y="183" font-size="13">☐ Ler a spec</text>
+    </svg>
+  </figure>
+  <h3>Componentes formam uma árvore</h3>
+  <figure>
+    <svg viewBox="0 0 760 170" role="img" aria-labelledby="f-tree">
+      <title id="f-tree">AppComponent contém Cabecalho e TarefasPagina; TarefasPagina contém FormularioTarefa e ListaTarefas; ListaTarefas repete ItemTarefa; o TarefasService é usado pela página</title>
+      <g font-size="13" text-anchor="middle">
+        <rect x="300" y="8" width="160" height="34" rx="7" fill="var(--front-soft)" stroke="var(--front)"/><text x="380" y="30">AppComponent</text>
+        <rect x="110" y="70" width="150" height="34" rx="7" fill="#fff" stroke="var(--front)"/><text x="185" y="92">Cabecalho</text>
+        <rect x="380" y="70" width="170" height="34" rx="7" fill="#fff" stroke="var(--front)"/><text x="465" y="92">TarefasPagina</text>
+        <rect x="290" y="128" width="170" height="34" rx="7" fill="#fff" stroke="var(--front)"/><text x="375" y="150">FormularioTarefa</text>
+        <rect x="480" y="128" width="150" height="34" rx="7" fill="#fff" stroke="var(--front)"/><text x="555" y="150">ListaTarefas</text>
+        <rect x="645" y="128" width="110" height="34" rx="7" fill="#fff" stroke="var(--front)" stroke-dasharray="4 3"/><text x="700" y="150">ItemTarefa ×N</text>
+        <rect x="600" y="70" width="150" height="34" rx="17" fill="var(--tint)" stroke="var(--muted)"/><text x="675" y="92" font-style="italic">TarefasService</text>
+      </g>
+      <g stroke="var(--front)" stroke-width="1.6" fill="none"><path d="M380 42 V56 H185 V70"/><path d="M380 56 H465 V70"/><path d="M465 104 V116 H375 V128"/><path d="M465 116 H555 V128"/><path d="M630 145 H645"/></g>
+      <path d="M550 87 H600" stroke="var(--muted)" stroke-dasharray="4 3" stroke-width="1.6"/>
+    </svg>
+    <figcaption>Telas grandes são feitas de componentes pequenos. O service (borda arredondada) não é tela: é a lógica que os componentes usam para falar com a API.</figcaption>
+  </figure>
+  <h3>Conceitos essenciais</h3>
+  <table>
+    <thead><tr><th>Conceito</th><th>Em uma frase</th><th>Como aparece</th></tr></thead>
+    <tbody>
+      <tr><td>Interpolação</td><td>Mostra um valor na tela</td><td><code>{{ t.titulo }}</code></td></tr>
+      <tr><td>Evento</td><td>Roda código quando algo acontece</td><td><code>(click)="salvar()"</code></td></tr>
+      <tr><td>Property binding</td><td>Liga um valor a um atributo</td><td><code>[disabled]="carregando()"</code></td></tr>
+      <tr><td>Controle de fluxo</td><td>Mostra condicionalmente / repete</td><td><code>@if</code>, <code>@for</code>, <code>@empty</code></td></tr>
+      <tr><td>Signal</td><td>Variável viva: mudou, a tela atualiza</td><td><code>tarefas = signal([])</code></td></tr>
+      <tr><td>Service</td><td>Lógica compartilhada, ex.: chamar a API</td><td><code>@Injectable()</code></td></tr>
+      <tr><td>Injeção de dependência</td><td>O Angular entrega o service pronto</td><td><code>inject(TarefasService)</code></td></tr>
+    </tbody>
+  </table>
+  <h3>Exemplo comentado</h3>
+<pre><code><span class="c">// tarefas.service.ts — quem fala com a API</span>
+@Injectable({ providedIn: 'root' })
+export class TarefasService {
+  private http = inject(HttpClient);
+  private api = 'http://localhost:3000/tarefas';
+
+  listar()              { return this.http.get&lt;Tarefa[]&gt;(this.api); }
+  criar(titulo: string) { return this.http.post&lt;Tarefa&gt;(this.api, { titulo }); }
+}</code></pre>
+<pre><code><span class="c">// tarefas.component.ts — a tela</span>
+@Component({
+  selector: 'app-tarefas',
+  template: `
+    &lt;input #campo placeholder="Nova tarefa" /&gt;
+    &lt;button (click)="adicionar(campo.value)"&gt;Adicionar&lt;/button&gt;   <span class="c">&lt;!-- evento --&gt;</span>
+    &lt;ul&gt;
+      @for (t of tarefas(); track t.id) {                        <span class="c">&lt;!-- repete --&gt;</span>
+        &lt;li&gt;{{ t.titulo }}&lt;/li&gt;                                 <span class="c">&lt;!-- mostra --&gt;</span>
+      } @empty {
+        &lt;li&gt;Nenhuma tarefa ainda.&lt;/li&gt;
+      }
+    &lt;/ul&gt;
+  `,
+})
+export class TarefasComponent {
+  private service = inject(TarefasService);
+  tarefas = signal&lt;Tarefa[]&gt;([]);                              <span class="c">// estado vivo</span>
+
+  constructor() {
+    this.service.listar().subscribe(lista =&gt; this.tarefas.set(lista));
+  }
+
+  adicionar(titulo: string) {
+    this.service.criar(titulo)
+      .subscribe(nova =&gt; this.tarefas.update(l =&gt; [...l, nova]));
+  }
+}</code></pre>
+  <h3>Comandos</h3>
+<pre><code>ng new frontend                <span class="c"># cria o projeto (aceite os padrões)</span>
+cd frontend
+ng serve                       <span class="c"># http://localhost:4200 — Ctrl+C para parar (ou: npm start)</span>
+ng add @angular/material       <span class="c"># instala os componentes visuais do Angular Material</span>
+ng generate component tarefas  <span class="c"># ou: ng g c tarefas</span>
+ng generate service tarefas    <span class="c"># ou: ng g s tarefas</span>
+ng test                        <span class="c"># roda os testes</span></code></pre>
+  <div class="box warn"><span class="t">Pegadinha clássica</span><p>Sem <code>provideHttpClient()</code> na lista de <code>providers</code> do <code>app.config.ts</code>, aparece <code>NullInjectorError: No provider for HttpClient</code>.</p></div>
+
+  <h3>No projeto deste repositório</h3>
+  <p>O exemplo acima cabe num arquivo só para ficar fácil de ler. No projeto de verdade, em <code>frontend/src/app/</code>, as mesmas ideias aparecem divididas em pastas, e a tela usa os componentes prontos do <strong>Angular Material</strong> (tabela, formulário, diálogo, menu lateral).</p>
+  <table>
+    <thead><tr><th>Peça</th><th>Onde fica</th><th>Para que serve</th></tr></thead>
+    <tbody>
+      <tr><td>Funcionalidades</td><td><code>features/dashboard</code>, <code>features/tarefas</code>, <code>features/categorias</code></td><td>Cada assunto na sua pasta, com as próprias telas e dados</td></tr>
+      <tr><td>Service</td><td><code>features/tarefas/data/tarefas.service.ts</code></td><td>Só conversa com a API (GET, POST, PATCH, DELETE)</td></tr>
+      <tr><td>Store</td><td><code>features/tarefas/data/tarefas.store.ts</code></td><td>Guarda o estado em signals (lista, carregando, erro) e avisa as telas quando muda</td></tr>
+      <tr><td>Página</td><td><code>features/tarefas/tarefas-page/</code></td><td>Tabela com ordenação e paginação, filtros e botões</td></tr>
+      <tr><td>Diálogo</td><td><code>features/tarefas/tarefa-form-dialog/</code></td><td>Formulário de criar e editar, com validação</td></tr>
+      <tr><td>Layout</td><td><code>core/layout/navbar</code> e <code>core/layout/sidebar</code></td><td>Barra do topo e menu lateral, presentes em todas as telas</td></tr>
+      <tr><td>Interceptors</td><td><code>core/http/</code></td><td>Toda requisição passa por eles: um liga a barra de carregamento, o outro transforma erros da API em mensagens legíveis</td></tr>
+      <tr><td>Compartilhados</td><td><code>shared/ui/</code></td><td>Cabeçalho de página, estados de vazio e de erro, diálogo de confirmação</td></tr>
+    </tbody>
+  </table>
+  <div class="box tip"><span class="t">Filtros que moram na URL</span><p>Na tela de tarefas, escolher a categoria muda o endereço para algo como <code>/tarefas?categoria=2&amp;status=pendentes</code>. O componente recebe esses valores como <code>input()</code> (graças ao <code>withComponentInputBinding()</code> no <code>app.config.ts</code>) e pede à API só o que foi filtrado. Resultado: dá para copiar o link e abrir a mesma visão em outra aba.</p></div>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>Angular monta a tela com componentes (lógica + HTML + CSS). Signals guardam o estado e atualizam a tela sozinhos. Services concentram a conversa com a API e entram nos componentes com <code>inject()</code>. Rode com <code>ng serve</code> e teste com <code>ng test</code>.</p></div>
+</section>
+
+<section class="chapter back" id="ch13">
+  <div class="ch-head"><span class="num">13</span><h2>Backend com NestJS</h2></div>
+  <p><strong>A cozinha.</strong> NestJS recebe os pedidos, confere se fazem sentido, aplica as regras e busca ou guarda os dados no banco. É Node.js com TypeScript, organizado de um jeito muito parecido com o Angular (decorators, módulos, injeção de dependência).</p>
+  <h3>O caminho do pedido dentro da API</h3>
+  <figure>
+    <svg viewBox="0 0 760 190" role="img" aria-labelledby="f-nest">
+      <title id="f-nest">Requisição entra no Controller, passa pelo ValidationPipe com o DTO, segue para o Service, depois para o Repository do ORM e chega ao PostgreSQL; se a validação falhar sai 400</title>
+      <g font-size="13" text-anchor="middle">
+        <rect x="5" y="40" width="130" height="60" rx="9" fill="var(--back-soft)" stroke="var(--back)" stroke-width="2"/><text x="70" y="66" font-weight="700">Controller</text><text x="70" y="84" font-size="11" class="m">recebe a comanda</text>
+        <rect x="155" y="40" width="140" height="60" rx="9" fill="var(--back-soft)" stroke="var(--back)" stroke-width="2"/><text x="225" y="66" font-weight="700">ValidationPipe</text><text x="225" y="84" font-size="11" class="m">confere o DTO</text>
+        <rect x="315" y="40" width="130" height="60" rx="9" fill="var(--back-soft)" stroke="var(--back)" stroke-width="2"/><text x="380" y="66" font-weight="700">Service</text><text x="380" y="84" font-size="11" class="m">a receita</text>
+        <rect x="465" y="40" width="130" height="60" rx="9" fill="var(--back-soft)" stroke="var(--back)" stroke-width="2"/><text x="530" y="66" font-weight="700">Repository</text><text x="530" y="84" font-size="11" class="m">ORM → SQL</text>
+        <rect x="615" y="40" width="140" height="60" rx="9" fill="var(--db-soft)" stroke="var(--db)" stroke-width="2"/><text x="685" y="66" font-weight="700">PostgreSQL</text><text x="685" y="84" font-size="11" class="m">a despensa</text>
+      </g>
+      <g stroke="var(--ink)" stroke-width="2"><path d="M137 70h16M297 70h16M447 70h16M597 70h16"/></g>
+      <path d="M225 102 V140" stroke="var(--err)" stroke-width="2"/>
+      <rect x="150" y="140" width="150" height="38" rx="7" fill="#fde8e6" stroke="var(--err)"/><text x="225" y="164" text-anchor="middle" font-size="12" style="fill:var(--err)" font-weight="600">400 Bad Request</text>
+      <text x="320" y="164" font-size="12" class="m">dado inválido para aqui: o service e o banco nem são chamados</text>
+      <rect x="5" y="2" width="750" height="26" rx="5" fill="var(--tint)"/><text x="380" y="20" text-anchor="middle" font-size="12">tudo isso fica dentro do <tspan font-weight="700">TarefasModule</tspan></text>
+    </svg>
+  </figure>
+  <table>
+    <thead><tr><th>Peça</th><th>Responsabilidade</th><th>Erro comum de iniciante</th></tr></thead>
+    <tbody>
+      <tr><td>Module</td><td>Agrupa tudo de uma funcionalidade</td><td>Esquecer de importar o módulo no <code>AppModule</code></td></tr>
+      <tr><td>Controller</td><td>Define as rotas e repassa</td><td>Colocar regra de negócio aqui</td></tr>
+      <tr><td>DTO</td><td>Formato esperado dos dados de entrada</td><td>Não validar nada</td></tr>
+      <tr><td>Service</td><td>Regra de negócio</td><td>Ficar sem teste</td></tr>
+      <tr><td>Repository / ORM</td><td>Fala com o banco (TypeORM ou Prisma)</td><td>Escrever SQL na mão sem necessidade</td></tr>
+    </tbody>
+  </table>
+  <h3>Exemplo comentado</h3>
+<pre><code><span class="c">// criar-tarefa.dto.ts — o que a API aceita</span>
+export class CriarTarefaDto {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(120)
+  titulo: string;
+}
+
+<span class="c">// tarefas.controller.ts — as rotas</span>
+@Controller('tarefas')
+export class TarefasController {
+  constructor(private readonly service: TarefasService) {}
+
+  @Get()
+  listar() { return this.service.listar(); }
+
+  @Post()
+  criar(@Body() dto: CriarTarefaDto) { return this.service.criar(dto); }
+}
+
+<span class="c">// tarefas.service.ts — a regra</span>
+@Injectable()
+export class TarefasService {
+  constructor(@InjectRepository(Tarefa) private repo: Repository&lt;Tarefa&gt;) {}
+
+  listar() { return this.repo.find({ order: { concluida: 'ASC' } }); }
+  criar(dto: CriarTarefaDto) { return this.repo.save({ ...dto, concluida: false }); }
+}</code></pre>
+  <h3>Comandos</h3>
+<pre><code>nest new api                <span class="c"># cria o projeto (escolha npm)</span>
+cd api
+npm run start:dev           <span class="c"># http://localhost:3000 — recarrega ao salvar</span>
+nest g resource tarefas     <span class="c"># gera module, controller, service e DTOs</span>
+npm i class-validator class-transformer
+npm test                    <span class="c"># testes unitários</span>
+npm run test:e2e            <span class="c"># testes ponta a ponta</span></code></pre>
+  <div class="box warn"><span class="t">Duas linhas que todo main.ts deste projeto precisa</span>
+<pre style="margin:.4rem 0 0"><code>app.enableCors();                                   <span class="c">// libera o front na porta 4200</span>
+app.useGlobalPipes(new ValidationPipe());          <span class="c">// ativa a validação dos DTOs</span></code></pre></div>
+
+  <h3>Os módulos deste projeto</h3>
+  <p>Em <code>api/src/</code> cada assunto é um módulo, e o <code>AppModule</code> junta todos. Um módulo só enxerga o que outro <strong>exporta</strong>: o <code>CategoriasModule</code> tem <code>exports: [CategoriasService]</code>, e o <code>TarefasModule</code> tem <code>imports: [CategoriasModule]</code> para conferir se a categoria de uma tarefa existe.</p>
+  <table>
+    <thead><tr><th>Módulo</th><th>Pasta</th><th>O que faz</th></tr></thead>
+    <tbody>
+      <tr><td>Config</td><td><code>config/</code></td><td>Lê o <code>.env</code> e recusa subir a API se faltar algo</td></tr>
+      <tr><td>Database</td><td><code>database/</code></td><td>Conecta no PostgreSQL com TypeORM</td></tr>
+      <tr><td>Categorias</td><td><code>categorias/</code></td><td>CRUD de categorias; nome único, cor no formato <code>#RRGGBB</code></td></tr>
+      <tr><td>Tarefas</td><td><code>tarefas/</code></td><td>CRUD de tarefas com filtros por categoria, status, prioridade e texto</td></tr>
+      <tr><td>Dashboard</td><td><code>dashboard/</code></td><td>Indicadores calculados no banco (<code>COUNT</code> e <code>GROUP BY</code>)</td></tr>
+      <tr><td>Health</td><td><code>health/</code></td><td>Responde se a API e o banco estão no ar</td></tr>
+    </tbody>
+  </table>
+  <p>As duas linhas do quadro acima ficam em <code>api/src/configurar-app.ts</code>, usado pelo <code>main.ts</code> e pelos testes ponta a ponta. A documentação de todas as rotas é gerada sozinha pelo Swagger em <code>http://localhost:3000/docs</code>.</p>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>No NestJS o controller recebe, o DTO com ValidationPipe confere, o service aplica a regra e o repository fala com o banco. Ative CORS e o ValidationPipe no <code>main.ts</code>. Rode com <code>npm run start:dev</code> e teste com <code>npm test</code>.</p></div>
+</section>
+
+<section class="chapter db" id="ch14">
+  <div class="ch-head"><span class="num">14</span><h2>Banco de dados em container</h2></div>
+  <p><strong>A despensa, dentro de uma caixa.</strong> O PostgreSQL guarda os dados. Em vez de instalar o banco na máquina, rodamos ele dentro de um container Docker: todo mundo do time usa a mesma versão, sobe com um comando e apaga sem deixar sujeira.</p>
+  <h3>Imagem, container e volume</h3>
+  <figure>
+    <svg viewBox="0 0 760 230" role="img" aria-labelledby="f-dk">
+      <title id="f-dk">Imagem é a forma de bolo; containers são os bolos feitos com ela; o volume é o pote onde os dados ficam guardados mesmo que o bolo seja jogado fora</title>
+      <rect x="10" y="20" width="200" height="180" rx="12" fill="#fff" stroke="var(--line)" stroke-width="2"/>
+      <path d="M50 100 h120 l-12 50 h-96 z" fill="none" stroke="var(--db)" stroke-width="3"/><ellipse cx="110" cy="100" rx="60" ry="12" fill="none" stroke="var(--db)" stroke-width="3"/>
+      <text x="110" y="58" text-anchor="middle" font-weight="700">Imagem</text><text x="110" y="182" text-anchor="middle" font-size="12" class="m">a forma · postgres:16</text>
+      <path d="M220 110 h45" stroke="var(--muted)" stroke-width="2.5"/><path d="M259 103 l9 7 -9 7" fill="none" stroke="var(--muted)" stroke-width="2.5"/>
+      <rect x="280" y="20" width="230" height="180" rx="12" fill="var(--db-soft)" stroke="var(--db)" stroke-width="2"/>
+      <rect x="310" y="95" width="70" height="45" rx="8" fill="var(--db)" opacity=".75"/><rect x="310" y="86" width="70" height="14" rx="6" fill="var(--db)"/>
+      <rect x="405" y="95" width="70" height="45" rx="8" fill="var(--db)" opacity=".45"/><rect x="405" y="86" width="70" height="14" rx="6" fill="var(--db)" opacity=".7"/>
+      <text x="395" y="58" text-anchor="middle" font-weight="700">Containers</text><text x="395" y="182" text-anchor="middle" font-size="12" class="m">os bolos · rodando</text>
+      <path d="M520 110 h45" stroke="var(--muted)" stroke-width="2.5" stroke-dasharray="5 4"/><path d="M559 103 l9 7 -9 7" fill="none" stroke="var(--muted)" stroke-width="2.5"/>
+      <rect x="580" y="20" width="170" height="180" rx="12" fill="#fff" stroke="var(--line)" stroke-width="2"/>
+      <rect x="625" y="82" width="80" height="70" rx="10" fill="none" stroke="var(--db)" stroke-width="3"/><rect x="618" y="74" width="94" height="14" rx="5" fill="var(--db)"/><rect x="635" y="115" width="60" height="30" rx="4" fill="var(--db)" opacity=".35"/>
+      <text x="665" y="58" text-anchor="middle" font-weight="700">Volume</text><text x="665" y="182" text-anchor="middle" font-size="12" class="m">o pote · dados salvos</text>
+    </svg>
+    <figcaption>Apague o container e os dados continuam no volume. Apague o volume e os dados vão embora.</figcaption>
+  </figure>
+  <h3>O arquivo docker-compose.yml</h3>
+<pre><code>services:
+  db:
+    image: postgres:16                  <span class="c"># a forma</span>
+    container_name: estudo-db           <span class="c"># o nome do bolo</span>
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: tarefas
+    ports:
+      - "5433:5432"                     <span class="c"># porta da máquina : porta do container</span>
+    volumes:
+      - dados:/var/lib/postgresql/data  <span class="c"># o pote</span>
+    healthcheck:                        <span class="c"># avisa quando o banco está pronto para conexões</span>
+      test: ["CMD-SHELL", "pg_isready -U app -d tarefas"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  dados:</code></pre>
+  <div class="box warn"><span class="t">Por que 5433 e não 5432?</span><p>Dentro do container o PostgreSQL continua na porta padrão, 5432. Do lado da sua máquina usamos a 5433, porque é comum já existir outro PostgreSQL ocupando a 5432 (de outro projeto, por exemplo), e dois programas não podem usar a mesma porta. Se a 5432 estiver livre e você preferir, troque nos dois lugares: <code>ports</code> no <code>docker-compose.yml</code> e <code>DATABASE_URL</code> no <code>api/.env</code>.</p></div>
+  <h3>Comandos do dia a dia</h3>
+  <table>
+    <thead><tr><th>Comando</th><th>O que acontece</th><th>Dados</th></tr></thead>
+    <tbody>
+      <tr><td><code>docker compose up -d</code></td><td>Cria e liga o container em segundo plano</td><td>mantidos</td></tr>
+      <tr><td><code>npm run banco</code></td><td>Atalho do projeto: liga e espera o banco ficar pronto</td><td>mantidos</td></tr>
+      <tr><td><code>docker ps</code></td><td>Lista containers rodando</td><td>—</td></tr>
+      <tr><td><code>docker compose logs -f db</code></td><td>Acompanha os logs (<kbd>Ctrl</kbd>+<kbd>C</kbd> sai)</td><td>—</td></tr>
+      <tr><td><code>docker compose stop</code></td><td>Desliga sem remover</td><td>mantidos</td></tr>
+      <tr><td><code>docker compose down</code></td><td>Desliga e remove o container</td><td>mantidos no volume</td></tr>
+      <tr><td><code>docker compose down -v</code></td><td>Remove container <strong>e volume</strong></td><td><strong style="color:var(--err)">apagados</strong></td></tr>
+    </tbody>
+  </table>
+  <h3>Olhando dentro do banco</h3>
+<pre><code>docker exec -it estudo-db psql -U app -d tarefas
+
+<span class="c"># dentro do psql:</span>
+\dt                         <span class="c"># lista tabelas</span>
+SELECT * FROM tarefa;       <span class="c"># mostra os registros</span>
+\q                          <span class="c"># sai</span></code></pre>
+  <p>Prefere interface gráfica? DBeaver conecta em <code>localhost:5433</code>, usuário <code>app</code>, senha <code>app</code>, banco <code>tarefas</code>.</p>
+  <h3>Ligando o NestJS ao banco</h3>
+<pre><code><span class="c"># api/.env — nunca vai para o Git</span>
+DATABASE_URL=postgresql://app:app@localhost:5433/tarefas
+DB_SYNCHRONIZE=true           <span class="c"># cria as tabelas sozinho a partir das entidades (só para estudo)</span></code></pre>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>A imagem é o molde, o container é a instância rodando e o volume guarda os dados. <code>docker compose up -d</code> liga, <code>down</code> desliga mantendo os dados, e <code>down -v</code> apaga tudo — cuidado com ele.</p></div>
+</section>
+
+<section class="chapter" id="ch15">
+  <div class="ch-head"><span class="num">15</span><h2>Juntando tudo e erros comuns</h2></div>
+  <h3>Estrutura do repositório</h3>
+<pre><code>fullcycle/
+├── frontend/             <span class="c"># Angular + Angular Material</span>
+│   └── src/app/
+│       ├── core/         <span class="c"># navbar, sidebar, interceptors</span>
+│       ├── shared/       <span class="c"># componentes reaproveitados</span>
+│       └── features/     <span class="c"># dashboard, tarefas, categorias</span>
+├── api/                  <span class="c"># NestJS</span>
+│   ├── .env              <span class="c"># fora do Git</span>
+│   └── src/              <span class="c"># um módulo por assunto (cap. 13)</span>
+├── docker-compose.yml    <span class="c"># PostgreSQL</span>
+├── package.json          <span class="c"># atalhos: npm run setup, npm run dev</span>
+├── CLAUDE.md             <span class="c"># contexto fixo do Claude (você cria no cap. 7)</span>
+├── .claude/skills/sdd/   <span class="c"># skill de SDD do projeto (caps. 16 e 18)</span>
+├── specs/                <span class="c"># specs criadas pela /sdd em cada task (caps. 17 e 18)</span>
+├── tasks/                <span class="c"># as 5 tasks para resolver (cap. 18)</span>
+└── README.md</code></pre>
+  <h3>Montando o projeto pela primeira vez</h3>
+  <p>Ao clonar um projeto, as bibliotecas (<code>node_modules</code>) e as senhas (<code>.env</code>) não vêm junto — por segurança e por tamanho. Prepare uma vez:</p>
+<pre><code>git clone &lt;endereço-do-repositório&gt;
+cd fullcycle
+code .                        <span class="c"># abre no VS Code; use o terminal integrado daqui pra frente</span>
+
+npm run setup                 <span class="c"># instala tudo (raiz, api e frontend) e cria o api/.env</span></code></pre>
+  <p>Prefere fazer à mão, para ver cada passo? O <code>npm run setup</code> faz exatamente isto:</p>
+<pre><code>npm install                   <span class="c"># bibliotecas da raiz (os atalhos)</span>
+cd api
+npm install                   <span class="c"># baixa as bibliotecas da API (demora na primeira vez)</span>
+cp .env.example .env          <span class="c"># cria o .env a partir do modelo</span>
+cd ../frontend
+npm install                   <span class="c"># baixa as bibliotecas do front</span>
+cd ..</code></pre>
+  <p><strong>O que você deve ver:</strong> o <code>npm install</code> termina com algo como <code>added 812 packages</code>. Avisos amarelos (<code>WARN</code>) são normais; erros vermelhos (<code>ERR!</code>) não.</p>
+  <div class="box tip"><span class="t">Peça ajuda ao Claude</span><p>Na pasta do projeto: <code>sou iniciante. me guia passo a passo para rodar este projeto pela primeira vez, explicando cada comando antes de rodar.</code></p></div>
+
+  <h3>Ordem para subir tudo</h3>
+  <p>O jeito mais rápido é um comando só, na pasta <code>fullcycle</code>:</p>
+<pre><code>npm run dev                   <span class="c"># liga o banco, espera ficar pronto e sobe API e front juntos</span></code></pre>
+  <p>As linhas da API aparecem com <code>[API]</code> e as do front com <code>[FRONTEND]</code>. Quando surgir <code>Local: http://localhost:4200/</code>, abra no navegador. <kbd>Ctrl</kbd>+<kbd>C</kbd> para tudo.</p>
+  <p>Para enxergar cada camada separada, use três terminais (no VS Code: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>`</kbd> abre um novo):</p>
+<pre><code><span class="c"># terminal 1 — banco (de dentro da pasta fullcycle)</span>
+docker compose up -d
+
+<span class="c"># terminal 2 — API</span>
+cd api &amp;&amp; npm run start:dev
+
+<span class="c"># terminal 3 — front</span>
+cd frontend &amp;&amp; npm start</code></pre>
+  <p>Sempre de baixo para cima: banco, depois API, depois front. Cada camada depende da de baixo.</p>
+
+  <h3>Como descobrir onde está o erro</h3>
+  <figure>
+    <svg viewBox="0 0 760 250" role="img" aria-labelledby="f-diag">
+      <title id="f-diag">Fluxograma de diagnóstico: abrir DevTools aba Network; se a chamada não aparece, o problema é no front; se aparece com erro de CORS ou 5xx, olhe o terminal da API; se a API reclama de conexão, o banco está parado; se volta lista vazia, o banco está vazio</title>
+      <g font-size="12.5" text-anchor="middle">
+        <rect x="250" y="5" width="260" height="40" rx="8" fill="var(--tint)" stroke="var(--ink)" stroke-width="1.5"/><text x="380" y="30" font-weight="700">F12 → aba Network → recarregue</text>
+        <rect x="10" y="95" width="200" height="54" rx="8" fill="var(--front-soft)" stroke="var(--front)"/><text x="110" y="117">A chamada nem aparece</text><text x="110" y="136" font-weight="700" style="fill:var(--front)">→ problema no front</text>
+        <rect x="280" y="95" width="200" height="54" rx="8" fill="var(--back-soft)" stroke="var(--back)"/><text x="380" y="117">Aparece com CORS ou 5xx</text><text x="380" y="136" font-weight="700" style="fill:var(--back)">→ olhe o terminal da API</text>
+        <rect x="550" y="95" width="200" height="54" rx="8" fill="var(--tint)" stroke="var(--line)"/><text x="650" y="117">Aparece com 200 e <tspan class="mono">[]</tspan></text><text x="650" y="136" font-weight="700">→ banco vazio, tudo certo</text>
+        <rect x="280" y="190" width="200" height="54" rx="8" fill="var(--db-soft)" stroke="var(--db)"/><text x="380" y="212">API diz ECONNREFUSED</text><text x="380" y="231" font-weight="700" style="fill:var(--db)">→ <tspan class="mono">docker ps</tspan></text>
+      </g>
+      <g stroke="var(--ink)" stroke-width="1.5" fill="none"><path d="M330 45 L110 95"/><path d="M380 45 V95"/><path d="M430 45 L650 95"/><path d="M380 149 V190"/></g>
+    </svg>
+  </figure>
+  <table>
+    <thead><tr><th>Mensagem</th><th>Camada</th><th>Correção</th></tr></thead>
+    <tbody>
+      <tr><td><code>blocked by CORS policy</code></td><td>API</td><td><code>app.enableCors()</code> no <code>main.ts</code></td></tr>
+      <tr><td><code>ECONNREFUSED 127.0.0.1:5433</code></td><td>Banco</td><td><code>docker compose up -d</code></td></tr>
+      <tr><td><code>port is already allocated</code></td><td>Docker</td><td>Outro programa usa a porta 5433; troque a porta (cap. 14)</td></tr>
+      <tr><td>Navbar mostra "API offline"</td><td>API</td><td>Suba a API (<code>npm run api</code>) e leia o erro no terminal dela</td></tr>
+      <tr><td>Navbar mostra "Banco offline"</td><td>Banco</td><td>A API está no ar, mas o banco caiu: <code>npm run banco</code> e clique no indicador da navbar para verificar de novo</td></tr>
+      <tr><td><code>Variáveis de ambiente inválidas</code></td><td>API</td><td>Falta o <code>api/.env</code> ou ele está errado: <code>cp .env.example .env</code> dentro de <code>api/</code></td></tr>
+      <tr><td><code>NullInjectorError: HttpClient</code></td><td>Front</td><td><code>provideHttpClient()</code> no <code>app.config.ts</code></td></tr>
+      <tr><td><code>EADDRINUSE :::3000</code></td><td>Máquina</td><td>Já tem algo nessa porta; feche o terminal antigo</td></tr>
+      <tr><td><code>Cannot connect to the Docker daemon</code></td><td>Docker</td><td>Abra o Docker Desktop e espere iniciar</td></tr>
+      <tr><td>Dados sumiram</td><td>Banco</td><td>Alguém rodou <code>down -v</code>, ou falta o bloco <code>volumes</code></td></tr>
+      <tr><td>Recebo 500 ao criar tarefa vazia</td><td>API</td><td>Falta o <code>ValidationPipe</code> global</td></tr>
+    </tbody>
+  </table>
+  <div class="box tip"><span class="t">Usando o Claude para depurar</span><p>Cole o erro completo e diga o que você estava fazendo: <code>rodei npm run start:dev e apareceu isso: [erro]. o docker ps mostra o container rodando.</code> Quanto mais contexto, melhor o diagnóstico. E peça para ele <em>explicar a causa</em> antes de corrigir.</p></div>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>Na primeira vez: clone e rode <code>npm run setup</code> (ou <code>npm install</code> em api e frontend e crie o <code>.env</code>). No dia a dia: <code>npm run dev</code>, ou banco, depois API, depois front, cada um num terminal. Quando algo quebrar, use o DevTools para descobrir a camada e leia a mensagem de erro com calma.</p></div>
+</section>
+
+<section class="chapter ai" id="ch16">
+  <div class="ch-head"><span class="num">16</span><h2>Skills no Claude</h2></div>
+  <p><strong>O caderno de receitas da cozinha.</strong> No capítulo 9 você aprendeu a escrever um bom pedido. Uma <strong>skill</strong> é um bom pedido salvo numa pasta, com nome e descrição, versionado junto com o projeto. O Claude consulta a receita certa sozinho quando o assunto aparece — ou você chama pelo nome, como <code>/criar-endpoint</code>.</p>
+  <h3>Como o Claude lê uma skill: três níveis</h3>
+  <figure>
+    <svg viewBox="0 0 760 210" role="img" aria-labelledby="f-sk">
+      <title id="f-sk">Nível 1: nome e descrição de todas as skills ficam sempre visíveis. Nível 2: o SKILL.md completo é lido quando o pedido combina. Nível 3: arquivos extras são lidos só se o SKILL.md mandar</title>
+      <rect x="10" y="20" width="230" height="170" rx="12" fill="var(--ai-soft)" stroke="var(--ai)" stroke-width="2"/>
+      <text x="28" y="48" font-weight="700">1. Sempre carregado</text><text x="28" y="68" font-size="12" class="m">nome + descrição de todas</text>
+      <rect x="28" y="85" width="194" height="18" rx="4" fill="var(--ai)" opacity=".55"/><text x="36" y="99" font-size="11" class="mono" style="fill:#fff">criar-endpoint: Cria…</text>
+      <rect x="28" y="110" width="194" height="18" rx="4" fill="var(--ai)" opacity=".55"/><text x="36" y="124" font-size="11" class="mono" style="fill:#fff">revisar-ui: Revisa…</text>
+      <rect x="28" y="135" width="194" height="18" rx="4" fill="var(--ai)" opacity=".55"/><text x="36" y="149" font-size="11" class="mono" style="fill:#fff">migration-banco: …</text>
+      <text x="28" y="178" font-size="11" class="m">custa pouquíssimo contexto</text>
+      <path d="M248 105 h30" stroke="var(--ai)" stroke-width="3"/><path d="M272 98 l9 7 -9 7" fill="none" stroke="var(--ai)" stroke-width="3"/>
+      <rect x="290" y="20" width="220" height="170" rx="12" fill="#fff" stroke="var(--ai)" stroke-width="2"/>
+      <text x="308" y="48" font-weight="700">2. Se o pedido combinar</text><text x="308" y="68" font-size="12" class="m">lê o SKILL.md inteiro</text>
+      <rect x="308" y="85" width="184" height="85" rx="6" fill="none" stroke="var(--line)" stroke-width="2"/>
+      <path d="M320 102h120M320 117h150M320 132h100M320 147h135M320 160h90" stroke="var(--muted)" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+      <path d="M518 105 h30" stroke="var(--ai)" stroke-width="3" stroke-dasharray="5 4"/><path d="M542 98 l9 7 -9 7" fill="none" stroke="var(--ai)" stroke-width="3"/>
+      <rect x="560" y="20" width="190" height="170" rx="12" fill="#fff" stroke="var(--line)" stroke-width="2" stroke-dasharray="6 5"/>
+      <text x="578" y="48" font-weight="700">3. Se precisar</text><text x="578" y="68" font-size="12" class="m">referências e scripts</text>
+      <rect x="578" y="85" width="70" height="85" rx="6" fill="none" stroke="var(--line)" stroke-width="2"/><text x="613" y="132" text-anchor="middle" font-size="11" class="m mono">ref.md</text>
+      <rect x="660" y="85" width="70" height="85" rx="6" fill="none" stroke="var(--line)" stroke-width="2"/><text x="695" y="132" text-anchor="middle" font-size="11" class="m mono">script</text>
+    </svg>
+    <figcaption>Como só a descrição fica sempre visível, é ela que decide se o resto da skill será lido. Uma descrição vaga faz a skill nunca ser usada — ou ser usada na hora errada.</figcaption>
+  </figure>
+  <h3>Estrutura de pastas</h3>
+<pre><code>fullcycle/
+└── .claude/
+    └── skills/
+        └── criar-endpoint/       <span class="c"># o nome da pasta vira o comando /criar-endpoint</span>
+            ├── SKILL.md          <span class="c"># obrigatório</span>
+            ├── padroes.md        <span class="c"># opcional — nível 3</span>
+            └── scripts/          <span class="c"># opcional — nível 3</span></code></pre>
+  <p>Skills em <code>.claude/skills/</code> são do projeto e vão para o Git: o time inteiro usa. Skills em <code>~/.claude/skills/</code> são pessoais e valem em todos os seus projetos.</p>
+  <h3>Anatomia do SKILL.md</h3>
+<pre><code>---
+name: criar-endpoint                         <span class="c"># minúsculas, números e hífens</span>
+description: Cria um endpoint REST no NestJS deste projeto
+  seguindo o padrão module/controller/service/DTO. Use quando
+  pedirem nova rota, recurso, CRUD ou endpoint na API.       <span class="c"># O QUE faz + QUANDO usar</span>
+---
+
+# Criar endpoint NestJS
+
+1. Rode `nest g resource &lt;nome&gt;` dentro de `api/`.
+2. Todo DTO de entrada usa class-validator.
+3. Regra de negócio fica no service; o controller só repassa.
+4. Crie ou atualize o teste unitário do service.
+5. Rode `npm test` e mostre o resultado antes de finalizar.
+
+Para nomes de rotas e formato de erros, leia padroes.md.    <span class="c"># aponta para o nível 3</span></code></pre>
+  <h3>Descrição boa e ruim</h3>
+  <table>
+    <thead><tr><th>Ruim</th><th>Por quê</th><th>Melhor</th></tr></thead>
+    <tbody>
+      <tr><td><code>Ajuda com a API.</code></td><td>Vago: dispara em qualquer coisa ou em nada</td><td>Diz o que faz e cita as palavras que o usuário usaria</td></tr>
+      <tr><td><code>Skill de backend.</code></td><td>Não diz quando usar</td><td><code>Use quando pedirem rota, CRUD ou endpoint</code></td></tr>
+    </tbody>
+  </table>
+  <h3>CLAUDE.md ou skill?</h3>
+  <table>
+    <thead><tr><th></th><th>CLAUDE.md</th><th>Skill</th></tr></thead>
+    <tbody>
+      <tr><td>Quando vale</td><td>Sempre, em toda sessão naquela pasta</td><td>Só quando o assunto aparece</td></tr>
+      <tr><td>Bom para</td><td>Stack, comandos, regras gerais</td><td>Um procedimento específico e repetível</td></tr>
+      <tr><td>Tamanho ideal</td><td>Curto: é lido sempre</td><td>Pode ser detalhado: só é lido quando precisa</td></tr>
+    </tbody>
+  </table>
+  <div class="box tip"><span class="t">Uma skill pronta para estudar</span><p>Abra <code>.claude/skills/sdd/SKILL.md</code>: é uma skill de verdade deste projeto. O <code>SKILL.md</code> é o nível 2 (o passo a passo), e <code>constitution.md</code> e a pasta <code>modelos/</code> são o nível 3, lidos só quando a skill manda. Ela é usada no capítulo 18.</p></div>
+
+  <h3>Criando e testando sua primeira skill</h3>
+  <ol class="steps ai">
+    <li><strong>Crie a pasta e o arquivo</strong><code>mkdir -p .claude/skills/criar-endpoint</code> e crie o <code>SKILL.md</code> nela pelo VS Code.</li>
+    <li><strong>Abra uma sessão nova</strong>Skills são descobertas ao abrir. Rode <code>claude</code> e depois <code>/skills</code> — ela deve aparecer na lista.</li>
+    <li><strong>Teste o caso que deve acionar</strong><code>cria uma rota GET /categorias</code>. O Claude deve dizer que está usando a skill e seguir os passos dela.</li>
+    <li><strong>Teste o caso que não deve acionar</strong><code>muda a cor do botão Adicionar</code>. A skill não deve ser usada.</li>
+    <li><strong>Ajuste a descrição se errar</strong>Quase todo problema de skill se resolve melhorando a descrição.</li>
+  </ol>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>Skill é uma pasta com <code>SKILL.md</code> em <code>.claude/skills/</code>. O Claude sempre vê nome e descrição, e só lê o resto quando o pedido combina. Por isso a descrição precisa dizer o que a skill faz e quando usar. Teste um pedido que deve acionar e um que não deve.</p></div>
+</section>
+
+<section class="chapter ai" id="ch17">
+  <div class="ch-head"><span class="num">17</span><h2>SDD com Spec Kit</h2></div>
+  <p><strong>A planta antes da obra.</strong> Spec-Driven Development é escrever primeiro <em>o que</em> precisa ser feito e <em>por quê</em>, depois <em>como</em>, depois quebrar em tarefas pequenas — e só então a IA programa. A especificação vira a fonte da verdade: se o requisito muda, muda a spec primeiro.</p>
+  <figure>
+    <svg viewBox="0 0 760 140" role="img" aria-labelledby="f-sdd">
+      <title id="f-sdd">Fluxo do SDD: constitution, specify, plan, tasks, implement; cada etapa gera um arquivo que você revisa antes de seguir</title>
+      <g font-size="13" text-anchor="middle">
+        <rect x="5" y="25" width="132" height="62" rx="10" fill="#fff" stroke="var(--ai)" stroke-width="2"/><text x="71" y="51" font-weight="700">constitution</text><text x="71" y="70" class="m" font-size="11">regras do projeto</text>
+        <rect x="158" y="25" width="132" height="62" rx="10" fill="#fff" stroke="var(--ai)" stroke-width="2"/><text x="224" y="51" font-weight="700">specify</text><text x="224" y="70" class="m" font-size="11">o quê e por quê</text>
+        <rect x="311" y="25" width="132" height="62" rx="10" fill="#fff" stroke="var(--ai)" stroke-width="2"/><text x="377" y="51" font-weight="700">plan</text><text x="377" y="70" class="m" font-size="11">como</text>
+        <rect x="464" y="25" width="132" height="62" rx="10" fill="#fff" stroke="var(--ai)" stroke-width="2"/><text x="530" y="51" font-weight="700">tasks</text><text x="530" y="70" class="m" font-size="11">passos pequenos</text>
+        <rect x="617" y="25" width="138" height="62" rx="10" fill="var(--ai)"/><text x="686" y="51" font-weight="700" style="fill:#fff">implement</text><text x="686" y="70" font-size="11" style="fill:#fff">o código</text>
+      </g>
+      <g stroke="var(--muted)" stroke-width="2"><path d="M139 56h17M292 56h17M445 56h17M598 56h17"/></g>
+      <g font-size="11" text-anchor="middle" class="mono m"><text x="71" y="110">constitution.md</text><text x="224" y="110">spec.md</text><text x="377" y="110">plan.md</text><text x="530" y="110">tasks.md</text><text x="686" y="110">código + testes</text></g>
+      <text x="380" y="134" text-anchor="middle" font-size="12" class="m">entre cada etapa: você lê, ajusta e só então avança</text>
+    </svg>
+  </figure>
+  <h3>Instalando e iniciando</h3>
+<pre><code>uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+specify init projeto-estudo --ai claude     <span class="c"># projeto novo</span>
+<span class="c"># ou, num projeto que já existe:</span>
+cd fullcycle &amp;&amp; specify init --here --ai claude
+
+claude                                      <span class="c"># os comandos /speckit.* ficam disponíveis</span></code></pre>
+  <div class="box warn"><span class="t">Confira o README antes</span><p>O Spec Kit evolui rápido e as flags podem mudar entre versões. Os comandos acima seguem o README do repositório <code>github/spec-kit</code>.</p></div>
+
+  <h3>Cada etapa com o projeto de tarefas</h3>
+  <h4><code>/speckit.constitution</code> → constitution.md</h4>
+<pre><code>1. Todo endpoint novo tem teste unitário no service.
+2. TypeScript em modo strict, sem `any`.
+3. Nenhuma dependência nova sem justificativa no plan.md.</code></pre>
+  <p><strong>Você revisa:</strong> o time concorda? Cada regra dá para verificar?</p>
+
+  <h4><code>/speckit.specify</code> → spec.md</h4>
+<pre><code># Lista de tarefas pessoais
+## Histórias
+- Como usuário, vejo minhas tarefas ao abrir a página.
+- Como usuário, crio uma tarefa informando o título.
+- Como usuário, marco e desmarco uma tarefa como concluída.
+## Regras
+- Título obrigatório, até 120 caracteres.
+- Concluídas aparecem riscadas e no fim da lista.
+- Se a API estiver fora, aparece "Tente de novo em instantes".
+## Fora do escopo
+- Login, várias listas, datas de vencimento.</code></pre>
+  <p><strong>Você revisa:</strong> não tem tecnologia aqui? Toda regra é testável? Tem "fora do escopo"? Ele evita que a IA invente funcionalidade.</p>
+
+  <h4><code>/speckit.plan</code> → plan.md</h4>
+<pre><code>- Front: Angular, componentes standalone, estado em signals.
+- Back: NestJS + TypeORM, ValidationPipe global.
+- Banco: PostgreSQL 16 via docker compose.
+- API: GET /tarefas · POST /tarefas · PATCH /tarefas/:id</code></pre>
+  <p><strong>Você revisa:</strong> cada regra da spec tem onde morar? Algo desrespeita a constitution?</p>
+
+  <h4><code>/speckit.tasks</code> → tasks.md</h4>
+<pre><code>- [ ] T001 Criar docker-compose.yml com Postgres 16
+- [ ] T002 Criar entidade Tarefa (id, titulo, concluida)
+- [ ] T003 Teste do TarefasService.criar (falha primeiro)
+- [ ] T004 Implementar GET e POST /tarefas
+- [ ] T005 [P] Implementar PATCH /tarefas/:id
+- [ ] T006 [P] TarefasService no Angular
+- [ ] T007 Componente de lista com estados vazio e erro</code></pre>
+  <p><strong>Você revisa:</strong> cada tarefa é pequena o bastante para entender o diff? <code>[P]</code> marca tarefas que podem ser feitas em paralelo.</p>
+
+  <h4><code>/speckit.implement</code> → código</h4>
+  <p>O Claude executa as tarefas em ordem. Seu papel em cada uma: ler o diff, rodar os testes, testar na mão o que a spec promete. Se algo não bater, corrija a spec <em>ou</em> o código — nunca deixe os dois divergirem.</p>
+
+  <h3>Spec ou plan? Teste rápido</h3>
+  <table>
+    <thead><tr><th>Frase</th><th>Vai em</th></tr></thead>
+    <tbody>
+      <tr><td>O usuário pode marcar uma tarefa como concluída.</td><td>spec</td></tr>
+      <tr><td>Usar TypeORM com PostgreSQL 16.</td><td>plan</td></tr>
+      <tr><td>Se a API estiver fora, o usuário vê uma mensagem.</td><td>spec</td></tr>
+      <tr><td>Guardar a lista num signal.</td><td>plan</td></tr>
+    </tbody>
+  </table>
+  <p>Regra: se fala do <strong>usuário e do comportamento</strong>, é spec. Se cita <strong>tecnologia</strong>, é plan.</p>
+  <div class="box tip"><span class="t">Sem instalar nada: a skill /sdd</span><p>Este projeto traz a skill <code>/sdd</code>, em <code>.claude/skills/sdd/</code>, que faz o mesmo ciclo usando só o Claude Code: constituição, spec, plan, tasks e implementação com o teste primeiro. Os arquivos ficam em <code>specs/NNN-nome/</code>, como no Spec Kit. O capítulo 18 mostra como usar.</p></div>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>Em SDD você escreve as regras (constitution), o que o usuário precisa (spec), como construir (plan) e os passos (tasks) antes de implementar. Leia e ajuste cada arquivo antes de avançar. Se o requisito mudar, mude a spec primeiro.</p></div>
+</section>
+
+<section class="chapter ai" id="ch18">
+  <div class="ch-head"><span class="num">18</span><h2>Mão na massa: as tasks do projeto</h2></div>
+  <p><strong>Agora é com você.</strong> Você preparou a máquina, entendeu as três camadas do sistema e viu como skills e SDD guiam o Claude. Este capítulo junta tudo num roteiro prático: abrir o projeto no VS Code, conversar com o Claude Code no painel e resolver as <strong>5 tasks</strong> do projeto com a skill <code>/sdd</code>.</p>
+
+  <h3>18.1 O que você vai fazer</h3>
+  <p>O projeto tem 5 problemas colocados de propósito, descritos em <code>tasks/index.html</code> (abra o arquivo no navegador). Cada task traz o sintoma e uma dica, mas não a solução: descobrir onde está o problema faz parte do exercício. Para cada task você vai:</p>
+  <ol>
+    <li>Reproduzir o problema com o sistema rodando.</li>
+    <li>Escrever com o Claude a spec, o plan e as tasks do SDD, revisando cada arquivo.</li>
+    <li>Criar um teste que falha por causa do problema.</li>
+    <li>Corrigir, ver o teste passar e rodar todos os testes.</li>
+    <li>Abrir um pull request com a correção, como no capítulo 10.</li>
+  </ol>
+  <p>Os testes que já existem passam: nenhum deles pega esses 5 problemas. Escrever o teste que pega é parte de cada task.</p>
+  <table>
+    <thead><tr><th>Task</th><th>Problema</th><th>Onde aparece</th><th>Nível</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Tarefa excluída continua na lista</td><td>Frontend</td><td>Fácil</td></tr>
+      <tr><td>2</td><td>"Criada em" mostra a hora errada</td><td>Frontend</td><td>Fácil</td></tr>
+      <tr><td>3</td><td>Editar uma tarefa concluída faz ela voltar a pendente</td><td>Frontend</td><td>Médio</td></tr>
+      <tr><td>4</td><td>Nome de categoria comprido derruba a API</td><td>Frontend e API</td><td>Médio</td></tr>
+      <tr><td>5</td><td>"Pendentes por prioridade" conta tarefas concluídas</td><td>API</td><td>Médio</td></tr>
+    </tbody>
+  </table>
+  <p>Comece pelas fáceis: elas ajudam a pegar o ritmo do ciclo spec, plan, tasks e implementação antes das que atravessam mais de uma camada.</p>
+
+  <h3>18.2 Abrindo o projeto no VS Code com o Claude Code</h3>
+  <p>Faça uma vez, nesta ordem. Os detalhes de cada passo estão no capítulo 8.</p>
+  <ol class="steps ai">
+    <li><strong>Suba o sistema</strong>Num terminal, na pasta <code>fullcycle</code>: <code>npm run setup</code> (só na primeira vez) e depois <code>npm run dev</code>. Deixe esse terminal aberto e confira que <code>http://localhost:4200</code> abre.</li>
+    <li><strong>Abra a pasta no VS Code</strong>Em outro terminal, na mesma pasta, rode <code>code .</code>, ou use <em>File → Open Folder</em> e escolha <code>fullcycle</code>. Abra sempre a raiz, e não <code>api/</code> ou <code>frontend/</code>: é na raiz que ficam a skill, as tasks e o README.</li>
+    <li><strong>Instale a extensão, se ainda não tiver</strong>Aba de extensões → busque <em>Claude Code</em> → confira que o autor é <em>Anthropic</em> → <em>Install</em>.</li>
+    <li><strong>Abra o painel do Claude</strong>Abra qualquer arquivo, como o <code>README.md</code>, e clique na faísca (✳) no canto superior direito do editor. Na primeira vez, faça login com a conta do capítulo 6.</li>
+    <li><strong>Confira o modo Manual</strong>Embaixo da caixa de pedido aparece o modo de permissão. Deixe em <em>Manual</em> (seção 8.5): assim o Claude pede autorização antes de editar arquivos e de rodar comandos, e você vê cada passo.</li>
+    <li><strong>Confira a skill</strong>Digite <code>/skills</code> na caixa de pedido. A skill <code>sdd</code> deve aparecer na lista. Se não aparecer, abra uma sessão nova: skills são descobertas quando a sessão começa.</li>
+    <li><strong>Faça uma pergunta de aquecimento</strong><code>@README.md me explica em 5 linhas como este projeto está organizado</code>. Se a resposta falar de frontend, API e banco, está tudo pronto.</li>
+  </ol>
+
+  <h3>18.3 A skill /sdd</h3>
+  <p>A skill vem junto com o projeto, em <code>.claude/skills/sdd/</code>: quem clona o repositório já tem (cap. 16). Ela faz o ciclo do capítulo 17 sem instalar o Spec Kit.</p>
+<pre><code>.claude/skills/sdd/
+├── SKILL.md            <span class="c"># o passo a passo que o Claude segue</span>
+├── constitution.md     <span class="c"># regras que todo trabalho precisa cumprir</span>
+└── modelos/            <span class="c"># modelos dos arquivos de cada etapa</span>
+    ├── spec.md
+    ├── plan.md
+    └── tasks.md</code></pre>
+  <table>
+    <thead><tr><th>Quero…</th><th>Como fazer</th></tr></thead>
+    <tbody>
+      <tr><td>Usar neste projeto</td><td>Não precisa instalar nada. Abra o Claude Code na pasta <code>fullcycle</code>, pelo painel do VS Code ou com <code>claude</code> no terminal, e digite <code>/sdd task 1</code>.</td></tr>
+      <tr><td>Ver se o Claude achou a skill</td><td><code>/skills</code> lista as skills disponíveis na sessão.</td></tr>
+      <tr><td>Usar em todos os meus projetos</td><td>Copie a pasta para as suas skills pessoais e abra uma sessão nova. macOS e Linux: <code>cp -r .claude/skills/sdd ~/.claude/skills/</code>. Windows (PowerShell): <code>Copy-Item -Recurse .claude\skills\sdd $HOME\.claude\skills\</code>.</td></tr>
+      <tr><td>Mudar as regras do projeto</td><td>Edite <code>constitution.md</code>. Vale para todo trabalho feito com a skill.</td></tr>
+      <tr><td>Usar em algo que não é uma task</td><td>Descreva o pedido: <code>/sdd quero que a lista de categorias mostre quantas tarefas estão pendentes</code>. O ciclo é o mesmo.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>18.4 Resolvendo uma task, passo a passo</h3>
+  <ol class="steps ai">
+    <li><strong>Crie a branch</strong>Uma por task, como no capítulo 10: <code>git checkout main &amp;&amp; git pull</code> e depois <code>git checkout -b fix/task-1</code>.</li>
+    <li><strong>Peça</strong><code>/sdd task 1</code>. O Claude lê a task em <code>tasks/index.html</code> e a constituição, e tenta reproduzir o problema.</li>
+    <li><strong>Revise a spec</strong>Ele cria <code>specs/001-.../spec.md</code> e para. Leia: está do ponto de vista de quem usa? Toda regra dá para testar? Tem "fora do escopo"? Peça ajustes ou responda <code>pode seguir</code>.</li>
+    <li><strong>Revise o plan</strong>No <code>plan.md</code>, cada regra da spec precisa ter um lugar no código e um teste. Se a mudança parecer grande demais, peça um caminho menor.</li>
+    <li><strong>Revise as tasks</strong>No <code>tasks.md</code>, a primeira tarefa é sempre o teste que reproduz o problema.</li>
+    <li><strong>Acompanhe a implementação</strong>Em cada tarefa, o Claude mostra o teste falhando, faz a correção e mostra o teste passando. No modo Manual, você aprova cada edição pelo diff do painel: leia antes de aceitar.</li>
+    <li><strong>Confira você mesmo</strong>Rode <code>npm test</code> e <code>npm run test:e2e</code> no terminal e repita na tela o passo a passo da task. O problema sumiu?</li>
+    <li><strong>Abra o pull request</strong><code>git add .</code>, <code>git commit -m "fix: ..."</code>, <code>git push -u origin fix/task-1</code> e <code>gh pr create --fill</code>. No texto do PR, conte o que o Claude fez e o que você conferiu.</li>
+  </ol>
+  <div class="box warn"><span class="t">Não pule as revisões</span><p>A skill para depois de cada etapa de propósito. Se você só responder "ok" sem ler, perde a parte mais importante do exercício: aprender a conferir o que a IA faz.</p></div>
+  <div class="box tip"><span class="t">Resumo do capítulo</span><p>Suba o sistema com <code>npm run dev</code>, abra a raiz do projeto no VS Code, clique na faísca e confira <code>/skills</code>. Para cada task de <code>tasks/index.html</code>, crie uma branch, rode <code>/sdd task N</code> e revise spec, plan e tasks antes de deixar o Claude implementar. No fim, rode os testes e abra um pull request.</p></div>
+</section>
+
+<section class="chapter" id="ch19">
+  <div class="ch-head"><span class="num">19</span><h2>Checklist prático</h2></div>
+  <p>Faça no projeto de estudo do GitHub. Marque cada item que conseguir fazer sozinho: as marcações ficam salvas neste navegador. Na versão impressa, marque à caneta.</p>
+  <div class="progresso-check">
+    <strong id="progresso-check-texto" aria-live="polite">0 de 0 itens</strong>
+    <span class="barra" aria-hidden="true"><span id="progresso-check-barra"></span></span>
+    <button type="button" id="progresso-check-limpar">Desmarcar tudo</button>
+  </div>
+  <h3>Máquina e ferramentas</h3>
+  <ul class="check">
+    <li><label><input type="checkbox"><span>Todos os comandos da seção 4.3 respondem com versão.</span></label></li>
+    <li><label><input type="checkbox"><span><code>docker run hello-world</code> imprime "Hello from Docker!".</span></label></li>
+    <li><label><input type="checkbox"><span><code>gh auth status</code> mostra que estou logado no GitHub.</span></label></li>
+    <li><label><input type="checkbox"><span><code>claude --version</code> responde e já fiz login.</span></label></li>
+  </ul>
+  <h3>VS Code e acesso</h3>
+  <ul class="check">
+    <li><label><input type="checkbox"><span>Abro projetos com <code>code .</code> e uso o terminal integrado.</span></label></li>
+    <li><label><input type="checkbox"><span>As extensões do capítulo 5 estão instaladas, incluindo a do Claude Code (Anthropic).</span></label></li>
+    <li><label><input type="checkbox"><span>Tenho acesso ao Claude (Console ou empresa) e sei ver o gasto com <code>/usage</code>.</span></label></li>
+    <li><label><input type="checkbox"><span>O modo Manual é o padrão nas minhas sessões.</span></label></li>
+    <li><label><input type="checkbox"><span>Fiz uma pergunta selecionando código e aceitei ou rejeitei um diff pelo painel.</span></label></li>
+  </ul>
+  <h3>Claude Code</h3>
+  <ul class="check">
+    <li><label><input type="checkbox"><span>Clonei o projeto e abri uma sessão nomeada com <code>claude -n</code>.</span></label></li>
+    <li><label><input type="checkbox"><span>Li o <code>CLAUDE.md</code> e sei explicar para que ele serve.</span></label></li>
+    <li><label><input type="checkbox"><span>Usei <code>@</code> para perguntar sobre um arquivo específico.</span></label></li>
+    <li><label><input type="checkbox"><span>Saí, voltei com <code>claude -c</code> e a conversa continuou.</span></label></li>
+    <li><label><input type="checkbox"><span>Pedi uma mudança em modo plano e li o plano antes de aprovar.</span></label></li>
+  </ul>
+  <h3>Banco</h3>
+  <ul class="check">
+    <li><label><input type="checkbox"><span><code>docker compose up -d</code> e o container aparece em <code>docker ps</code>.</span></label></li>
+    <li><label><input type="checkbox"><span>Entrei com <code>psql</code> e listei as tabelas.</span></label></li>
+    <li><label><input type="checkbox"><span>Rodei <code>down</code> e <code>up</code> e os dados continuaram lá.</span></label></li>
+  </ul>
+  <h3>Backend</h3>
+  <ul class="check">
+    <li><label><input type="checkbox"><span><code>npm run start:dev</code> sobe sem erro.</span></label></li>
+    <li><label><input type="checkbox"><span>Listei e criei tarefas com <code>curl</code>.</span></label></li>
+    <li><label><input type="checkbox"><span>Mandei título vazio e recebi <code>400</code>.</span></label></li>
+    <li><label><input type="checkbox"><span>Criei duas categorias com o mesmo nome e recebi <code>409</code>.</span></label></li>
+    <li><label><input type="checkbox"><span>Abri o Swagger em <code>localhost:3000/docs</code> e testei uma rota por lá.</span></label></li>
+    <li><label><input type="checkbox"><span><code>npm test</code> passa; quebrei um teste de propósito, vi falhar e consertei.</span></label></li>
+  </ul>
+  <h3>Frontend</h3>
+  <ul class="check">
+    <li><label><input type="checkbox"><span><code>npm start</code> (ou <code>ng serve</code>) dentro de <code>frontend/</code> sobe e a página abre.</span></label></li>
+    <li><label><input type="checkbox"><span>A navbar mostra "API online" e a barra de carregamento aparece quando a tela busca dados.</span></label></li>
+    <li><label><input type="checkbox"><span>Parei o banco com <code>npm run banco:parar</code>, a navbar mostrou "Banco offline" e, depois de <code>npm run banco</code>, voltou para "API online".</span></label></li>
+    <li><label><input type="checkbox"><span>Filtrei as tarefas por categoria e o filtro apareceu na URL.</span></label></li>
+    <li><label><input type="checkbox"><span>Vi o <code>GET /tarefas</code> com status 200 no DevTools.</span></label></li>
+    <li><label><input type="checkbox"><span>Criei uma tarefa pela tela, recarreguei e ela continuou lá.</span></label></li>
+    <li><label><input type="checkbox"><span>Derrubei a API e a tela mostrou mensagem de erro.</span></label></li>
+  </ul>
+  <h3>Skills, SDD e Git</h3>
+  <ul class="check">
+    <li><label><input type="checkbox"><span><code>/skills</code> mostra a skill do projeto; testei um pedido que aciona e um que não aciona.</span></label></li>
+    <li><label><input type="checkbox"><span>Fiz specify → plan → tasks numa funcionalidade pequena, lendo cada arquivo.</span></label></li>
+    <li><label><input type="checkbox"><span>Conferi cada item do <code>tasks.md</code> contra o código e os testes.</span></label></li>
+    <li><label><input type="checkbox"><span>Abri um pull request com a mudança e um resumo do que o Claude fez e do que eu revisei.</span></label></li>
+    <li><label><input type="checkbox"><span>Resolvi as 5 tasks de <code>tasks/index.html</code> com <code>/sdd</code>, uma branch e um pull request para cada.</span></label></li>
+  </ul>
+</section>
+
+<section class="chapter" id="ch20">
+  <div class="ch-head"><span class="num">20</span><h2>Exercícios e gabarito</h2></div>
+  <ol class="ex">
+    <li>Você instalou o Node, mas <code>node -v</code> diz "comando não encontrado". Qual a primeira coisa a fazer?<span class="o">a) Reinstalar · b) Fechar e abrir o terminal · c) Reiniciar o Docker</span></li>
+    <li>Como o Claude Code sabe em qual projeto trabalhar?<span class="o">a) Você escolhe num menu · b) É a pasta onde você rodou <code>claude</code> · c) Ele procura no GitHub</span></li>
+    <li>Você parou ontem no meio de uma tarefa. Qual comando retoma a última conversa daquela pasta?<span class="o">a) <code>claude -c</code> · b) <code>/clear</code> · c) <code>/init</code></span></li>
+    <li>Para que serve o <code>CLAUDE.md</code>?<span class="o">a) Guardar senhas · b) Contexto do projeto lido em toda sessão · c) Lista de tarefas do SDD</span></li>
+    <li>Qual método HTTP usar para criar uma tarefa?<span class="o">a) GET · b) POST · c) DELETE</span></li>
+    <li>A API respondeu <code>400</code>. O que isso indica?<span class="o">a) Servidor caiu · b) Dados enviados inválidos · c) Deu certo</span></li>
+    <li>No Angular, onde deve ficar o código que chama a API?<span class="o">a) No template · b) Num service · c) No CSS</span></li>
+    <li>No NestJS, quem contém a regra de negócio?<span class="o">a) Controller · b) Service · c) DTO</span></li>
+    <li>Qual comando apaga também os dados do banco?<span class="o">a) <code>docker compose down</code> · b) <code>docker compose down -v</code> · c) <code>docker ps</code></span></li>
+    <li>Qual parte da skill decide se ela será usada?<span class="o">a) A descrição · b) A pasta scripts · c) O tamanho do arquivo</span></li>
+    <li>Qual etapa do SDD não deve falar de tecnologia?<span class="o">a) specify · b) plan · c) tasks</span></li>
+    <li>O requisito mudou no meio da implementação. O que fazer primeiro?<span class="o">a) Editar o código · b) Atualizar a spec e gerar o plano de novo · c) Apagar o tasks.md</span></li>
+    <li>Aparece <code>blocked by CORS policy</code> no navegador. Em qual camada está a correção?<span class="o">a) Front · b) API · c) Banco</span></li>
+    <li>Você não tem assinatura do Claude. Como usar o Claude Code?<span class="o">a) Pelo plano gratuito do claude.ai · b) Com uma conta no Claude Console e créditos · c) Não tem como</span></li>
+    <li>Você está aprendendo. Qual modo de permissão usar?<span class="o">a) Auto · b) Manual · c) Qualquer um</span></li>
+    <li><strong>Prático:</strong> escreva a <code>description</code> de uma skill que gera testes unitários para services do NestJS.</li>
+    <li><strong>Prático:</strong> escreva uma spec curta (com "fora do escopo") para "editar o título de uma tarefa".</li>
+  </ol>
+  <h3>Gabarito</h3>
+  <table>
+    <thead><tr><th>#</th><th>Resposta</th><th>Por quê</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>b</td><td>O terminal só enxerga programas novos depois de reaberto.</td></tr>
+      <tr><td>2</td><td>b</td><td>O Claude Code trabalha na pasta onde foi aberto.</td></tr>
+      <tr><td>3</td><td>a</td><td><code>/clear</code> começa do zero; <code>/init</code> cria o CLAUDE.md.</td></tr>
+      <tr><td>4</td><td>b</td><td>É lido automaticamente; senhas ficam no <code>.env</code>, fora do Git.</td></tr>
+      <tr><td>5</td><td>b</td><td>POST cria; GET só busca.</td></tr>
+      <tr><td>6</td><td>b</td><td>4xx é problema no pedido; 5xx, no servidor.</td></tr>
+      <tr><td>7</td><td>b</td><td>Services concentram lógica reaproveitável e entram via <code>inject()</code>.</td></tr>
+      <tr><td>8</td><td>b</td><td>O controller só recebe e repassa.</td></tr>
+      <tr><td>9</td><td>b</td><td>O <code>-v</code> remove os volumes, onde os dados ficam.</td></tr>
+      <tr><td>10</td><td>a</td><td>Só nome e descrição ficam sempre visíveis.</td></tr>
+      <tr><td>11</td><td>a</td><td>A spec descreve o que o usuário precisa; tecnologia vai no plan.</td></tr>
+      <tr><td>12</td><td>b</td><td>A spec é a fonte da verdade.</td></tr>
+      <tr><td>13</td><td>b</td><td>Falta <code>app.enableCors()</code> no NestJS.</td></tr>
+      <tr><td>14</td><td>b</td><td>O plano gratuito não dá acesso ao Claude Code; o Console cobra por uso.</td></tr>
+      <tr><td>15</td><td>b</td><td>Manual pergunta antes de cada mudança, e você vê e aprende cada passo.</td></tr>
+      <tr><td>16</td><td>—</td><td>Exemplo: "Gera testes unitários Jest para services do NestJS em api/, com mocks do repository. Use quando pedirem testes, cobertura ou spec de service."</td></tr>
+      <tr><td>17</td><td>—</td><td>Deve ter: quem faz o quê, regra do título (obrigatório, até 120), o que acontece em erro, e fora do escopo (ex.: editar outros campos, histórico de edições).</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter" id="ch21">
+  <div class="ch-head"><span class="num">21</span><h2>Vídeos e documentação</h2></div>
+  <p>Canais brasileiros conhecidos em cada assunto. Busque pelo nome do canal mais o tema no YouTube e prefira vídeos recentes — Angular e as ferramentas de IA mudam rápido.</p>
+  <table class="vid">
+    <thead><tr><th>Assunto</th><th>Canal</th><th>Buscar por</th></tr></thead>
+    <tbody>
+      <tr><td>VS Code para iniciantes</td><td>vários</td><td><a href="https://www.youtube.com/results?search_query=vs+code+para+iniciantes+portugu%C3%AAs">vs code para iniciantes</a></td></tr>
+      <tr><td>Terminal, Git, GitHub</td><td>Curso em Vídeo (Gustavo Guanabara)</td><td><a href="https://www.youtube.com/results?search_query=curso+em+video+git+github">curso em video git github</a></td></tr>
+      <tr><td>Como a web funciona</td><td>Filipe Deschamps</td><td><a href="https://www.youtube.com/results?search_query=filipe+deschamps+como+funciona+internet">filipe deschamps internet</a></td></tr>
+      <tr><td>API, REST, JSON</td><td>Código Fonte TV</td><td><a href="https://www.youtube.com/results?search_query=codigo+fonte+tv+api+rest">codigo fonte tv api rest</a></td></tr>
+      <tr><td>Angular</td><td>Loiane Groner</td><td><a href="https://www.youtube.com/results?search_query=loiane+groner+angular">loiane groner angular</a></td></tr>
+      <tr><td>Angular</td><td>Hora de Codar (Matheus Battisti)</td><td><a href="https://www.youtube.com/results?search_query=hora+de+codar+angular">hora de codar angular</a></td></tr>
+      <tr><td>NestJS</td><td>Hora de Codar</td><td><a href="https://www.youtube.com/results?search_query=hora+de+codar+nestjs">hora de codar nestjs</a></td></tr>
+      <tr><td>NestJS / Node</td><td>Rocketseat</td><td><a href="https://www.youtube.com/results?search_query=rocketseat+nestjs">rocketseat nestjs</a></td></tr>
+      <tr><td>Docker</td><td>LinuxTips (Jeferson Fernando)</td><td><a href="https://www.youtube.com/results?search_query=linuxtips+docker">linuxtips docker</a></td></tr>
+      <tr><td>Docker</td><td>Full Cycle</td><td><a href="https://www.youtube.com/results?search_query=full+cycle+docker">full cycle docker</a></td></tr>
+      <tr><td>SQL básico</td><td>Curso em Vídeo</td><td><a href="https://www.youtube.com/results?search_query=curso+em+video+banco+de+dados">curso em video banco de dados</a></td></tr>
+      <tr><td>Claude Code e skills</td><td>vários</td><td><a href="https://www.youtube.com/results?search_query=claude+code+skills+portugu%C3%AAs">claude code skills português</a></td></tr>
+      <tr><td>SDD / Spec Kit</td><td>vários</td><td><a href="https://www.youtube.com/results?search_query=github+spec+kit+portugu%C3%AAs">github spec kit português</a></td></tr>
+      <tr><td>IA e programação</td><td>Fabio Akita</td><td><a href="https://www.youtube.com/results?search_query=fabio+akita+ia">fabio akita ia</a></td></tr>
+    </tbody>
+  </table>
+  <h3>Documentação oficial</h3>
+  <table>
+    <thead><tr><th>Assunto</th><th>Endereço</th></tr></thead>
+    <tbody>
+      <tr><td>Claude Code — início rápido</td><td><a href="https://code.claude.com/docs/en/quickstart">code.claude.com/docs/en/quickstart</a></td></tr>
+      <tr><td>Claude Code — instalação e problemas</td><td><a href="https://code.claude.com/docs/en/setup">code.claude.com/docs/en/setup</a></td></tr>
+      <tr><td>Claude Code no VS Code</td><td><a href="https://code.claude.com/docs/en/vs-code">code.claude.com/docs/en/vs-code</a></td></tr>
+      <tr><td>Claude Code — login e contas</td><td><a href="https://code.claude.com/docs/en/authentication">code.claude.com/docs/en/authentication</a></td></tr>
+      <tr><td>Claude Code — modos de permissão</td><td><a href="https://code.claude.com/docs/en/permission-modes">code.claude.com/docs/en/permission-modes</a></td></tr>
+      <tr><td>Claude Console</td><td><a href="https://platform.claude.com">platform.claude.com</a></td></tr>
+      <tr><td>Claude Code — skills</td><td><a href="https://code.claude.com/docs/en/skills">code.claude.com/docs/en/skills</a></td></tr>
+      <tr><td>Skills de exemplo</td><td><a href="https://github.com/anthropics/skills">github.com/anthropics/skills</a></td></tr>
+      <tr><td>Spec Kit</td><td><a href="https://github.com/github/spec-kit">github.com/github/spec-kit</a></td></tr>
+      <tr><td>Angular</td><td><a href="https://angular.dev">angular.dev</a></td></tr>
+      <tr><td>Angular Material</td><td><a href="https://material.angular.dev">material.angular.dev</a></td></tr>
+      <tr><td>NestJS</td><td><a href="https://docs.nestjs.com">docs.nestjs.com</a></td></tr>
+      <tr><td>NestJS — Swagger</td><td><a href="https://docs.nestjs.com/openapi/introduction">docs.nestjs.com/openapi/introduction</a></td></tr>
+      <tr><td>TypeORM</td><td><a href="https://typeorm.io">typeorm.io</a></td></tr>
+      <tr><td>Docker</td><td><a href="https://docs.docker.com/get-started/">docs.docker.com/get-started</a></td></tr>
+      <tr><td>PostgreSQL</td><td><a href="https://www.postgresql.org/docs/">postgresql.org/docs</a></td></tr>
+      <tr><td>nvm (Linux)</td><td><a href="https://github.com/nvm-sh/nvm">github.com/nvm-sh/nvm</a></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter" id="ch22">
+  <div class="ch-head"><span class="num">22</span><h2>Glossário</h2></div>
+  <table>
+    <tbody>
+      <tr><th>API</th><td>Endereços que um sistema expõe para outro conversar com ele.</td></tr>
+      <tr><th>Branch</th><td>Linha paralela de trabalho no Git, separada da <code>main</code>.</td></tr>
+      <tr><th>CLAUDE.md</th><td>Arquivo de contexto que o Claude Code lê em toda sessão daquela pasta.</td></tr>
+      <tr><th>Claude Console</th><td>Site da Anthropic para contas com pagamento por uso (platform.claude.com).</td></tr>
+      <tr><th>Componente</th><td>Pedaço de tela do Angular: lógica + HTML + CSS.</td></tr>
+      <tr><th>Container</th><td>Processo isolado criado a partir de uma imagem Docker.</td></tr>
+      <tr><th>CORS</th><td>Regra do navegador que bloqueia chamadas entre origens diferentes, a menos que o servidor permita.</td></tr>
+      <tr><th>DTO</th><td>Formato esperado dos dados que entram na API.</td></tr>
+      <tr><th>IDE</th><td>Programa para editar código com ferramentas integradas, como o VS Code.</td></tr>
+      <tr><th>Extensão</th><td>Complemento que adiciona recursos ao VS Code.</td></tr>
+      <tr><th>Imagem</th><td>Molde a partir do qual containers são criados.</td></tr>
+      <tr><th>Injeção de dependência</th><td>O framework entrega pronto o objeto que sua classe precisa.</td></tr>
+      <tr><th>JSON</th><td>Formato de texto para trocar dados: <code>{"titulo":"Estudar"}</code>.</td></tr>
+      <tr><th>LTS</th><td>Versão com suporte longo; a mais estável para usar.</td></tr>
+      <tr><th>ORM</th><td>Biblioteca que traduz objetos do código em comandos SQL.</td></tr>
+      <tr><th>PATH</th><td>Lista de pastas onde o terminal procura programas.</td></tr>
+      <tr><th>Pull request</th><td>Pedido para juntar uma branch na <code>main</code>, com revisão do time.</td></tr>
+      <tr><th>REST</th><td>Estilo de API: URLs para recursos, métodos HTTP para ações.</td></tr>
+      <tr><th>SDD</th><td>Spec-Driven Development: especificar antes de implementar.</td></tr>
+      <tr><th>Sessão</th><td>Uma conversa no Claude Code, com histórico que pode ser retomado.</td></tr>
+      <tr><th>Signal</th><td>Variável reativa do Angular: quando muda, a tela atualiza.</td></tr>
+      <tr><th>Skill</th><td>Pasta com <code>SKILL.md</code> que ensina um procedimento ao Claude.</td></tr>
+      <tr><th>Status code</th><td>Número na resposta HTTP: 2xx sucesso, 4xx erro no pedido, 5xx erro no servidor.</td></tr>
+      <tr><th>Token</th><td>Pedaço de palavra; é a unidade usada para medir e cobrar o uso do Claude.</td></tr>
+      <tr><th>Volume</th><td>Onde os dados sobrevivem à remoção do container.</td></tr>
+    </tbody>
+  </table>
+</section>
+</div>
+<script>
+(() => {
+  const CHAVE = 'guia-fullcycle-checklist';
+  const caixas = [...document.querySelectorAll('.check input[type="checkbox"]')];
+  const texto = document.getElementById('progresso-check-texto');
+  const barra = document.getElementById('progresso-check-barra');
+  const limpar = document.getElementById('progresso-check-limpar');
+  const rotulo = (caixa) => caixa.closest('label').textContent.replace(/\s+/g, ' ').trim();
+
+  const lerMarcados = () => {
+    try {
+      return JSON.parse(localStorage.getItem(CHAVE)) || [];
+    } catch {
+      return [];
+    }
+  };
+
+  const salvar = () => {
+    const marcados = caixas.filter((caixa) => caixa.checked).map(rotulo);
+    try {
+      localStorage.setItem(CHAVE, JSON.stringify(marcados));
+    } catch {}
+  };
+
+  const atualizarProgresso = () => {
+    const feitos = caixas.filter((caixa) => caixa.checked).length;
+    texto.textContent = `${feitos} de ${caixas.length} itens`;
+    barra.style.width = `${caixas.length ? (feitos / caixas.length) * 100 : 0}%`;
+  };
+
+  const marcados = new Set(lerMarcados());
+  caixas.forEach((caixa) => {
+    caixa.checked = marcados.has(rotulo(caixa));
+    caixa.addEventListener('change', () => {
+      salvar();
+      atualizarProgresso();
+    });
+  });
+
+  limpar.addEventListener('click', () => {
+    caixas.forEach((caixa) => {
+      caixa.checked = false;
+    });
+    salvar();
+    atualizarProgresso();
+  });
+
+  atualizarProgresso();
+})();
+</script>
+</body>
+</html>

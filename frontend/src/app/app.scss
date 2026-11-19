@@ -1,0 +1,32 @@
+@use '@angular/material' as mat;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.container {
+  flex: 1;
+
+  @include mat.sidenav-overrides(
+    (
+      container-shape: 0,
+      container-width: 248px,
+      container-divider-color: var(--mat-sys-outline-variant),
+      content-background-color: var(--mat-sys-surface-container-low),
+    )
+  );
+}
+
+.conteudo {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+@media (max-width: 599.98px) {
+  .conteudo {
+    padding: 16px;
+  }
+}

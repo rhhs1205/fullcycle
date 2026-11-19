@@ -1,0 +1,224 @@
+<app-cabecalho-pagina titulo="Tarefas" subtitulo="Cadastre, filtre e acompanhe suas tarefas.">
+  <button mat-flat-button (click)="abrirFormulario()">
+    <mat-icon>add</mat-icon>
+    Nova tarefa
+  </button>
+</app-cabecalho-pagina>
+
+<mat-card appearance="outlined" class="cartao">
+  <div class="filtros">
+    <mat-form-field subscriptSizing="dynamic" class="busca">
+      <mat-label>Buscar</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        maxlength="120"
+        [value]="busca() ?? ''"
+        (input)="digitarBusca($event)"
+        placeholder="Título ou descrição"
+      />
+    </mat-form-field>
+
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>Categoria</mat-label>
+      <mat-select
+        #seletorCategoria
+        [value]="filtro().categoriaId ?? null"
+        (selectionChange)="filtrar({ categoria: $event.value })"
+      >
+        <mat-option [value]="null">Todas</mat-option>
+        @for (categoria of categoriasStore.categorias(); track categoria.id) {
+          <mat-option [value]="categoria.id">
+            <app-chip-categoria [categoria]="categoria" />
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>Status</mat-label>
+      <mat-select
+        [value]="statusSelecionado()"
+        (selectionChange)="filtrar({ status: $event.value })"
+      >
+        <mat-option [value]="null">Todos</mat-option>
+        <mat-option value="pendentes">Pendentes</mat-option>
+        <mat-option value="concluidas">Concluídas</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>Prioridade</mat-label>
+      <mat-select
+        [value]="filtro().prioridade ?? null"
+        (selectionChange)="filtrar({ prioridade: $event.value })"
+      >
+        <mat-option [value]="null">Todas</mat-option>
+        @for (prioridade of prioridades; track prioridade) {
+          <mat-option [value]="prioridade">{{ prioridade | rotuloPrioridade }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (filtrando()) {
+      <button mat-button (click)="limparFiltros()">
+        <mat-icon>filter_alt_off</mat-icon>
+        Limpar filtros
+      </button>
+    }
+  </div>
+
+  @if (store.erro(); as erro) {
+    <app-estado-erro [mensagem]="erro" (tentarDeNovo)="recarregar()" />
+  } @else {
+    @if (categoriasStore.erro()) {
+      <div class="aviso-categorias">
+        <mat-icon>cloud_off</mat-icon>
+        <p role="alert">Não foi possível carregar as categorias.</p>
+        <button mat-button (click)="tentarCategoriasDeNovo()">
+          <mat-icon>refresh</mat-icon>
+          Tentar de novo
+        </button>
+      </div>
+    }
+
+    <div class="tabela">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        [trackBy]="rastrearPorId"
+        matSort
+        tabindex="-1"
+        aria-label="Tarefas"
+      >
+        <ng-container matColumnDef="concluida">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Ordenar por status"
+          >
+            Status
+          </th>
+          <td mat-cell *matCellDef="let tarefa">
+            <mat-checkbox
+              data-acao="concluir"
+              [checked]="tarefa.concluida"
+              (change)="alternarConcluida(tarefa)"
+              [aria-label]="(tarefa.concluida ? 'Reabrir ' : 'Concluir ') + tarefa.titulo"
+            />
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="titulo">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Ordenar por título"
+          >
+            Título
+          </th>
+          <td mat-cell *matCellDef="let tarefa">
+            <span class="titulo">{{ tarefa.titulo }}</span>
+            @if (tarefa.descricao) {
+              <span class="descricao">{{ tarefa.descricao }}</span>
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="categoria">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Ordenar por categoria"
+          >
+            Categoria
+          </th>
+          <td mat-cell *matCellDef="let tarefa">
+            <app-chip-categoria [categoria]="tarefa.categoria" />
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="prioridade">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Ordenar por prioridade"
+          >
+            Prioridade
+          </th>
+          <td mat-cell *matCellDef="let tarefa">
+            <app-selo-prioridade [prioridade]="tarefa.prioridade" />
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="criadaEm">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Ordenar por data de criação"
+          >
+            Criada em
+          </th>
+          <td mat-cell *matCellDef="let tarefa">
+            {{ tarefa.criadaEm | date: 'dd/MM/yyyy HH:mm' : 'UTC' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef class="acoes">Ações</th>
+          <td mat-cell *matCellDef="let tarefa" class="acoes">
+            <button
+              mat-icon-button
+              matTooltip="Editar"
+              data-acao="editar"
+              (click)="abrirFormulario(tarefa)"
+              [attr.aria-label]="'Editar ' + tarefa.titulo"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              matTooltip="Excluir"
+              data-acao="excluir"
+              (click)="confirmarRemocao(tarefa)"
+              [attr.aria-label]="'Excluir ' + tarefa.titulo"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+        <tr
+          mat-row
+          *matRowDef="let tarefa; columns: colunas"
+          [attr.data-tarefa]="tarefa.id"
+          [class.concluida]="tarefa.concluida"
+        ></tr>
+        <tr class="sem-dados" *matNoDataRow>
+          <td [attr.colspan]="colunas.length">
+            @if (!store.carregando()) {
+              @if (filtrando()) {
+                Nenhuma tarefa encontrada com esses filtros.
+              } @else {
+                Nenhuma tarefa ainda. Clique em "Nova tarefa" para começar.
+              }
+            }
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 20]"
+      [pageSize]="10"
+      showFirstLastButtons
+      aria-label="Selecionar página de tarefas"
+    />
+  }
+</mat-card>

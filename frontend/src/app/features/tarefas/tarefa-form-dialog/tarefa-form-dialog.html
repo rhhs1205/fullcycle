@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>{{ editando ? 'Editar tarefa' : 'Nova tarefa' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="salvar()">
+  <mat-dialog-content class="campos">
+    <mat-form-field>
+      <mat-label>Título</mat-label>
+      <input matInput formControlName="titulo" maxlength="120" />
+      <mat-hint align="end">{{ form.controls.titulo.value.length }}/120</mat-hint>
+      <mat-error>Informe o título.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Descrição</mat-label>
+      <textarea matInput formControlName="descricao" rows="3" maxlength="500"></textarea>
+      <mat-hint align="end">{{ form.controls.descricao.value.length }}/500</mat-hint>
+    </mat-form-field>
+
+    <div class="linha">
+      <mat-form-field>
+        <mat-label>Prioridade</mat-label>
+        <mat-select formControlName="prioridade">
+          @for (prioridade of prioridades; track prioridade) {
+            <mat-option [value]="prioridade">{{ prioridade | rotuloPrioridade }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Categoria</mat-label>
+        <mat-select formControlName="categoriaId">
+          <mat-option [value]="null">Sem categoria</mat-option>
+          @for (categoria of categorias(); track categoria.id) {
+            <mat-option [value]="categoria.id">
+              <app-chip-categoria [categoria]="categoria" />
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    @if (editando) {
+      <mat-checkbox formControlName="concluida">Concluída</mat-checkbox>
+    }
+
+    @if (erro(); as mensagem) {
+      <p class="erro" role="alert">{{ mensagem }}</p>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [mat-dialog-close]="undefined">Cancelar</button>
+    <button mat-flat-button type="submit" [disabled]="salvando()">
+      {{ salvando() ? 'Salvando...' : 'Salvar' }}
+    </button>
+  </mat-dialog-actions>
+</form>

@@ -1,0 +1,114 @@
+<app-cabecalho-pagina titulo="Dashboard" subtitulo="Visão geral das suas tarefas.">
+  <button mat-stroked-button (click)="carregar()">
+    <mat-icon>refresh</mat-icon>
+    Atualizar
+  </button>
+  <a mat-flat-button routerLink="/tarefas">
+    <mat-icon>checklist</mat-icon>
+    Ver tarefas
+  </a>
+</app-cabecalho-pagina>
+
+@if (erro(); as erro) {
+  <mat-card appearance="outlined">
+    <app-estado-erro [mensagem]="erro" (tentarDeNovo)="carregar()" />
+  </mat-card>
+} @else if (resumo(); as resumo) {
+  <section class="indicadores" aria-label="Indicadores">
+    <app-indicador-card
+      icone="list_alt"
+      rotulo="Total de tarefas"
+      [valor]="resumo.total | number"
+    />
+    <app-indicador-card
+      icone="pending_actions"
+      rotulo="Pendentes"
+      tom="secundario"
+      [valor]="resumo.pendentes | number"
+    />
+    <app-indicador-card
+      icone="task_alt"
+      rotulo="Concluídas"
+      tom="sucesso"
+      [valor]="resumo.concluidas | number"
+    />
+    <app-indicador-card
+      icone="insights"
+      rotulo="Progresso geral"
+      tom="terciario"
+      [valor]="resumo.percentualConcluido / 100 | percent"
+    >
+      <app-barra-progresso
+        class="progresso-geral"
+        rotulo="Progresso geral"
+        [valor]="resumo.percentualConcluido"
+      />
+    </app-indicador-card>
+  </section>
+
+  <section class="paineis">
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Pendentes por prioridade</mat-card-title>
+        <mat-card-subtitle>O que ainda falta fazer</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="linhas">
+        @for (prioridade of prioridades; track prioridade) {
+          <div class="linha">
+            <app-selo-prioridade class="legenda" [prioridade]="prioridade" />
+            <app-barra-progresso
+              [rotulo]="'Pendentes por prioridade: ' + (prioridade | rotuloPrioridade)"
+              [valor]="percentual(resumo.pendentesPorPrioridade[prioridade], maiorPendencia())"
+              [cor]="corPrioridade[prioridade]"
+            />
+            <span class="quantidade">{{ resumo.pendentesPorPrioridade[prioridade] | number }}</span>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Progresso por categoria</mat-card-title>
+        <mat-card-subtitle>Concluídas sobre o total de cada categoria</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="linhas">
+        @for (categoria of resumo.porCategoria; track categoria.id) {
+          <div class="linha">
+            <app-chip-categoria class="legenda" [categoria]="categoria" />
+            <app-barra-progresso
+              [rotulo]="'Progresso por categoria: ' + categoria.nome"
+              [valor]="percentual(categoria.concluidas, categoria.total)"
+              [cor]="categoria.cor"
+            />
+            <span class="quantidade"
+              >{{ categoria.concluidas | number }}/{{ categoria.total | number }}</span
+            >
+          </div>
+        } @empty {
+          <p class="vazio">Nenhuma tarefa cadastrada ainda.</p>
+        }
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Próximas tarefas</mat-card-title>
+      <mat-card-subtitle>As pendentes mais importantes primeiro</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <ul class="proximas">
+        @for (tarefa of resumo.proximas; track tarefa.id) {
+          <li>
+            <app-selo-prioridade [prioridade]="tarefa.prioridade" />
+            <span class="titulo">{{ tarefa.titulo }}</span>
+            <app-chip-categoria [categoria]="tarefa.categoria" />
+          </li>
+        } @empty {
+          <li class="vazio">Nenhuma tarefa pendente.</li>
+        }
+      </ul>
+    </mat-card-content>
+  </mat-card>
+}
