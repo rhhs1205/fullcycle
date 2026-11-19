@@ -18,13 +18,15 @@ Depois de rodar e entender o projeto, vá para a seção [Mão na massa](#mão-n
 
 ### 1. Confira o que precisa estar instalado
 
+Os comandos deste README são para **Ubuntu 20.04 ou mais novo**, no terminal padrão (`bash`). O capítulo 4 do guia instala tudo isso do zero.
+
 | Ferramenta | Versão | Como conferir |
 | --- | --- | --- |
 | Node.js | 20.19+ ou 22.12+ (recomendado: 22) | `node -v` |
-| Docker Desktop | qualquer versão recente, **aberto** | `docker ps` |
+| Docker Engine | qualquer versão recente, **ligado** | `docker ps` |
 | Git | qualquer versão recente | `git --version` |
 
-Se `docker ps` responder `Cannot connect to the Docker daemon`, abra o Docker Desktop e espere o ícone ficar verde.
+Se `docker ps` responder `Cannot connect to the Docker daemon`, ligue o serviço com `sudo systemctl start docker`. Se responder `permission denied`, falta o seu usuário no grupo: `sudo usermod -aG docker $USER` e, depois, sair e entrar de novo na sessão.
 
 ### 2. Instale as dependências (só na primeira vez)
 
@@ -268,7 +270,7 @@ Descubra primeiro **em qual camada** está o problema: aperte `F12` no navegador
 | Navbar mostra "API offline" | API parada | `npm run api` e leia o erro no terminal |
 | Navbar mostra "Banco offline" | A API está no ar, mas o banco caiu | `npm run banco` e clique no indicador da navbar para verificar de novo |
 | `ECONNREFUSED 127.0.0.1:5433` no terminal da API | Banco desligado | `npm run banco` |
-| `Cannot connect to the Docker daemon` | Docker fechado | Abra o Docker Desktop e espere iniciar |
+| `Cannot connect to the Docker daemon` | Serviço do Docker parado | `sudo systemctl start docker` |
 | `port is already allocated` ao ligar o banco | Outro programa usa a 5433 | Troque a porta (veja Configurações) |
 | `EADDRINUSE :::3000` ou `:4200` | Já tem algo rodando nessa porta | Feche o terminal antigo ou o outro programa |
 | `blocked by CORS policy` no navegador | Endereço do front diferente do `CORS_ORIGIN` | Ajuste `CORS_ORIGIN` no `api/.env` |
@@ -303,7 +305,7 @@ A skill fica em `.claude/skills/sdd/` e vem junto com o repositório: para usar 
 | Resolver uma task | `/sdd task 1` no painel do Claude Code |
 | Pedir outra mudança com o mesmo método | `/sdd` seguido do pedido, em português |
 | Ver se a skill foi encontrada | `/skills` |
-| Usar a skill em todos os meus projetos | Copie a pasta para `~/.claude/skills/` e abra uma sessão nova. macOS e Linux: `cp -r .claude/skills/sdd ~/.claude/skills/`. Windows (PowerShell): `Copy-Item -Recurse .claude\skills\sdd $HOME\.claude\skills\` |
+| Usar a skill em todos os meus projetos | Copie a pasta e abra uma sessão nova: `cp -r .claude/skills/sdd ~/.claude/skills/` |
 | Mudar as regras que a skill segue | Edite `.claude/skills/sdd/constitution.md` |
 
 Os arquivos de cada task ficam em `specs/NNN-nome/`: `spec.md`, `plan.md` e `tasks.md`.

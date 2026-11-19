@@ -59,14 +59,6 @@ svg .mono{font-family:var(--mono)}
 .steps>li{counter-increment:st;position:relative;padding:0 0 .9rem 2.6rem;break-inside:avoid}
 .steps>li::before{content:counter(st);position:absolute;left:0;top:-.05rem;width:1.8rem;height:1.8rem;border-radius:50%;background:var(--c,var(--ink));color:#fff;font-weight:700;font-size:.9rem;display:grid;place-items:center}
 .steps>li>strong:first-child{display:block}
-.os{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin:0 0 1.1rem}
-.os>div{border:1px solid var(--line);border-radius:7px;padding:.7rem .8rem;break-inside:avoid}
-.os h4{margin:0 0 .4rem;font-size:.95rem}
-.os pre{font-size:.72rem;margin:0}
-.os.stack{grid-template-columns:1fr;gap:.45rem}
-.os.stack>div{display:grid;grid-template-columns:10rem 1fr;align-items:center;gap:.6rem;padding:.5rem .7rem}
-.os.stack h4{margin:0}
-.os.stack pre{font-size:.78rem}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .check{list-style:none;padding:0}
 .check li{border-bottom:1px dashed var(--line);margin:0}
@@ -100,7 +92,7 @@ kbd{font-family:var(--mono);font-size:.8em;border:1px solid var(--line);border-b
   .progresso-check{display:none}
   .check input:checked+span{color:var(--ink);text-decoration:none}
 }
-@media (max-width:760px){.doc{padding:1.6rem 1.2rem;margin:0}.os,.two{grid-template-columns:1fr}.toc ol{columns:1}td code{white-space:normal;overflow-wrap:anywhere}}
+@media (max-width:760px){.doc{padding:1.6rem 1.2rem;margin:0}.two{grid-template-columns:1fr}.toc ol{columns:1}td code{white-space:normal;overflow-wrap:anywhere}}
 </style>
 </head>
 <body>
@@ -129,9 +121,9 @@ kbd{font-family:var(--mono);font-size:.8em;border:1px solid var(--line);border-b
       <text x="326" y="232" text-anchor="middle" font-size="13" style="fill:var(--ai)">Skills + SDD guiando o Claude no caminho</text>
     </svg>
     <h1>Do terminal ao sistema completo</h1>
-    <p class="sub">Guia de estudos para quem está começando do zero: preparar a máquina e o VS Code, usar o Claude Code sem assinatura e entender, passo a passo, Angular, NestJS, banco em container, Skills e Spec-Driven Development.</p>
+    <p class="sub">Guia de estudos no Ubuntu: preparar a máquina e o VS Code, usar o Claude Code sem assinatura e entender, passo a passo, Angular, NestJS, banco em container, Skills e Spec-Driven Development.</p>
   </div>
-  <div class="meta">Guia de estudos · versão para impressão</div>
+  <div class="meta">Guia de estudos · Ubuntu · versão para impressão</div>
 </section>
 
 <!-- ============ SUMARIO ============ -->
@@ -177,7 +169,6 @@ kbd{font-family:var(--mono);font-size:.8em;border:1px solid var(--line);border-b
 <!-- ============ 1 ============ -->
 <section class="chapter" id="ch1">
   <div class="ch-head"><span class="num">01</span><h2>Boas-vindas</h2></div>
-  <p>Este guia foi escrito para quem está <strong>começando do zero</strong>. Você não precisa saber programar, nunca ter aberto um terminal ou nunca ter usado uma IA para programar. Tudo será explicado no momento em que aparecer, com exemplos do dia a dia.</p>
   <p>Ao final, você vai ter a máquina pronta para trabalhar, vai saber usar o <strong>Claude Code</strong> — uma IA que ajuda a programar — e vai entender as peças de um sistema web de verdade: a tela, o servidor e o banco de dados.</p>
 
   <h3>O que você vai conseguir fazer</h3>
@@ -213,7 +204,7 @@ kbd{font-family:var(--mono);font-size:.8em;border:1px solid var(--line);border-b
       <li>Blocos escuros são comandos para digitar no terminal, uma linha por vez, apertando <kbd>Enter</kbd> no fim.</li>
       <li>Linhas que começam com <code>#</code> são comentários explicando o comando. <strong>Não digite.</strong></li>
       <li><code>&lt;algo&gt;</code> quer dizer "troque pelo seu valor". Ex.: <code>git clone &lt;endereço&gt;</code> vira <code>git clone https://github.com/empresa/projeto</code>.</li>
-      <li>Quando o comando muda conforme o sistema, ele aparece separado para <strong>Windows</strong>, <strong>macOS</strong> e <strong>Linux</strong>. Use só o do seu.</li>
+      <li>Os comandos são para o <strong>Ubuntu</strong>, no terminal padrão (<code>bash</code>). Em outra distribuição Linux, troque o <code>apt</code> pelo gerenciador de pacotes dela.</li>
       <li>"<strong>O que você deve ver</strong>" mostra o resultado esperado, para você saber que deu certo.</li>
     </ul>
   </div>
@@ -222,7 +213,7 @@ kbd{font-family:var(--mono);font-size:.8em;border:1px solid var(--line);border-b
   <table>
     <thead><tr><th>Item</th><th>Detalhe</th></tr></thead>
     <tbody>
-      <tr><td>Computador</td><td>Windows 10 ou 11, macOS 13 ou mais novo, ou Ubuntu 20.04 ou mais novo. Pelo menos 8 GB de memória (o Docker usa bastante).</td></tr>
+      <tr><td>Computador</td><td>Ubuntu 20.04 ou mais novo. Pelo menos 8 GB de memória (o Docker usa bastante).</td></tr>
       <tr><td>Internet</td><td>Para baixar as ferramentas e para o Claude funcionar.</td></tr>
       <tr><td>Permissão para instalar programas</td><td>Em computador da empresa, alguns downloads podem ser bloqueados. Se um comando falhar por "permissão" ou "rede", fale com o suporte antes de tentar contornar.</td></tr>
       <tr><td>Conta no GitHub</td><td>Gratuita, em github.com.</td></tr>
@@ -269,7 +260,7 @@ kbd{font-family:var(--mono);font-size:.8em;border:1px solid var(--line);border-b
   <table>
     <thead><tr><th>Ferramenta</th><th>O que é</th><th>Analogia</th></tr></thead>
     <tbody>
-      <tr><td>Gerenciador de pacotes</td><td>Instala outros programas por comando (<code>winget</code>, <code>brew</code>, <code>apt</code>)</td><td>A loja de aplicativos do celular</td></tr>
+      <tr><td>Gerenciador de pacotes</td><td>Instala outros programas por comando. No Ubuntu é o <code>apt</code></td><td>A loja de aplicativos do celular</td></tr>
       <tr><td>VS Code</td><td>Editor onde você lê e escreve o código</td><td>O Word, só que para código</td></tr>
       <tr><td>Node.js e npm</td><td>Roda código JavaScript/TypeScript fora do navegador. O npm baixa bibliotecas</td><td>O motor do carro</td></tr>
       <tr><td>Git</td><td>Guarda o histórico de todas as mudanças</td><td>"Controlar alterações" do Word, para o projeto inteiro</td></tr>
@@ -359,31 +350,24 @@ kbd{font-family:var(--mono);font-size:.8em;border:1px solid var(--line);border-b
   <div class="ch-head"><span class="num">04</span><h2>Preparando a máquina pelo terminal</h2></div>
   <p>Agora vamos instalar tudo pelo terminal (lembre do capítulo 2: é a janela onde você digita comandos). Faça <strong>uma seção por vez</strong> e confira o resultado antes de seguir.</p>
   <figure>
-    <svg viewBox="0 0 760 120" role="img" aria-labelledby="f-stack"><title id="f-stack">Camadas do ambiente: sistema operacional, gerenciador de pacotes, ferramentas, editor e Claude Code</title>
+    <svg viewBox="0 0 760 120" role="img" aria-labelledby="f-stack"><title id="f-stack">Camadas do ambiente: Ubuntu, apt, ferramentas, editor e Claude Code</title>
       <g font-size="13" text-anchor="middle">
-      <rect x="5" y="80" width="750" height="34" rx="6" fill="var(--tint)" stroke="var(--line)"/><text x="380" y="102">Sistema operacional: Windows, macOS ou Linux</text>
-      <rect x="40" y="42" width="680" height="34" rx="6" fill="#fff" stroke="var(--ink)"/><text x="380" y="64">Gerenciador de pacotes: winget · brew · apt</text>
+      <rect x="5" y="80" width="750" height="34" rx="6" fill="var(--tint)" stroke="var(--line)"/><text x="380" y="102">Sistema operacional: Ubuntu</text>
+      <rect x="40" y="42" width="680" height="34" rx="6" fill="#fff" stroke="var(--ink)"/><text x="380" y="64">Gerenciador de pacotes: apt</text>
       <rect x="75" y="4" width="610" height="34" rx="6" fill="var(--ai-soft)" stroke="var(--ai)"/><text x="380" y="26">Git · Node.js · Docker · uv · VS Code · Claude Code</text></g>
     </svg>
     <figcaption>Primeiro o gerenciador de pacotes, depois as ferramentas por cima dele. Cada camada depende da de baixo.</figcaption>
   </figure>
 
   <h3>4.1 Abrindo o terminal</h3>
-  <table>
-    <thead><tr><th>Sistema</th><th>Como abrir</th><th>Como saber que deu certo</th></tr></thead>
-    <tbody>
-      <tr><td>Windows</td><td>Tecla Windows, digite <strong>Terminal</strong> e abra. Ele já abre no PowerShell.</td><td>A linha começa com <code>PS C:\Users\SeuNome&gt;</code></td></tr>
-      <tr><td>macOS</td><td><kbd>Cmd</kbd> + <kbd>Espaço</kbd>, digite <strong>Terminal</strong> e abra.</td><td>A linha termina com <code>%</code> ou <code>$</code></td></tr>
-      <tr><td>Linux</td><td><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd></td><td>A linha termina com <code>$</code></td></tr>
-    </tbody>
-  </table>
-  <div class="box"><span class="t">Experimente agora</span><p>Abra o terminal, digite <code>pwd</code> e aperte <kbd>Enter</kbd>. Ele mostra em qual pasta você está, algo como <code>C:\Users\SeuNome</code> ou <code>/home/seunome</code>. Pronto: você usou o terminal.</p></div>
+  <p>Aperte <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>. Deu certo quando aparece uma linha terminada em <code>$</code>, algo como <code>seunome@maquina:~$</code>.</p>
+  <div class="box"><span class="t">Experimente agora</span><p>Abra o terminal, digite <code>pwd</code> e aperte <kbd>Enter</kbd>. Ele mostra em qual pasta você está, algo como <code>/home/seunome</code>. Pronto: você usou o terminal.</p></div>
   <h4>Os comandos de navegação que você vai usar o tempo todo</h4>
   <table>
     <thead><tr><th>Comando</th><th>O que faz</th></tr></thead>
     <tbody>
       <tr><td><code>pwd</code></td><td>Mostra em qual pasta você está.</td></tr>
-      <tr><td><code>ls</code></td><td>Lista os arquivos da pasta (no PowerShell também funciona).</td></tr>
+      <tr><td><code>ls</code></td><td>Lista os arquivos da pasta.</td></tr>
       <tr><td><code>cd pasta</code></td><td>Entra numa pasta. <code>cd ..</code> volta uma.</td></tr>
       <tr><td><code>mkdir nome</code></td><td>Cria uma pasta.</td></tr>
       <tr><td><code>code .</code></td><td>Abre a pasta atual no VS Code.</td></tr>
@@ -393,67 +377,32 @@ kbd{font-family:var(--mono);font-size:.8em;border:1px solid var(--line);border-b
   </table>
 
   <h3>4.2 Instalando as ferramentas</h3>
-  <p>Cada sistema tem um <strong>gerenciador de pacotes</strong> que instala programas com um comando: <code>winget</code> no Windows (já vem instalado), <code>brew</code> no macOS e <code>apt</code> no Ubuntu.</p>
-  <div class="box warn"><span class="t">Só no macOS: instale o Homebrew primeiro</span>
-<pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></pre>
-  <p>Ao final, o instalador mostra dois comandos em "Next steps". Copie e rode os dois.</p></div>
-
-  <div class="box warn"><span class="t">Só no Windows: libere scripts no PowerShell</span><p>Por padrão o PowerShell bloqueia alguns programas instalados pelo npm (você veria <code>a execução de scripts foi desabilitada neste sistema</code>). Rode uma vez:</p>
-<pre style="margin:.3rem 0 0"><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
-<span class="c"># responda S (Sim) e aperte Enter</span></code></pre></div>
-
+  <p>O Ubuntu já vem com um <strong>gerenciador de pacotes</strong>, o <code>apt</code>: ele instala programas com um comando, sem procurar site nem instalador. Alguns programas desta lista têm o próprio instalador, e cada caso está indicado abaixo.</p>
   <h4>Git, VS Code e GitHub CLI</h4>
-  <div class="os">
-    <div><h4>Windows</h4><pre><code>winget install Git.Git
-winget install Microsoft.VisualStudioCode
-winget install GitHub.cli</code></pre></div>
-    <div><h4>macOS</h4><pre><code>brew install git gh
-brew install --cask visual-studio-code</code></pre></div>
-    <div><h4>Linux (Ubuntu)</h4><pre><code>sudo apt update
+<pre><code>sudo apt update
 sudo apt install -y git gh
-sudo snap install code --classic</code></pre></div>
-  </div>
+sudo snap install code --classic</code></pre>
 
   <h4>Node.js (versão LTS)</h4>
-  <p>Node roda o Angular e o NestJS. Use sempre a versão <strong>LTS</strong> (suporte longo). No Linux recomendamos o <strong>nvm</strong>, que permite trocar de versão sem <code>sudo</code>.</p>
-  <div class="os">
-    <div><h4>Windows</h4><pre><code>winget install OpenJS.NodeJS.LTS</code></pre></div>
-    <div><h4>macOS</h4><pre><code>brew install node</code></pre></div>
-    <div><h4>Linux (Ubuntu)</h4><pre><code><span class="c"># instale o nvm com o comando
-# do README: github.com/nvm-sh/nvm
+  <p>Node roda o Angular e o NestJS. Use sempre a versão <strong>LTS</strong> (suporte longo). Instale pelo <strong>nvm</strong>, que troca de versão sem <code>sudo</code> e sem brigar com o Node do sistema.</p>
+<pre><code><span class="c"># copie o comando de instalação do nvm no README oficial:
+# github.com/nvm-sh/nvm  (seção "Install &amp; Update Script")
 # feche e abra o terminal, depois:</span>
-nvm install --lts</code></pre></div>
-  </div>
+nvm install --lts</code></pre>
 
   <h4>Docker</h4>
-  <div class="os">
-    <div><h4>Windows</h4><pre><code>winget install Docker.DockerDesktop
-<span class="c"># reinicie o computador
-# abra o Docker Desktop uma vez
-# e aceite os termos.
-# Se pedir WSL, rode como
-# administrador:  wsl --install
-# e reinicie de novo.</span></code></pre></div>
-    <div><h4>macOS</h4><pre><code>brew install --cask docker
-<span class="c"># abra o app Docker uma vez
-# e espere a baleia ficar parada</span></code></pre></div>
-    <div><h4>Linux (Ubuntu)</h4><pre><code>curl -fsSL https://get.docker.com | sh
+<pre><code>curl -fsSL https://get.docker.com | sh
 sudo usermod -aG docker $USER
-<span class="c"># saia e entre de novo
-# na sessão do Linux</span></code></pre></div>
-  </div>
+<span class="c"># saia da sessão e entre de novo, para o seu usuário
+# entrar no grupo docker e rodar sem sudo</span></code></pre>
 
   <h4>uv (necessário para o Spec Kit, cap. 17)</h4>
-  <div class="os stack">
-    <div><h4>Windows</h4><pre><code>winget install astral-sh.uv</code></pre></div>
-    <div><h4>macOS</h4><pre><code>brew install uv</code></pre></div>
-    <div><h4>Linux (Ubuntu)</h4><pre><code>curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre></div>
-  </div>
+<pre><code>curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
 
-  <h4>CLIs do Angular e do NestJS (iguais em todos os sistemas)</h4>
+  <h4>CLIs do Angular e do NestJS</h4>
 <pre><code>npm install -g @angular/cli @nestjs/cli</code></pre>
 
-  <div class="box warn"><span class="t">Feche e abra o terminal depois de instalar</span><p>O terminal só "enxerga" programas novos quando é reaberto. Se aparecer <code>command not found</code> ou <code>não é reconhecido como um comando</code> logo depois de instalar, esse é quase sempre o motivo.</p></div>
+  <div class="box warn"><span class="t">Feche e abra o terminal depois de instalar</span><p>O terminal só "enxerga" programas novos quando é reaberto. Se aparecer <code>command not found</code> logo depois de instalar, esse é quase sempre o motivo.</p></div>
 
   <h3>4.3 Verificando a instalação</h3>
   <p>Feche e abra o terminal. Depois rode cada linha. Todas devem responder com um número de versão.</p>
@@ -472,7 +421,7 @@ v22.12.0
 Docker version 27.4.0
 Docker Compose version v2.31.0
 uv 0.5.11</span></code></pre>
-  <p>Se alguma linha disser <em>"não é reconhecido"</em> ou <em>"command not found"</em>, aquela ferramenta não foi instalada ou o terminal precisa ser reaberto.</p>
+  <p>Se alguma linha disser <em>"command not found"</em>, aquela ferramenta não foi instalada ou o terminal precisa ser reaberto.</p>
   <p>Teste também se o Docker está realmente funcionando (não só instalado):</p>
 <pre><code>docker run hello-world
 <span class="c"># deve imprimir "Hello from Docker!"</span></code></pre>
@@ -548,27 +497,23 @@ gh auth login
 
   <h3>5.2 Atalhos que você vai usar todo dia</h3>
   <table>
-    <thead><tr><th>Ação</th><th>Windows / Linux</th><th>macOS</th></tr></thead>
+    <thead><tr><th>Ação</th><th>Atalho</th></tr></thead>
     <tbody>
-      <tr><td>Paleta de comandos (procura qualquer função)</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td></tr>
-      <tr><td>Abrir arquivo pelo nome</td><td><kbd>Ctrl</kbd>+<kbd>P</kbd></td><td><kbd>Cmd</kbd>+<kbd>P</kbd></td></tr>
-      <tr><td>Abrir / fechar o terminal</td><td><kbd>Ctrl</kbd>+<kbd>`</kbd></td><td><kbd>Ctrl</kbd>+<kbd>`</kbd></td></tr>
-      <tr><td>Novo terminal</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>`</kbd></td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>`</kbd></td></tr>
-      <tr><td>Extensões</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd></td></tr>
-      <tr><td>Salvar</td><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td><kbd>Cmd</kbd>+<kbd>S</kbd></td></tr>
-      <tr><td>Buscar em todos os arquivos</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></td></tr>
+      <tr><td>Paleta de comandos (procura qualquer função)</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td></tr>
+      <tr><td>Abrir arquivo pelo nome</td><td><kbd>Ctrl</kbd>+<kbd>P</kbd></td></tr>
+      <tr><td>Abrir / fechar o terminal</td><td><kbd>Ctrl</kbd>+<kbd>`</kbd></td></tr>
+      <tr><td>Novo terminal</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>`</kbd></td></tr>
+      <tr><td>Extensões</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd></td></tr>
+      <tr><td>Salvar</td><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td></tr>
+      <tr><td>Buscar em todos os arquivos</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></td></tr>
     </tbody>
   </table>
   <p>A tecla <kbd>`</kbd> é a crase, normalmente ao lado do número 1 ou perto do <kbd>Enter</kbd> no teclado brasileiro.</p>
 
-  <h3>5.3 Habilitando o comando <code>code</code> no terminal</h3>
-  <p>O comando <code>code .</code> abre a pasta atual no VS Code. No Windows e no Linux ele já funciona depois da instalação. No macOS, faça uma vez:</p>
-  <ol class="steps">
-    <li><strong>Abra o VS Code</strong></li>
-    <li><strong>Abra a paleta de comandos</strong><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></li>
-    <li><strong>Digite "shell command"</strong>e escolha <em>Shell Command: Install 'code' command in PATH</em>.</li>
-    <li><strong>Feche e abra o terminal</strong>e teste com <code>code --version</code>.</li>
-  </ol>
+  <h3>5.3 O comando <code>code</code> no terminal</h3>
+  <p>O comando <code>code .</code> abre a pasta atual no VS Code. Instalado pelo <code>snap</code>, como no capítulo 4, ele já funciona. Confira:</p>
+<pre><code>code --version</code></pre>
+  <p>Se der <code>command not found</code>, feche e abra o terminal. Se continuar, o VS Code foi instalado de outro jeito (<code>.deb</code> baixado do site, por exemplo): abra o VS Code, aperte <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>, digite <em>shell command</em> e escolha <em>Install 'code' command in PATH</em>.</p>
 
   <h3>5.4 Instalando as extensões</h3>
   <p><strong>Extensões</strong> são complementos que ensinam o VS Code a entender cada tecnologia: colorir o código, apontar erros, formatar. Instale estas:</p>
@@ -586,7 +531,7 @@ gh auth login
   </table>
   <h4>Pelo próprio VS Code</h4>
   <ol class="steps">
-    <li><strong>Abra a aba de extensões</strong><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> (ou <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> no Mac).</li>
+    <li><strong>Abra a aba de extensões</strong><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>.</li>
     <li><strong>Busque pelo nome</strong>da tabela acima.</li>
     <li><strong>Confira o autor</strong>antes de instalar. A extensão do Claude Code é publicada pela <strong>Anthropic</strong>; existem cópias de outros autores.</li>
     <li><strong>Clique em Install</strong>.</li>
@@ -706,22 +651,16 @@ code .</code></pre>
 
   <h3>7.2 Instalar</h3>
   <p>Use o instalador oficial. Ele se atualiza sozinho em segundo plano.</p>
-  <div class="os stack">
-    <div><h4>Windows (PowerShell)</h4><pre><code>irm https://claude.ai/install.ps1 | iex</code></pre></div>
-    <div><h4>macOS</h4><pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre></div>
-    <div><h4>Linux</h4><pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre></div>
-  </div>
+<pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre>
   <p>O comando não mostra progresso enquanto baixa — espere terminar. Depois <strong>abra um terminal novo</strong> e confira:</p>
 <pre><code>claude --version
 <span class="c"># ex.: 2.x.x (Claude Code)</span></code></pre>
   <div class="box warn"><span class="t">Erros comuns na instalação</span>
     <ul>
-      <li><code>claude não é reconhecido</code> / <code>command not found</code>: abra um terminal novo. Se continuar, o instalador não foi adicionado ao PATH — veja "Troubleshoot installation" na documentação.</li>
-      <li><code>'irm' is not recognized</code>: você está no CMD, não no PowerShell. Abra o <strong>Terminal</strong> do Windows.</li>
-      <li>No Windows, tenha o <strong>Git</strong> instalado (cap. 4): com ele, o Claude Code usa o Git Bash para rodar comandos.</li>
+      <li><code>command not found: claude</code>: abra um terminal novo. Se continuar, o instalador não foi adicionado ao PATH — veja "Troubleshoot installation" na documentação.</li>
+      <li><code>curl: command not found</code>: instale com <code>sudo apt install -y curl</code> e rode de novo.</li>
     </ul>
   </div>
-  <p>Alternativas, se a empresa preferir gerenciadores de pacote: <code>winget install Anthropic.ClaudeCode</code> no Windows ou <code>brew install --cask claude-code</code> no macOS. Nesses casos ele não se atualiza sozinho.</p>
 
   <h3>7.3 Primeiro acesso (login)</h3>
   <p>Antes, tenha em mãos a conta do capítulo 6 (Console ou a da empresa).</p>
@@ -906,7 +845,7 @@ claude --add-dir ../frontend         <span class="c"># ao abrir</span>
   <table>
     <thead><tr><th>Quero…</th><th>Como fazer</th></tr></thead>
     <tbody>
-      <tr><td>Perguntar sobre um trecho de código</td><td>Selecione as linhas no editor. O Claude já vê a seleção. <kbd>Alt</kbd>+<kbd>K</kbd> (<kbd>Option</kbd>+<kbd>K</kbd> no Mac) insere a referência, ex.: <code>@tarefas.service.ts#5-10</code>.</td></tr>
+      <tr><td>Perguntar sobre um trecho de código</td><td>Selecione as linhas no editor. O Claude já vê a seleção. <kbd>Alt</kbd>+<kbd>K</kbd> insere a referência, ex.: <code>@tarefas.service.ts#5-10</code>.</td></tr>
       <tr><td>Citar um arquivo</td><td>Digite <code>@</code> e o começo do nome.</td></tr>
       <tr><td>Ver o plano antes de qualquer mudança</td><td>Mude o modo para <strong>Plan</strong> ou digite <code>/plan</code>. O plano abre como documento, e você pode comentar nele antes de aprovar.</td></tr>
       <tr><td>Trocar o modo de permissão</td><td>Clique no indicador de modo embaixo da caixa de pedido.</td></tr>
@@ -1080,7 +1019,6 @@ gh pr create --fill                      <span class="c"># abre o pull request</
 curl -X POST http://localhost:3000/tarefas \
   -H "Content-Type: application/json" \
   -d '{"titulo":"Estudar HTTP"}'</code></pre>
-  <div class="box warn"><span class="t">No PowerShell</span><p>Use <code>curl.exe</code> em vez de <code>curl</code>, e troque as aspas do corpo: <code>-d "{\"titulo\":\"Estudar HTTP\"}"</code>. Ou use a extensão REST Client do VS Code.</p></div>
   <div class="box tip"><span class="t">Testando pelo navegador</span><p>Com a API do projeto rodando, abra <code>http://localhost:3000/docs</code>. É o Swagger: uma página gerada pela própria API com todas as rotas (tarefas, categorias, dashboard e health), o formato de cada dado e um botão <em>Try it out</em> para mandar requisições sem usar o terminal.</p></div>
   <div class="box tip"><span class="t">Resumo do capítulo</span><p>O front envia requisições com método (GET, POST, PATCH, DELETE), rota e, às vezes, um corpo em JSON. O back responde com um status code (2xx certo, 4xx pedido errado, 5xx erro no servidor) e um JSON. Dá para testar a API pelo terminal com <code>curl</code>.</p></div>
 </section>
@@ -1440,7 +1378,7 @@ cd frontend &amp;&amp; npm start</code></pre>
       <tr><td><code>Variáveis de ambiente inválidas</code></td><td>API</td><td>Falta o <code>api/.env</code> ou ele está errado: <code>cp .env.example .env</code> dentro de <code>api/</code></td></tr>
       <tr><td><code>NullInjectorError: HttpClient</code></td><td>Front</td><td><code>provideHttpClient()</code> no <code>app.config.ts</code></td></tr>
       <tr><td><code>EADDRINUSE :::3000</code></td><td>Máquina</td><td>Já tem algo nessa porta; feche o terminal antigo</td></tr>
-      <tr><td><code>Cannot connect to the Docker daemon</code></td><td>Docker</td><td>Abra o Docker Desktop e espere iniciar</td></tr>
+      <tr><td><code>Cannot connect to the Docker daemon</code></td><td>Docker</td><td>Ligue o serviço: <code>sudo systemctl start docker</code></td></tr>
       <tr><td>Dados sumiram</td><td>Banco</td><td>Alguém rodou <code>down -v</code>, ou falta o bloco <code>volumes</code></td></tr>
       <tr><td>Recebo 500 ao criar tarefa vazia</td><td>API</td><td>Falta o <code>ValidationPipe</code> global</td></tr>
     </tbody>
@@ -1666,7 +1604,7 @@ claude                                      <span class="c"># os comandos /speck
     <tbody>
       <tr><td>Usar neste projeto</td><td>Não precisa instalar nada. Abra o Claude Code na pasta <code>fullcycle</code>, pelo painel do VS Code ou com <code>claude</code> no terminal, e digite <code>/sdd task 1</code>.</td></tr>
       <tr><td>Ver se o Claude achou a skill</td><td><code>/skills</code> lista as skills disponíveis na sessão.</td></tr>
-      <tr><td>Usar em todos os meus projetos</td><td>Copie a pasta para as suas skills pessoais e abra uma sessão nova. macOS e Linux: <code>cp -r .claude/skills/sdd ~/.claude/skills/</code>. Windows (PowerShell): <code>Copy-Item -Recurse .claude\skills\sdd $HOME\.claude\skills\</code>.</td></tr>
+      <tr><td>Usar em todos os meus projetos</td><td>Copie a pasta para as suas skills pessoais e abra uma sessão nova: <code>cp -r .claude/skills/sdd ~/.claude/skills/</code>.</td></tr>
       <tr><td>Mudar as regras do projeto</td><td>Edite <code>constitution.md</code>. Vale para todo trabalho feito com a skill.</td></tr>
       <tr><td>Usar em algo que não é uma task</td><td>Descreva o pedido: <code>/sdd quero que a lista de categorias mostre quantas tarefas estão pendentes</code>. O ciclo é o mesmo.</td></tr>
     </tbody>
@@ -1841,7 +1779,7 @@ claude                                      <span class="c"># os comandos /speck
       <tr><td>TypeORM</td><td><a href="https://typeorm.io">typeorm.io</a></td></tr>
       <tr><td>Docker</td><td><a href="https://docs.docker.com/get-started/">docs.docker.com/get-started</a></td></tr>
       <tr><td>PostgreSQL</td><td><a href="https://www.postgresql.org/docs/">postgresql.org/docs</a></td></tr>
-      <tr><td>nvm (Linux)</td><td><a href="https://github.com/nvm-sh/nvm">github.com/nvm-sh/nvm</a></td></tr>
+      <tr><td>nvm</td><td><a href="https://github.com/nvm-sh/nvm">github.com/nvm-sh/nvm</a></td></tr>
     </tbody>
   </table>
 </section>

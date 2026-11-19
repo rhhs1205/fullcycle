@@ -6,7 +6,7 @@ Levantamento de 19/11/2026: o guia `trilha-estudos-fullstack.html` comparado com
 - 2 verificadores tentaram derrubar cada uma.
 - Restaram **21 lacunas confirmadas**, todas com evidência no código (arquivo e linha) ou no guia.
 
-**Atualizado no mesmo dia, depois das correções:** os 10 bugs estão resolvidos, cada um com o teste que o pega, o projeto está no GitHub e o `.gitignore` do frontend ficou sem comentários. Restam 9 itens em aberto ou parciais, mais um achado novo (22).
+**Atualizado no mesmo dia, depois das correções:** os 10 bugs estão resolvidos, cada um com o teste que o pega, o projeto está no GitHub e o `.gitignore` do frontend ficou sem comentários. Depois disso, o guia e o README passaram a tratar só do Ubuntu, o que encerrou o item 15. Restam 8 itens em aberto ou parciais, mais um achado novo (22).
 
 ## Resumo
 
@@ -26,7 +26,7 @@ Levantamento de 19/11/2026: o guia `trilha-estudos-fullstack.html` comparado com
 | 12 | Skill `criar-endpoint` em `.claude/skills/` | guia | médio | pequeno | em aberto |
 | 13 | SDD com Spec Kit em `specs/` | guia | médio | médio | parcial |
 | 14 | Projeto fora do Git e do GitHub | guia | alto | pequeno | resolvida |
-| 15 | README com comandos que falham no Windows | docs | médio | pequeno | parcial |
+| 15 | Comandos que falham no Windows | docs | médio | pequeno | resolvida pelo escopo |
 | 16 | Guia manda corrigir CORS no lugar errado | docs | baixo | pequeno | em aberto |
 | 17 | `ng generate` cria nomes fora do padrão do projeto | frontend + docs | baixo | pequeno | em aberto |
 | 18 | Esquema do banco só via `synchronize`, sem migrations | API | médio | médio | em aberto |
@@ -137,12 +137,11 @@ O cap. 16 e o checklist esperam uma skill para criar endpoints. Hoje o projeto t
 
 ## 3. Documentação
 
-### 15. README com comandos que falham no Windows
+### 15. Comandos que falham no Windows
 
-O README novo usa os scripts da raiz (`npm run setup`, `npm run dev`) e cita o Chrome nos testes. Ainda falham no Windows PowerShell 5.1, que é o padrão do Terminal:
+Resolvida pelo escopo: o guia e o README passaram a ser só para **Ubuntu 20.04 ou mais novo**, no `bash`. Saíram as colunas e as caixas de Windows e macOS (winget, Homebrew, `Set-ExecutionPolicy`, WSL, `irm`, `curl.exe`, `Copy-Item`, atalhos com `Cmd`), e o Docker Desktop virou serviço do sistema (`sudo systemctl start docker`).
 
-- `cd api && npm run start:dev`, porque o PowerShell 5.1 não aceita `&&`.
-- O exemplo de `curl -X POST ... '{...}'`, por causa das aspas.
+O que valia só para Windows deixou de ser um problema: `&&` no PowerShell 5.1 e as aspas do `curl -X POST`. Se um dia o guia voltar a cobrir outros sistemas, os dois voltam para esta lista.
 
 ### 16. Guia manda corrigir CORS no lugar errado
 
@@ -174,7 +173,7 @@ No Angular 20, `ng g s tarefas` gera `tarefas.ts` com `class Tarefas`, e pipes e
 
 ### 20. `.vscode` só dentro de `frontend/` e nenhum arquivo `.http`
 
-O guia abre a raiz no VS Code, então as recomendações que estão em `frontend/.vscode` não valem. Um arquivo `requisicoes.http` (extensão REST Client) resolve o problema do `curl` no Windows e documenta as rotas.
+O guia abre a raiz no VS Code, então as recomendações que estão em `frontend/.vscode` não valem. Um arquivo `requisicoes.http` (extensão REST Client) documentaria as rotas e deixaria testar a API sem montar o `curl` na mão.
 
 ### 21. Comentários do scaffold no `frontend/.gitignore`
 
