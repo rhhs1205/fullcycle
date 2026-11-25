@@ -8,7 +8,7 @@ Projeto de estudo full stack com três camadas, cada uma na sua pasta:
 | Servidor (API) | NestJS 11 + TypeORM | `api/` | 3000 |
 | Banco de dados | PostgreSQL 16 no Docker | `docker-compose.yml` | 5433 |
 
-O passo a passo para aprender cada peça está no guia [`trilha-estudos-fullstack.html`](trilha-estudos-fullstack.html). Abra o arquivo no navegador: o plano de estudo sugerido cabe em 4 dias.
+O passo a passo para aprender cada peça está no guia [`trilha-estudos-fullstack.html`](trilha-estudos-fullstack.html). Abra o arquivo no navegador: o plano de estudo sugerido cabe em 4 dias. Para ler fora do navegador ou imprimir, use a [versão em PDF](trilha-estudos-fullstack.pdf) (67 páginas). No HTML, o checklist do capítulo 19 guarda as marcações; no PDF, ele sai para marcar à caneta.
 
 Depois de rodar e entender o projeto, vá para a seção [Mão na massa](#mão-na-massa): ela mostra como usar o Claude Code no VS Code e o que você precisa fazer, que são 5 tasks para resolver com a skill `/sdd`.
 
@@ -93,6 +93,7 @@ fullcycle/
 ├── package.json                atalhos: setup, dev, test...
 ├── scripts/                    script que cria o api/.env
 ├── trilha-estudos-fullstack.html   guia de estudos
+├── trilha-estudos-fullstack.pdf    o mesmo guia em PDF
 ├── tasks/index.html            as 5 tasks para resolver (veja Mão na massa)
 ├── .claude/skills/sdd/         skill /sdd do Claude Code
 ├── specs/                      specs criadas pela /sdd (surge na primeira task)
