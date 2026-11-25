@@ -95,6 +95,7 @@ fullcycle/
 ├── trilha-estudos-fullstack.html   guia de estudos
 ├── trilha-estudos-fullstack.pdf    o mesmo guia em PDF
 ├── tasks/index.html            as 5 tasks para resolver (veja Mão na massa)
+├── tasks/tasks.pdf             as mesmas tasks em PDF
 ├── .claude/skills/sdd/         skill /sdd do Claude Code
 ├── specs/                      specs criadas pela /sdd (surge na primeira task)
 │
@@ -284,7 +285,7 @@ Ainda travado? Abra o Claude Code na raiz do projeto, cole o erro completo e dig
 
 ## Mão na massa
 
-Depois de rodar o projeto e entender as peças, é hora de trabalhar nele com o Claude Code. O projeto tem **5 problemas colocados de propósito**, descritos em [`tasks/index.html`](tasks/index.html) (abra no navegador). Cada task traz o sintoma e uma dica, mas não a solução. Os testes atuais passam: escrever o teste que pega cada problema faz parte da task.
+Depois de rodar o projeto e entender as peças, é hora de trabalhar nele com o Claude Code. O projeto tem **5 problemas colocados de propósito**, descritos em [`tasks/index.html`](tasks/index.html) (abra no navegador) ou em [`tasks/tasks.pdf`](tasks/tasks.pdf). Cada task traz o sintoma e uma dica, mas não a solução. Os testes atuais passam: escrever o teste que pega cada problema faz parte da task.
 
 ### 1. Abra o projeto no VS Code com o Claude Code
 
@@ -321,7 +322,7 @@ Os arquivos de cada task ficam em `specs/NNN-nome/`: `spec.md`, `plan.md` e `tas
 | 4 | Nome de categoria comprido derruba a API | Frontend e API | Médio |
 | 5 | "Pendentes por prioridade" conta tarefas concluídas | API | Médio |
 
-A descrição de cada uma, com o passo a passo para reproduzir e uma dica, está em [`tasks/index.html`](tasks/index.html).
+A descrição de cada uma, com o passo a passo para reproduzir e uma dica, está em [`tasks/index.html`](tasks/index.html), ou no [PDF](tasks/tasks.pdf).
 
 Para cada task:
 

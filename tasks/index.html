@@ -121,6 +121,13 @@ footer { color: var(--muted); font-size: .85rem; margin-top: 2rem; }
   .doc { margin: 0; padding: 1.6rem 1rem; box-shadow: none; }
   h1 { font-size: 1.6rem; }
 }
+@media print {
+  body { background: #fff; font-size: 10.5pt; }
+  .doc { max-width: none; margin: 0; padding: 0; box-shadow: none; }
+  a { color: var(--ink); }
+  .task, .box, .dica { break-inside: avoid; }
+  .resumo { break-inside: avoid; }
+}
 </style>
 </head>
 <body>
